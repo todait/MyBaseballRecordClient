@@ -14,6 +14,7 @@ class AuthTextInputWidget extends StatelessWidget {
   final Function(String) onChanged;
   final VoidCallback onEditingComplete;
   final bool isEmailValid;
+  final FocusNode? focusNode;
 
   const AuthTextInputWidget({
     super.key,
@@ -27,6 +28,7 @@ class AuthTextInputWidget extends StatelessWidget {
     required this.onChanged,
     required this.onEditingComplete,
     required this.isEmailValid,
+    this.focusNode,
   });
 
   @override
@@ -63,6 +65,7 @@ class AuthTextInputWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                    focusNode: focusNode,
                     autofocus: true,
                     onEditingComplete: onEditingComplete,
                     textInputAction: TextInputAction.next,

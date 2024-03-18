@@ -33,11 +33,16 @@ class _RegisterPageState extends State<RegisterPage> {
   bool showConfirmPasswordInput = false;
   bool showFinalPassword = false;
 
+  FocusNode passwordFocusNode = FocusNode();
+  FocusNode confirmPasswordFocusNode = FocusNode();
+
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    passwordFocusNode.dispose();
+    confirmPasswordFocusNode.dispose();
     super.dispose();
   }
 
@@ -53,7 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
         emailError = null;
         showPasswordInput = true;
       });
-      FocusScope.of(context).nextFocus();
+      FocusScope.of(context).requestFocus(passwordFocusNode);
     }
   }
 
@@ -69,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
         passwordError = null;
         showConfirmPasswordInput = true;
       });
-      FocusScope.of(context).nextFocus();
+      FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
     }
   }
 
@@ -85,7 +90,6 @@ class _RegisterPageState extends State<RegisterPage> {
         confirmPasswordError = null;
         showPasswordCheckInput = true;
       });
-      FocusScope.of(context).nextFocus();
       navigateToMainPage();
     }
   }
@@ -160,6 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   if (showPasswordInput)
                     AuthTextInputWidget(
+                      focusNode: passwordFocusNode,
                       obscureText: true,
                       textStyle: AppTextStyle.body120M
                           .copyWith(color: AppColor.textPrimary),
@@ -193,6 +198,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   if (showConfirmPasswordInput)
                     AuthTextInputWidget(
+                      focusNode: confirmPasswordFocusNode,
                       obscureText: true,
                       textStyle: AppTextStyle.body120M
                           .copyWith(color: AppColor.textPrimary),
@@ -201,12 +207,22 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: confirmPasswordController,
                       onClearPressed: () => confirmPasswordController.clear(),
                       keyboardType: TextInputType.text,
-                      onChanged: (String value) {},
+                      onChanged: (String value) {
+                        if (value == passwordController.text) {
+                          setState(() {
+                            showFinalPassword = true;
+                          });
+                        } else {
+                          setState(() {
+                            showFinalPassword = false;
+                          });
+                        }
+                      },
                       onEditingComplete: updateConfirmPasswordStatus,
-                      isEmailValid: showFinalPassword,
+                      isEmailValid: false,
                     ),
                   const SizedBox(height: 8),
-                  if (confirmPasswordError != null)
+                  if (confirmPasswordError != null && !showFinalPassword)
                     Text(
                       confirmPasswordError!,
                       style: AppTextStyle.caption213R
@@ -214,16 +230,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   if (confirmPasswordError == null &&
                       showConfirmPasswordInput &&
-                      !showPasswordCheckInput)
+                      !showPasswordCheckInput &&
+                      !showFinalPassword)
                     Text(
                       AppTextList.passwordRequirementsText,
                       style: AppTextStyle.caption213R
                           .copyWith(color: AppColor.textHint),
                     ),
-                  if (passwordController.text ==
-                          confirmPasswordController.text &&
-                      confirmPasswordError == null &&
-                      confirmPasswordController.text.isNotEmpty)
+                  if (showFinalPassword)
                     Text(
                       AppTextList.passwordConfirmationSuccessText,
                       style: AppTextStyle.caption213R
