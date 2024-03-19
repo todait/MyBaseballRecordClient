@@ -31,6 +31,8 @@ class IntroPage extends StatelessWidget {
                         .copyWith(color: AppColor.graysWhite)),
                 const SizedBox(height: 233),
                 AuthButton(
+                  height: 30,
+                  textStyle: AppTextStyle.body315M,
                   onClick: () {},
                   icon: const FaIcon(FontAwesomeIcons.apple),
                   backgroundColor: AppColor.graysWhite,
@@ -41,6 +43,8 @@ class IntroPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 AuthButton(
+                  height: 30,
+                  textStyle: AppTextStyle.body315M,
                   onClick: () {},
                   icon: Image.asset('assets/icon/kakao_logo.png'),
                   backgroundColor: AppColor.yellowColor,
@@ -51,6 +55,9 @@ class IntroPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 AuthButton(
+                  height: 30,
+                  textStyle: AppTextStyle.body315M
+                      .copyWith(color: AppColor.graysWhite),
                   onClick: () {},
                   icon: Image.asset('assets/icon/naver_logo.png'),
                   backgroundColor: AppColor.greenColor,
@@ -61,6 +68,9 @@ class IntroPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 AuthButton(
+                  height: 30,
+                  textStyle: AppTextStyle.body315M
+                      .copyWith(color: AppColor.graysWhite),
                   onClick: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const EmailAuthPage(

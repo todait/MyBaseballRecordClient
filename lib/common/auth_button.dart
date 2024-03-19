@@ -12,6 +12,8 @@ class AuthButton extends StatelessWidget {
   final Color iconColor;
   final String text;
   final BorderRadiusGeometry? borderRadius;
+  final TextStyle? textStyle;
+  final double? height;
 
   const AuthButton({
     super.key,
@@ -23,6 +25,8 @@ class AuthButton extends StatelessWidget {
     required this.textColor,
     required this.iconColor,
     this.borderRadius,
+    this.textStyle,
+    this.height,
   });
 
   @override
@@ -39,7 +43,7 @@ class AuthButton extends StatelessWidget {
           vertical: 9.0,
         ),
         child: SizedBox(
-          height: 30,
+          height: height,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -51,8 +55,7 @@ class AuthButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 text,
-                style: TextStyle(
-                    fontSize: 15.0, letterSpacing: 0.2, color: textColor),
+                style: textStyle,
               ),
             ],
           ),

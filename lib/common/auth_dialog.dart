@@ -56,6 +56,9 @@ class AuthDialog extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             AuthButton(
+              height: 30,
+              textStyle:
+                  AppTextStyle.body315M.copyWith(color: AppColor.graysWhite),
               onClick: () {
                 navigateToLoginPage(context, false);
               },
@@ -68,6 +71,9 @@ class AuthDialog extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             AuthButton(
+              height: 30,
+              textStyle:
+                  AppTextStyle.body315M.copyWith(color: AppColor.textHint),
               onClick: () {
                 navigateToLoginPage(context, false);
               },
