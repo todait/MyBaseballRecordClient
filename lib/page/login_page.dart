@@ -3,6 +3,7 @@ import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/auth_text_input_widget.dart';
+import 'package:my_baseball_record/common/sticky_bottom_button.dart';
 import 'package:my_baseball_record/common/util/validate.dart';
 import 'package:my_baseball_record/page/find_password_page.dart';
 
@@ -27,11 +28,15 @@ class _LoginPageState extends State<LoginPage> {
 
   bool checkEmail = false;
   bool checkPassword = true;
+  bool isInputValid = false;
+
+  FocusNode passwordFocusNode = FocusNode();
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -48,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
         checkEmail = true;
         checkPassword = false;
       });
-      FocusScope.of(context).nextFocus();
+      FocusScope.of(context).requestFocus(passwordFocusNode);
     }
   }
 
@@ -58,13 +63,14 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         passwordError = AppTextList.passwordNotFoundErrorMessage;
         checkPassword = false;
+        isInputValid = false;
       });
     } else {
       setState(() {
         passwordError = null;
         checkPassword = false;
+        isInputValid = true;
       });
-      FocusScope.of(context).nextFocus();
     }
   }
 
@@ -77,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: Stack(
           children: [
             Padding(
@@ -128,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   const SizedBox(height: 11),
                   AuthTextInputWidget(
+                    focusNode: passwordFocusNode,
                     obscureText: true,
                     textStyle: AppTextStyle.body120M
                         .copyWith(color: AppColor.textPrimary),
@@ -162,6 +170,16 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ],
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: StickyBottomButton(
+                text: AppTextList.loginText,
+                onClick: () {},
+                enabled: isInputValid,
               ),
             ),
           ],
