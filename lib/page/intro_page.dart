@@ -63,7 +63,9 @@ class IntroPage extends StatelessWidget {
                 AuthButton(
                   onClick: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const EmailAuthPage()));
+                        builder: (context) => const EmailAuthPage(
+                              isRegistering: true,
+                            )));
                   },
                   icon: Image.asset(
                     'assets/icon/at_logo.png',
