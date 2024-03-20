@@ -17,6 +17,7 @@ class AuthDialog extends StatelessWidget {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => EmailAuthPage(
               isRegistering: isRegistering,
+              email: email,
             )));
   }
 

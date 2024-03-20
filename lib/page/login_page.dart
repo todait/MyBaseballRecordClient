@@ -9,10 +9,12 @@ import 'package:my_baseball_record/page/find_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback toggleAuthMode;
+  final String? email;
 
   const LoginPage({
     super.key,
     required this.toggleAuthMode,
+    this.email,
   });
 
   @override
@@ -20,7 +22,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailController = TextEditingController();
+  // 임시로 final 뺌
+  TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   String? emailError;
@@ -31,6 +34,13 @@ class _LoginPageState extends State<LoginPage> {
   bool isInputValid = false;
 
   FocusNode passwordFocusNode = FocusNode();
+
+  // imsi
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController(text: widget.email ?? '');
+  }
 
   @override
   void dispose() {
