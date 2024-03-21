@@ -40,4 +40,5 @@ class AppTextList {
   static const viewText = '보기';
   static const closeText = '닫기';
   static const agreeAndSignUp = '동의하고 회원가입하기';
+  static const passwordResetEmailResent = '비밀번호 변경 메일을 다시 보냈습니다';
 }

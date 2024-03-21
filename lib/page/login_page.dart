@@ -6,15 +6,18 @@ import 'package:my_baseball_record/common/auth_text_input_widget.dart';
 import 'package:my_baseball_record/common/sticky_bottom_button.dart';
 import 'package:my_baseball_record/common/util/validate.dart';
 import 'package:my_baseball_record/page/find_password_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback toggleAuthMode;
   final String? email;
+  final bool showToast;
 
   const LoginPage({
     super.key,
     required this.toggleAuthMode,
     this.email,
+    this.showToast = false,
   });
 
   @override
@@ -22,7 +25,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // 임시로 final 뺌
   TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -35,11 +37,58 @@ class _LoginPageState extends State<LoginPage> {
 
   FocusNode passwordFocusNode = FocusNode();
 
-  // imsi
   @override
   void initState() {
     super.initState();
     emailController = TextEditingController(text: widget.email ?? '');
+    if (widget.showToast) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showToast(context);
+      });
+    }
+  }
+
+  void showToast(BuildContext context) {
+    FToast fToast = FToast();
+    fToast.init(context);
+
+    Widget toast = Container(
+      width: 350,
+      padding: const EdgeInsets.symmetric(vertical: 24.5, horizontal: 24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: AppColor.textPrimary,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.check,
+            color: AppColor.accentGreen100,
+          ),
+          const SizedBox(width: 16),
+          Text(
+            AppTextList.passwordResetEmailResent,
+            style: AppTextStyle.body315M.copyWith(color: AppColor.graysWhite),
+          ),
+        ],
+      ),
+    );
+
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
+    fToast.showToast(
+        child: toast,
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: const Duration(seconds: 2),
+        positionedToastBuilder: (context, child) {
+          return Positioned(
+            bottom: keyboardHeight + 320,
+            left: 16,
+            right: 16,
+            child: child,
+          );
+        });
   }
 
   @override
