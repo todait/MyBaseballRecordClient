@@ -56,13 +56,13 @@ class _RegisterPageState extends State<RegisterPage> {
         showPasswordInput = false;
       });
     } else {
-      setState(
-        () {
-          emailError = null;
-          showPasswordInput = true;
-        },
-      );
-      FocusScope.of(context).requestFocus(passwordFocusNode);
+      setState(() {
+        emailError = null;
+        showPasswordInput = true;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(passwordFocusNode);
+      });
     }
   }
 
@@ -78,7 +78,9 @@ class _RegisterPageState extends State<RegisterPage> {
         passwordError = null;
         showConfirmPasswordInput = true;
       });
-      FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
+      });
     }
   }
 
