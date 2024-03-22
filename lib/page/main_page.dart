@@ -35,8 +35,8 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: const AppBarWidget(
         trailingIcon: Icon(
-          Icons.notifications_none,
-          size: 20,
+          Icons.add,
+          size: 24,
           color: AppColor.textHint,
         ),
       ),
@@ -54,25 +54,41 @@ class _MainPageState extends State<MainPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    AppTextList.mainTitle,
-                    style: AppTextStyle.h224B,
+                  Text(
+                    AppTextList.upcomingMatches,
+                    style: AppTextStyle.h224B
+                        .copyWith(color: AppColor.textPrimary),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 8),
                   GameCard(
-                    title: AppTextList.recentMatchesTitle,
+                    title: AppTextList.upcomingMatchesTitle,
                     titleTextStyle: AppTextStyle.h318B
                         .copyWith(color: AppColor.textPrimary),
                     count: 0,
                     countTitle: AppTextList.countMatchesTitle,
-                    countTextStyle: AppTextStyle.body413M
+                    countTitleStyle: AppTextStyle.body413M
                         .copyWith(color: AppColor.textHint),
-                    icon: Image.asset('assets/icon/Frame 18.png'),
-                    subTitle: AppTextList.addPastRecordTitle,
-                    subTextStyle: AppTextStyle.body315M
+                    subTitle: AppTextList.upcomingMatchesEmpty,
+                    subTitleStyle: AppTextStyle.body315M
                         .copyWith(color: AppColor.textHint),
-                    btnTitle: AppTextList.addResultTitle,
-                    btnTextStyle: AppTextStyle.body315M
+                    btnTitle: AppTextList.addPreMatchSchedule,
+                    btnTitleStyle: AppTextStyle.body315M
+                        .copyWith(color: AppColor.primaryBlue2),
+                  ),
+                  const SizedBox(height: 20),
+                  GameCard(
+                    title: AppTextList.completedMatches,
+                    titleTextStyle: AppTextStyle.h318B
+                        .copyWith(color: AppColor.textPrimary),
+                    count: 0,
+                    countTitle: AppTextList.countMatchesTitle,
+                    countTitleStyle: AppTextStyle.body413M
+                        .copyWith(color: AppColor.textHint),
+                    subTitle: AppTextList.completedMatchesAvailable,
+                    subTitleStyle: AppTextStyle.body315M
+                        .copyWith(color: AppColor.textHint),
+                    btnTitle: AppTextList.addPastRecord,
+                    btnTitleStyle: AppTextStyle.body315M
                         .copyWith(color: AppColor.primaryBlue2),
                   ),
                 ],

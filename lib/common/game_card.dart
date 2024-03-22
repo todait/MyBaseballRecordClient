@@ -5,52 +5,63 @@ class GameCard extends StatelessWidget {
   final String title;
   final int count;
   final String countTitle;
-  final Widget icon;
+
   final String subTitle;
   final String btnTitle;
+
   final TextStyle? titleTextStyle;
-  final TextStyle? subTextStyle;
-  final TextStyle? btnTextStyle;
-  final TextStyle? countTextStyle;
+  final TextStyle? subTitleStyle;
+  final TextStyle? btnTitleStyle;
+  final TextStyle? countTitleStyle;
 
   const GameCard({
     super.key,
     required this.title,
     required this.count,
     required this.countTitle,
-    required this.icon,
     required this.subTitle,
     required this.btnTitle,
     this.titleTextStyle,
-    this.subTextStyle,
-    this.btnTextStyle,
-    this.countTextStyle,
+    this.subTitleStyle,
+    this.btnTitleStyle,
+    this.countTitleStyle,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 24),
       child: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: titleTextStyle),
-              const SizedBox(width: 203),
-              Text('$count$countTitle  >', style: countTextStyle),
+              Text('$count$countTitle  >', style: countTitleStyle),
             ],
           ),
-          const SizedBox(height: 30),
-          Row(
+          const SizedBox(height: 34),
+          Column(
             children: [
-              icon,
-              const SizedBox(width: 16),
-              Text(subTitle, style: subTextStyle),
-              const SizedBox(width: 71),
+              Text(
+                subTitle,
+                style: subTitleStyle,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 28),
               Container(
-                decoration: const BoxDecoration(
+                height: 44,
+                width: double.infinity,
+                decoration: BoxDecoration(
                   color: AppColor.primaryBlue3,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(btnTitle, style: btnTextStyle),
+                child: Center(
+                  child: Text(
+                    btnTitle,
+                    style: btnTitleStyle,
+                  ),
+                ),
               ),
             ],
           ),
