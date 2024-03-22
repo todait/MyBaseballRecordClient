@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppBarWidget extends StatelessWidget {
+class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Widget? leadingIcon;
   final Widget? trailingIcon;
@@ -15,10 +15,21 @@ class AppBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       centerTitle: true,
       leading: leadingIcon,
       title: title != null ? Text(title!) : null,
-      actions: trailingIcon != null ? [trailingIcon!] : null,
+      actions: trailingIcon != null
+          ? [
+              Container(
+                margin: const EdgeInsets.only(right: 12),
+                child: trailingIcon!,
+              ),
+            ]
+          : null,
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(44);
 }

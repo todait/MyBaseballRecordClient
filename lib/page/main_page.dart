@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_baseball_record/common/app_bar.dart';
+import 'package:my_baseball_record/common/app_color.dart';
+import 'package:my_baseball_record/common/app_text_list.dart';
+import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
 
 class MainPage extends StatelessWidget {
@@ -8,20 +11,23 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const AppBarWidget(
-          trailingIcon: Icon(Icons.notifications_none),
+      appBar: const AppBarWidget(
+        trailingIcon: Icon(
+          Icons.notifications_none,
+          size: 20,
+          color: AppColor.textHint,
         ),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
               Text(
-                '메인',
-                style: TextStyle(fontSize: 28),
+                AppTextList.mainTitle,
+                style: AppTextStyle.h224B.copyWith(color: AppColor.textPrimary),
               ),
+              const SizedBox(height: 5),
             ],
           ),
         ),

@@ -41,4 +41,12 @@ class AppTextList {
   static const closeText = '닫기';
   static const agreeAndSignUp = '동의하고 회원가입하기';
   static const passwordResetEmailResent = '비밀번호 변경 메일을 다시 보냈습니다';
+  static const mainTitle = '메인';
+  static const recentMatchesTitle = '최근 참여 경기';
+  static const countMatchesTitle = '건';
+  static const upcomingMatchesTitle = '예정된 경기';
+  static const addPastRecordTitle = '지난 기록을 추가해보세요';
+  static const addResultTitle = '결과 추가';
+  static const addScheduleTitle = '미리 일정을 추가해보세요';
+  static const addEventTitle = '일정 추가';
 }
