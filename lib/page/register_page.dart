@@ -21,81 +21,70 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  String? emailError;
-  String? passwordError;
-  String? confirmPasswordError;
+  String _emailError = "";
+  String _passwordError = "";
+  String _confirmPasswordError = "";
 
-  bool showPasswordInput = false;
-  bool showPasswordCheckInput = false;
-  bool showConfirmPasswordInput = false;
-  bool showFinalPassword = false;
+  bool _showPasswordInput = false;
+  bool _showPasswordCheckInput = false;
+  bool _showConfirmPasswordInput = false;
+  bool _showFinalPassword = false;
 
-  FocusNode passwordFocusNode = FocusNode();
-  FocusNode confirmPasswordFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _confirmPasswordFocusNode = FocusNode();
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    passwordFocusNode.dispose();
-    confirmPasswordFocusNode.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
     super.dispose();
   }
 
-  void updateEmailStatus() {
-    final email = emailController.text;
-    if (!validateEmail(email)) {
-      setState(() {
-        emailError = AppTextList.criticalAlertEmailText;
-        showPasswordInput = false;
-      });
-    } else {
-      setState(() {
-        emailError = null;
-        showPasswordInput = true;
-      });
+  void _updateEmailStatus() {
+    final email = _emailController.text;
+    setState(() {
+      _emailError =
+          validateEmail(email) ? "" : AppTextList.criticalAlertEmailText;
+      _showPasswordInput = _emailError.isEmpty;
+    });
+    if (_showPasswordInput) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        FocusScope.of(context).requestFocus(passwordFocusNode);
+        FocusScope.of(context).requestFocus(_passwordFocusNode);
       });
     }
   }
 
-  void updatePasswordStatus() {
-    final password = passwordController.text;
-    if (!validatePassword(password)) {
-      setState(() {
-        passwordError = AppTextList.passwordValidationText;
-        showConfirmPasswordInput = false;
-      });
-    } else {
-      setState(() {
-        passwordError = null;
-        showConfirmPasswordInput = true;
-      });
+  void _updatePasswordStatus() {
+    final password = _passwordController.text;
+    setState(() {
+      _passwordError =
+          validatePassword(password) ? "" : AppTextList.passwordValidationText;
+      _showConfirmPasswordInput = _passwordError.isEmpty;
+    });
+    if (_showConfirmPasswordInput) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
+        FocusScope.of(context).requestFocus(_confirmPasswordFocusNode);
       });
     }
   }
 
-  void updateConfirmPasswordStatus() {
-    final confirmPassword = confirmPasswordController.text;
-    if (confirmPassword != passwordController.text) {
-      setState(() {
-        confirmPasswordError = AppTextList.passwordConfirmationPrompt;
-        showPasswordCheckInput = false;
-      });
-    } else {
-      setState(() {
-        confirmPasswordError = null;
-        showPasswordCheckInput = true;
-      });
+  void _updateConfirmPasswordStatus() {
+    final confirmPassword = _confirmPasswordController.text;
+    setState(() {
+      _confirmPasswordError = confirmPassword != _passwordController.text
+          ? AppTextList.passwordConfirmationPrompt
+          : "";
+      _showPasswordCheckInput = _confirmPasswordError.isEmpty;
+    });
+    if (_showPasswordCheckInput) {
       _showModelSheet();
     }
   }
@@ -142,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
         textStyle: AppTextStyle.body315M
             .copyWith(fontSize: 16, color: AppColor.graysWhite),
         onClick: () {
-          navigateToMainPage();
+          _navigateToMainPage();
         },
         icon: Container(),
         backgroundColor: AppColor.textPrimary,
@@ -155,14 +144,14 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void navigateToMainPage() {
+  void _navigateToMainPage() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MainPage()));
   }
 
   void _updateFinalPasswordStatus(String value) {
     setState(() {
-      showFinalPassword = value == passwordController.text;
+      _showFinalPassword = value == _passwordController.text;
     });
   }
 
@@ -205,21 +194,21 @@ class _RegisterPageState extends State<RegisterPage> {
                         .copyWith(color: AppColor.textPrimary),
                     labelText: AppTextList.emailLabel,
                     hintText: AppTextList.emailLabel,
-                    controller: emailController,
-                    onClearPressed: () => emailController.clear(),
+                    controller: _emailController,
+                    onClearPressed: () => _emailController.clear(),
                     keyboardType: TextInputType.text,
                     onChanged: (String value) {},
-                    onEditingComplete: updateEmailStatus,
-                    isEmailValid: showPasswordInput,
+                    onEditingComplete: _updateEmailStatus,
+                    isEmailValid: _showPasswordInput,
                   ),
                   const SizedBox(height: 8),
-                  if (emailError != null)
+                  if (_emailError.isNotEmpty)
                     Text(
-                      emailError!,
+                      _emailError,
                       style: AppTextStyle.caption213R
                           .copyWith(color: AppColor.accentRed100),
                     ),
-                  if (emailError == null && !showPasswordInput)
+                  if (_emailError.isEmpty && !_showPasswordInput)
                     Text(
                       AppTextList.importantNotificationEmailText,
                       style: AppTextStyle.caption213R
@@ -229,31 +218,31 @@ class _RegisterPageState extends State<RegisterPage> {
                     visible: true,
                     child: SizedBox(height: 8),
                   ),
-                  if (showPasswordInput)
+                  if (_showPasswordInput)
                     AuthTextInputWidget(
-                      focusNode: passwordFocusNode,
+                      focusNode: _passwordFocusNode,
                       obscureText: true,
                       textStyle: AppTextStyle.body120M
                           .copyWith(color: AppColor.textPrimary),
                       labelText: AppTextList.passwordSetupText,
                       hintText: AppTextList.passwordText,
-                      controller: passwordController,
-                      onClearPressed: () => passwordController.clear(),
+                      controller: _passwordController,
+                      onClearPressed: () => _passwordController.clear(),
                       keyboardType: TextInputType.text,
                       onChanged: (String value) {},
-                      onEditingComplete: updatePasswordStatus,
-                      isEmailValid: showConfirmPasswordInput,
+                      onEditingComplete: _updatePasswordStatus,
+                      isEmailValid: _showConfirmPasswordInput,
                     ),
                   const SizedBox(height: 8),
-                  if (passwordError != null)
+                  if (_passwordError.isNotEmpty)
                     Text(
-                      passwordError!,
+                      _passwordError,
                       style: AppTextStyle.caption213R
                           .copyWith(color: AppColor.accentRed100),
                     ),
-                  if (passwordError == null &&
-                      showPasswordInput &&
-                      !showConfirmPasswordInput)
+                  if (_passwordError.isEmpty &&
+                      _showPasswordInput &&
+                      !_showConfirmPasswordInput)
                     Text(
                       AppTextList.passwordRequirementsText,
                       style: AppTextStyle.caption213R
@@ -263,38 +252,38 @@ class _RegisterPageState extends State<RegisterPage> {
                     visible: true,
                     child: SizedBox(height: 8),
                   ),
-                  if (showConfirmPasswordInput)
+                  if (_showConfirmPasswordInput)
                     AuthTextInputWidget(
-                      focusNode: confirmPasswordFocusNode,
+                      focusNode: _confirmPasswordFocusNode,
                       obscureText: true,
                       textStyle: AppTextStyle.body120M
                           .copyWith(color: AppColor.textPrimary),
                       labelText: AppTextList.passwordConfirmationText,
                       hintText: AppTextList.passwordText,
-                      controller: confirmPasswordController,
-                      onClearPressed: () => confirmPasswordController.clear(),
+                      controller: _confirmPasswordController,
+                      onClearPressed: () => _confirmPasswordController.clear(),
                       keyboardType: TextInputType.text,
                       onChanged: _updateFinalPasswordStatus,
-                      onEditingComplete: updateConfirmPasswordStatus,
+                      onEditingComplete: _updateConfirmPasswordStatus,
                       isEmailValid: false,
                     ),
                   const SizedBox(height: 8),
-                  if (confirmPasswordError != null && !showFinalPassword)
+                  if (_confirmPasswordError.isNotEmpty && !_showFinalPassword)
                     Text(
-                      confirmPasswordError!,
+                      _confirmPasswordError,
                       style: AppTextStyle.caption213R
                           .copyWith(color: AppColor.accentRed100),
                     ),
-                  if (confirmPasswordError == null &&
-                      showConfirmPasswordInput &&
-                      !showPasswordCheckInput &&
-                      !showFinalPassword)
+                  if (_confirmPasswordError.isEmpty &&
+                      _showConfirmPasswordInput &&
+                      !_showPasswordCheckInput &&
+                      !_showFinalPassword)
                     Text(
                       AppTextList.reenterPasswordPrompt,
                       style: AppTextStyle.caption213R
                           .copyWith(color: AppColor.textHint),
                     ),
-                  if (showFinalPassword)
+                  if (_showFinalPassword)
                     Text(
                       AppTextList.passwordConfirmationSuccessText,
                       style: AppTextStyle.caption213R

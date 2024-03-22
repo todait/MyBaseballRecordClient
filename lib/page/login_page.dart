@@ -25,22 +25,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  String? emailError;
-  String? passwordError;
+  String _emailError = "";
+  String _passwordError = "";
 
-  bool checkEmail = false;
-  bool checkPassword = true;
-  bool isInputValid = false;
+  bool _checkEmail = false;
+  bool _checkPassword = true;
+  bool _isInputValid = false;
 
-  FocusNode passwordFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    emailController = TextEditingController(text: widget.email ?? '');
+    _emailController = TextEditingController(text: widget.email);
     if (widget.showToast) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showToast(context);
@@ -93,47 +93,37 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    passwordFocusNode.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
-  void checkEmailStatus() {
-    final email = emailController.text;
-    if (!validateEmail(email)) {
-      setState(() {
-        emailError = AppTextList.emailNotFoundErrorMessage;
-        checkEmail = false;
-      });
-    } else {
-      setState(() {
-        emailError = null;
-        checkEmail = true;
-        checkPassword = false;
-      });
-      FocusScope.of(context).requestFocus(passwordFocusNode);
+  void _checkEmailStatus() {
+    final email = _emailController.text;
+    setState(() {
+      _emailError =
+          validateEmail(email) ? "" : AppTextList.emailNotFoundErrorMessage;
+      _checkEmail = _emailError.isEmpty;
+      _checkPassword = !_checkEmail;
+    });
+    if (_checkEmail) {
+      FocusScope.of(context).requestFocus(_passwordFocusNode);
     }
   }
 
-  void checkPasswordStatus() {
-    final password = passwordController.text;
-    if (!validatePassword(password)) {
-      setState(() {
-        passwordError = AppTextList.passwordNotFoundErrorMessage;
-        checkPassword = false;
-        isInputValid = false;
-      });
-    } else {
-      setState(() {
-        passwordError = null;
-        checkPassword = false;
-        isInputValid = true;
-      });
-    }
+  void _checkPasswordStatus() {
+    final password = _passwordController.text;
+    setState(() {
+      _passwordError = validatePassword(password)
+          ? ""
+          : AppTextList.passwordNotFoundErrorMessage;
+      _checkPassword = _passwordError.isEmpty;
+      _isInputValid = _checkPassword;
+    });
   }
 
-  void navigateToFindPasswordPage() {
+  void _navigateToFindPasswordPage() {
     Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => const FindPasswordPage()));
   }
@@ -178,39 +168,39 @@ class _LoginPageState extends State<LoginPage> {
                         .copyWith(color: AppColor.textPrimary),
                     labelText: AppTextList.emailLabel,
                     hintText: AppTextList.emailLabel,
-                    controller: emailController,
-                    onClearPressed: () => emailController.clear(),
+                    controller: _emailController,
+                    onClearPressed: () => _emailController.clear(),
                     keyboardType: TextInputType.text,
                     onChanged: (String value) {},
-                    onEditingComplete: checkEmailStatus,
-                    isEmailValid: checkEmail,
+                    onEditingComplete: _checkEmailStatus,
+                    isEmailValid: _checkEmail,
                   ),
                   const SizedBox(height: 8),
-                  if (emailError != null)
+                  if (_emailError.isNotEmpty)
                     Text(
-                      emailError!,
+                      _emailError,
                       style: AppTextStyle.caption213R
                           .copyWith(color: AppColor.accentRed100),
                     ),
                   const SizedBox(height: 11),
                   AuthTextInputWidget(
-                    focusNode: passwordFocusNode,
+                    focusNode: _passwordFocusNode,
                     obscureText: true,
                     textStyle: AppTextStyle.body120M
                         .copyWith(color: AppColor.textPrimary),
                     labelText: AppTextList.passwordText,
                     hintText: AppTextList.passwordText,
-                    controller: passwordController,
-                    onClearPressed: () => passwordController.clear(),
+                    controller: _passwordController,
+                    onClearPressed: () => _passwordController.clear(),
                     keyboardType: TextInputType.text,
                     onChanged: (String value) {},
-                    onEditingComplete: checkPasswordStatus,
-                    isEmailValid: checkPassword,
+                    onEditingComplete: _checkPasswordStatus,
+                    isEmailValid: _checkPassword,
                   ),
                   const SizedBox(height: 8),
-                  if (passwordError != null)
+                  if (_passwordError.isNotEmpty)
                     Text(
-                      passwordError!,
+                      _passwordError,
                       style: AppTextStyle.caption213R
                           .copyWith(color: AppColor.accentRed100),
                     ),
@@ -219,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       GestureDetector(
-                        onTap: navigateToFindPasswordPage,
+                        onTap: _navigateToFindPasswordPage,
                         child: Text(
                           AppTextList.passwordFindText,
                           style: AppTextStyle.caption113B1
@@ -238,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
               child: StickyBottomButton(
                 text: AppTextList.loginText,
                 onClick: () {},
-                enabled: isInputValid,
+                enabled: _isInputValid,
               ),
             ),
           ],
