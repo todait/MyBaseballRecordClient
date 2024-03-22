@@ -4,6 +4,7 @@ import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
+import 'package:my_baseball_record/common/game_card.dart';
 import 'package:my_baseball_record/page/profile_page.dart';
 import 'package:my_baseball_record/page/record_page.dart';
 
@@ -46,24 +47,40 @@ class _MainPageState extends State<MainPage> {
             selectedIndex = index;
           });
         },
-        children: const [
+        children: [
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     AppTextList.mainTitle,
                     style: AppTextStyle.h224B,
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 30),
+                  GameCard(
+                    title: AppTextList.recentMatchesTitle,
+                    titleTextStyle: AppTextStyle.h318B
+                        .copyWith(color: AppColor.textPrimary),
+                    count: 0,
+                    countTitle: AppTextList.countMatchesTitle,
+                    countTextStyle: AppTextStyle.body413M
+                        .copyWith(color: AppColor.textHint),
+                    icon: Image.asset('assets/icon/Frame 18.png'),
+                    subTitle: AppTextList.addPastRecordTitle,
+                    subTextStyle: AppTextStyle.body315M
+                        .copyWith(color: AppColor.textHint),
+                    btnTitle: AppTextList.addResultTitle,
+                    btnTextStyle: AppTextStyle.body315M
+                        .copyWith(color: AppColor.primaryBlue2),
+                  ),
                 ],
               ),
             ),
           ),
-          RecordPage(),
-          ProfilePage(),
+          const RecordPage(),
+          const ProfilePage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBarWidget(
