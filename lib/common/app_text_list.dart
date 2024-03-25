@@ -56,4 +56,8 @@ class AppTextList {
   static const upcomingMatchesEmpty = '아직 추가된 경기 일정이 없어요\n미리 일정 추가해보세요';
   static const completedMatchesAvailable = '종료된 경기 리스트를 볼 수 있어요\n지난 기록을 추가해보세요';
   static const addPreMatchSchedule = '미리 일정 추가하기';
+  static const gameOfTheDay = '오늘의 경기';
+  static const today = '오늘';
+  static const upcoming = '예정';
+  static const finished = '종료';
 }
