@@ -46,13 +46,13 @@ class AppTextList {
   static const countMatchesTitle = '건';
   static const upcomingMatchesTitle = '예정된 경기';
   static const addResultTitle = '결과 추가';
-  static const addScheduleTitle = '미리 일정을 추가해보세요';
+  static const addScheduleTitle = '미리 경기 일정을 추가해보세요';
   static const addEventTitle = '일정 추가';
   static const recordTitle = '기록';
   static const profileTitle = '프로필';
   static const upcomingMatches = '경기 일정';
   static const completedMatches = '종료된 경기';
-  static const addPastRecord = '지난 기록 추가하기';
+  static const addPastRecord = '지난 경기 기록하기';
   static const upcomingMatchesEmpty = '아직 추가된 경기 일정이 없어요\n미리 일정 추가해보세요';
   static const completedMatchesAvailable = '종료된 경기 리스트를 볼 수 있어요\n지난 기록을 추가해보세요';
   static const addPreMatchSchedule = '미리 일정 추가하기';
@@ -60,4 +60,10 @@ class AppTextList {
   static const today = '오늘';
   static const upcoming = '예정';
   static const finished = '종료';
+  static const noGamesTodayMessage = '오늘은 경기가 없습니다';
+  static const restForNextScheduleMessage = '다음 일정을 위해 푹 쉬세요!';
+  static const addScheduleButton = '경기 일정 추가하기';
+  static const hasScheduledGames = ' 예정된 경기가 있나요?';
+  static const hasParticipatedGames = '참여했던 경기가 있나요?';
+  static const recordGameResultMessage = '경기 결과를 기록할 수 있어요';
 }
