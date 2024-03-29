@@ -48,11 +48,14 @@ class AuthButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconTheme(
-                  data: const IconThemeData(
-                    color: AppColor.graysBlack,
-                  ),
-                  child: icon),
-              const SizedBox(width: 8),
+                data: const IconThemeData(
+                  color: AppColor.graysBlack,
+                ),
+                child: icon,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
               Text(
                 text,
                 style: textStyle,

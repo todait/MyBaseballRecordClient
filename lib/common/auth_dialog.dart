@@ -41,23 +41,38 @@ class AuthDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColor.background246,
-      insetPadding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
+      insetPadding: const EdgeInsets.only(
+        left: 30,
+        right: 30,
+        bottom: 20,
+      ),
       child: Container(
         height: 306,
         decoration: BoxDecoration(
           color: AppColor.background246,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
         ),
-        padding: const EdgeInsets.only(top: 32, left: 24, right: 24, bottom: 0),
+        padding: const EdgeInsets.only(
+          top: 32,
+          left: 24,
+          right: 24,
+          bottom: 0,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               AppTextList.passwordResetSentMessage,
-              style: AppTextStyle.h318B.copyWith(color: AppColor.textPrimary),
+              style: AppTextStyle.h318B.copyWith(
+                color: AppColor.textPrimary,
+              ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(
+              height: 32,
+            ),
             Text(
               AppTextList.checkInboxAndLoginImmediatelyAfterPasswordChange,
               style: AppTextStyle.body315M.copyWith(
@@ -65,17 +80,24 @@ class AuthDialog extends StatelessWidget {
                 color: AppColor.textSecondary,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
             Text(
               email,
-              style: AppTextStyle.body315M
-                  .copyWith(fontSize: 16, color: AppColor.primaryBlue2),
+              style: AppTextStyle.body315M.copyWith(
+                fontSize: 16,
+                color: AppColor.primaryBlue2,
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(
+              height: 24,
+            ),
             AuthButton(
               height: 30,
-              textStyle:
-                  AppTextStyle.body315M.copyWith(color: AppColor.graysWhite),
+              textStyle: AppTextStyle.body315M.copyWith(
+                color: AppColor.graysWhite,
+              ),
               onClick: () {
                 _navigateToLoginPage(context);
               },
@@ -89,8 +111,9 @@ class AuthDialog extends StatelessWidget {
             ),
             AuthButton(
               height: 30,
-              textStyle:
-                  AppTextStyle.body315M.copyWith(color: AppColor.textHint),
+              textStyle: AppTextStyle.body315M.copyWith(
+                color: AppColor.textHint,
+              ),
               onClick: () {
                 _navigateToLoginPageWithToast(context);
               },

@@ -51,7 +51,9 @@ class AuthTextInputWidget extends StatelessWidget {
             right: 0,
             child: Text(
               labelText,
-              style: AppTextStyle.body413M.copyWith(color: labelTextColor),
+              style: AppTextStyle.body413M.copyWith(
+                color: labelTextColor,
+              ),
             ),
           ),
           Positioned(
@@ -80,8 +82,9 @@ class AuthTextInputWidget extends StatelessWidget {
                       contentPadding: EdgeInsets.zero,
                       border: InputBorder.none,
                       hintText: hintText,
-                      hintStyle: AppTextStyle.body120M
-                          .copyWith(color: AppColor.textPrimary20),
+                      hintStyle: AppTextStyle.body120M.copyWith(
+                        color: AppColor.textPrimary20,
+                      ),
                     ),
                   ),
                 ),
