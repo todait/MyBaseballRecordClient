@@ -11,22 +11,35 @@ class AppBottomSheet {
       builder: (BuildContext context) {
         return Container(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(
+              24,
+            ),
             child: SizedBox(
               height: 388,
               width: 393,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 24),
+                  const SizedBox(
+                    height: 24,
+                  ),
                   text1,
-                  const SizedBox(height: 16),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   text2,
-                  const SizedBox(height: 40),
+                  const SizedBox(
+                    height: 40,
+                  ),
                   Row(
                     children: [
-                      const Icon(Icons.check, color: AppColor.primaryBlue2),
-                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.check,
+                        color: AppColor.primaryBlue2,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
                       text3,
                       const Spacer(),
                       GestureDetector(
@@ -35,9 +48,13 @@ class AppBottomSheet {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 55),
+                  const SizedBox(
+                    height: 55,
+                  ),
                   button1,
-                  const SizedBox(height: 10),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   button2,
                 ],
               ),

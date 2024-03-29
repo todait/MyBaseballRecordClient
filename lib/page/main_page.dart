@@ -84,15 +84,30 @@ class _MainPageState extends State<MainPage>
           color: AppColor.textHint,
         ),
         title: AppTextList.upcomingMatches,
-        titleStyle: AppTextStyle.h224B.copyWith(color: AppColor.textPrimary),
+        titleStyle: AppTextStyle.h224B.copyWith(
+          color: AppColor.textPrimary,
+        ),
         timeTitle: _currentTime,
-        timeStyle: AppTextStyle.body315M.copyWith(color: AppColor.textHint),
+        timeStyle: AppTextStyle.body315M.copyWith(
+          color: AppColor.textHint,
+        ),
         tabController: _tabController,
         tabs: [
-          _buildTabLabel(AppTextList.gameOfTheDay, AppTextList.today, 0),
           _buildTabLabel(
-              AppTextList.upcomingMatchesTitle, AppTextList.upcoming, 1),
-          _buildTabLabel(AppTextList.completedMatches, AppTextList.finished, 2),
+            AppTextList.gameOfTheDay,
+            AppTextList.today,
+            0,
+          ),
+          _buildTabLabel(
+            AppTextList.upcomingMatchesTitle,
+            AppTextList.upcoming,
+            1,
+          ),
+          _buildTabLabel(
+            AppTextList.completedMatches,
+            AppTextList.finished,
+            2,
+          ),
         ],
       ),
       body: PageView(
@@ -107,19 +122,25 @@ class _MainPageState extends State<MainPage>
             controller: _tabController,
             children: [
               EmptyCard(
-                icon: Image.asset('assets/icon/group_342.png'),
+                icon: Image.asset(
+                  'assets/icon/group_342.png',
+                ),
                 text1: AppTextList.noGamesTodayMessage,
                 text2: AppTextList.restForNextScheduleMessage,
                 text3: AppTextList.addScheduleButton,
               ),
               EmptyCard(
-                icon: Image.asset('assets/icon/group_343.png'),
+                icon: Image.asset(
+                  'assets/icon/group_343.png',
+                ),
                 text1: AppTextList.hasScheduledGames,
                 text2: AppTextList.addScheduleTitle,
                 text3: AppTextList.addPreMatchSchedule,
               ),
               EmptyCard(
-                icon: Image.asset('assets/icon/group_341.png'),
+                icon: Image.asset(
+                  'assets/icon/group_341.png',
+                ),
                 text1: AppTextList.hasParticipatedGames,
                 text2: AppTextList.recordGameResultMessage,
                 text3: AppTextList.addPastRecord,

@@ -79,17 +79,18 @@ class _LoginPageState extends State<LoginPage> {
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
     fToast.showToast(
-        child: toast,
-        gravity: ToastGravity.BOTTOM,
-        toastDuration: const Duration(seconds: 2),
-        positionedToastBuilder: (context, child) {
-          return Positioned(
-            bottom: keyboardHeight + 320,
-            left: 16,
-            right: 16,
-            child: child,
-          );
-        });
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: const Duration(seconds: 2),
+      positionedToastBuilder: (context, child) {
+        return Positioned(
+          bottom: keyboardHeight + 320,
+          left: 16,
+          right: 16,
+          child: child,
+        );
+      },
+    );
   }
 
   @override
@@ -149,7 +150,9 @@ class _LoginPageState extends State<LoginPage> {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -159,26 +162,30 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: widget.toggleAuthMode,
                         child: Text(
                           AppTextList.registerText,
-                          style: AppTextStyle.h224B
-                              .copyWith(color: AppColor.textPrimary20),
+                          style: AppTextStyle.h224B.copyWith(
+                            color: AppColor.textPrimary20,
+                          ),
                         ),
                       ),
                       Text(
                         AppTextList.divider,
-                        style: AppTextStyle.h224B
-                            .copyWith(color: AppColor.graysGray),
+                        style: AppTextStyle.h224B.copyWith(
+                          color: AppColor.graysGray,
+                        ),
                       ),
                       Text(
                         AppTextList.loginText,
-                        style: AppTextStyle.h224B
-                            .copyWith(color: AppColor.textPrimary),
+                        style: AppTextStyle.h224B.copyWith(
+                          color: AppColor.textPrimary,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 32),
                   AuthTextInputWidget(
-                    textStyle: AppTextStyle.body120M
-                        .copyWith(color: AppColor.textPrimary),
+                    textStyle: AppTextStyle.body120M.copyWith(
+                      color: AppColor.textPrimary,
+                    ),
                     labelText: AppTextList.emailLabel,
                     hintText: AppTextList.emailLabel,
                     controller: _emailController,
@@ -192,15 +199,17 @@ class _LoginPageState extends State<LoginPage> {
                   if (_emailError.isNotEmpty)
                     Text(
                       _emailError,
-                      style: AppTextStyle.caption213R
-                          .copyWith(color: AppColor.accentRed100),
+                      style: AppTextStyle.caption213R.copyWith(
+                        color: AppColor.accentRed100,
+                      ),
                     ),
                   const SizedBox(height: 11),
                   AuthTextInputWidget(
                     focusNode: _passwordFocusNode,
                     obscureText: true,
-                    textStyle: AppTextStyle.body120M
-                        .copyWith(color: AppColor.textPrimary),
+                    textStyle: AppTextStyle.body120M.copyWith(
+                      color: AppColor.textPrimary,
+                    ),
                     labelText: AppTextList.passwordText,
                     hintText: AppTextList.passwordText,
                     controller: _passwordController,
@@ -210,12 +219,15 @@ class _LoginPageState extends State<LoginPage> {
                     onEditingComplete: _checkPasswordStatus,
                     isEmailValid: _checkPassword,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   if (_passwordError.isNotEmpty)
                     Text(
                       _passwordError,
-                      style: AppTextStyle.caption213R
-                          .copyWith(color: AppColor.accentRed100),
+                      style: AppTextStyle.caption213R.copyWith(
+                        color: AppColor.accentRed100,
+                      ),
                     ),
                   const SizedBox(height: 11),
                   Row(
@@ -225,8 +237,9 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: _navigateToFindPasswordPage,
                         child: Text(
                           AppTextList.passwordFindText,
-                          style: AppTextStyle.caption113B1
-                              .copyWith(color: AppColor.textHint),
+                          style: AppTextStyle.caption113B1.copyWith(
+                            color: AppColor.textHint,
+                          ),
                         ),
                       ),
                     ],

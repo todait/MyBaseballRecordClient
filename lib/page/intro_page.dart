@@ -23,59 +23,80 @@ class IntroPage extends StatelessWidget {
               children: [
                 Text(
                   AppTextList.mainText,
-                  style: AppTextStyle.hero48BB
-                      .copyWith(color: AppColor.graysWhite),
+                  style: AppTextStyle.hero48BB.copyWith(
+                    color: AppColor.graysWhite,
+                  ),
                 ),
-                Text(AppTextList.subText,
-                    style: AppTextStyle.h418M
-                        .copyWith(color: AppColor.graysWhite)),
+                Text(
+                  AppTextList.subText,
+                  style: AppTextStyle.h418M.copyWith(
+                    color: AppColor.graysWhite,
+                  ),
+                ),
                 const SizedBox(height: 233),
                 AuthButton(
                   height: 30,
                   textStyle: AppTextStyle.body315M,
                   onClick: () {},
-                  icon: const FaIcon(FontAwesomeIcons.apple),
+                  icon: const FaIcon(
+                    FontAwesomeIcons.apple,
+                  ),
                   backgroundColor: AppColor.graysWhite,
                   text: AppTextList.appleText,
                   borderColor: AppColor.transparent,
                   textColor: AppColor.graysBlack,
                   iconColor: AppColor.transparent,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(
+                  height: 16,
+                ),
                 AuthButton(
                   height: 30,
                   textStyle: AppTextStyle.body315M,
                   onClick: () {},
-                  icon: Image.asset('assets/icon/kakao_logo.png'),
+                  icon: Image.asset(
+                    'assets/icon/kakao_logo.png',
+                  ),
                   backgroundColor: AppColor.yellowColor,
                   text: AppTextList.kakaoText,
                   borderColor: AppColor.transparent,
                   textColor: AppColor.graysBlack,
                   iconColor: AppColor.transparent,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(
+                  height: 16,
+                ),
                 AuthButton(
                   height: 30,
-                  textStyle: AppTextStyle.body315M
-                      .copyWith(color: AppColor.graysWhite),
+                  textStyle: AppTextStyle.body315M.copyWith(
+                    color: AppColor.graysWhite,
+                  ),
                   onClick: () {},
-                  icon: Image.asset('assets/icon/naver_logo.png'),
+                  icon: Image.asset(
+                    'assets/icon/naver_logo.png',
+                  ),
                   backgroundColor: AppColor.greenColor,
                   text: AppTextList.naverText,
                   textColor: AppColor.graysWhite,
                   borderColor: AppColor.graysWhite,
                   iconColor: AppColor.transparent,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(
+                  height: 16,
+                ),
                 AuthButton(
                   height: 30,
-                  textStyle: AppTextStyle.body315M
-                      .copyWith(color: AppColor.graysWhite),
+                  textStyle: AppTextStyle.body315M.copyWith(
+                    color: AppColor.graysWhite,
+                  ),
                   onClick: () {
-                    Navigator.of(context).push(MaterialPageRoute(
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
                         builder: (context) => const EmailAuthPage(
-                              isRegistering: true,
-                            )));
+                          isRegistering: true,
+                        ),
+                      ),
+                    );
                   },
                   icon: Image.asset(
                     'assets/icon/at_logo.png',

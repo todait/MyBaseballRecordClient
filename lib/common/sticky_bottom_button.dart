@@ -28,7 +28,9 @@ class StickyBottomButton extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             text,
-            style: AppTextStyle.body315M.copyWith(color: AppColor.graysWhite),
+            style: AppTextStyle.body315M.copyWith(
+              color: AppColor.graysWhite,
+            ),
           ),
         ),
       ),

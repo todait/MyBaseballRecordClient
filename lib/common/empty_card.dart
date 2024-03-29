@@ -20,29 +20,44 @@ class EmptyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 144),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 144,
+      ),
       child: Column(
         children: [
           icon,
-          const SizedBox(height: 20),
+          const SizedBox(
+            height: 20,
+          ),
           Text(
             text1,
-            style: AppTextStyle.h418M.copyWith(color: AppColor.textSecondary),
+            style: AppTextStyle.h418M.copyWith(
+              color: AppColor.textSecondary,
+            ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(
+            height: 10,
+          ),
           Text(
             text2,
-            style: AppTextStyle.body315M.copyWith(color: AppColor.textHint),
+            style: AppTextStyle.body315M.copyWith(
+              color: AppColor.textHint,
+            ),
           ),
-          const SizedBox(height: 48),
+          const SizedBox(
+            height: 48,
+          ),
           AuthButton(
             onClick: () {},
             icon: Container(),
             backgroundColor: AppColor.primaryBlue3,
             text: text3,
             borderColor: AppColor.primaryBlue3,
-            textStyle: AppTextStyle.body315M
-                .copyWith(fontSize: 16, color: AppColor.primaryBlue2),
+            textStyle: AppTextStyle.body315M.copyWith(
+              fontSize: 16,
+              color: AppColor.primaryBlue2,
+            ),
             textColor: AppColor.primaryBlue2,
             iconColor: AppColor.transparent,
             height: 36,

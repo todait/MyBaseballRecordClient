@@ -22,59 +22,72 @@ class BottomNavigationBarWidget extends StatelessWidget {
       height: 85,
       decoration: BoxDecoration(
         color: AppColor.graysWhite,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColor.graysGray),
+        borderRadius: BorderRadius.circular(
+          16,
+        ),
+        border: Border.all(
+          color: AppColor.graysGray,
+        ),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 24, right: 24),
+        padding: const EdgeInsets.only(
+          left: 24,
+          right: 24,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Column(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.sports_baseball),
+                  icon: const Icon(
+                    Icons.sports_baseball,
+                  ),
                   onPressed: () => onTabIcon(0),
                   color: selectedIndex == 0 ? selectedColor : unselectedColor,
                 ),
                 Text(
                   AppTextList.mainTitle,
                   style: AppTextStyle.body413M.copyWith(
-                      height: 0.2,
-                      color:
-                          selectedIndex == 0 ? selectedColor : unselectedColor),
+                    height: 0.2,
+                    color: selectedIndex == 0 ? selectedColor : unselectedColor,
+                  ),
                 ),
               ],
             ),
             Column(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.sticky_note_2),
+                  icon: const Icon(
+                    Icons.sticky_note_2,
+                  ),
                   onPressed: () => onTabIcon(1),
                   color: selectedIndex == 1 ? selectedColor : unselectedColor,
                 ),
                 Text(
                   AppTextList.recordTitle,
                   style: AppTextStyle.body413M.copyWith(
-                      height: 0.2,
-                      color:
-                          selectedIndex == 1 ? selectedColor : unselectedColor),
+                    height: 0.2,
+                    color: selectedIndex == 1 ? selectedColor : unselectedColor,
+                  ),
                 ),
               ],
             ),
             Column(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.account_circle),
+                  icon: const Icon(
+                    Icons.account_circle,
+                  ),
                   onPressed: () => onTabIcon(2),
                   color: selectedIndex == 2 ? selectedColor : unselectedColor,
                 ),
                 Text(
                   AppTextList.profileTitle,
                   style: AppTextStyle.body413M.copyWith(
-                      height: 0.2,
-                      color:
-                          selectedIndex == 2 ? selectedColor : unselectedColor),
+                    height: 0.2,
+                    color: selectedIndex == 2 ? selectedColor : unselectedColor,
+                  ),
                 ),
               ],
             ),
