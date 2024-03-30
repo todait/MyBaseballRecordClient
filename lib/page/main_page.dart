@@ -24,20 +24,31 @@ class _MainPageState extends State<MainPage>
 
   int _selectedIndex = 0;
   DateTime _currentTime = DateTime.now();
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    startTimer();
-    _tabController = TabController(length: 3, vsync: this);
+    _startTimer();
+    _tabController = TabController(
+      length: 3,
+      vsync: this,
+      animationDuration: null,
+    );
   }
 
-  void startTimer() {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      _updateCurrentTime();
+    });
+  }
+
+  void _updateCurrentTime() {
+    if (mounted) {
       setState(() {
         _currentTime = DateTime.now();
       });
-    });
+    }
   }
 
   void onTabIcon(int index) {
@@ -71,6 +82,8 @@ class _MainPageState extends State<MainPage>
   void dispose() {
     _pageController.dispose();
     _tabController.dispose();
+    _timer.cancel();
+
     super.dispose();
   }
 
