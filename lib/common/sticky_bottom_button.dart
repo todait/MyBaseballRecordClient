@@ -17,15 +17,13 @@ class StickyBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const greyBtnColor = AppColor.textPrimary10;
+    const greyBtnColor = AppColor.textPrimary20;
 
     Color buttonColor = enabled ? AppColor.textPrimary : greyBtnColor;
-    Color buttonBorderColor =
-        enabled ? AppColor.textPrimary : greyBtnColor.withOpacity(0.8);
 
     return PressedButton(
       borderRadius: BorderRadius.circular(0),
-      borderColor: buttonBorderColor,
+      borderColor: AppColor.graysWhite,
       backgroundColor: buttonColor,
       onTap: enabled ? onClick : () {},
       borderWidth: 0,
