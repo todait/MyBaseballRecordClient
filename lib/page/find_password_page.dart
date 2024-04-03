@@ -95,7 +95,7 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                     controller: _emailController,
                     onClearPressed: () => _emailController.clear(),
                     keyboardType: TextInputType.text,
-                    onChanged: (String value) {},
+                    onChanged: (value) => _checkInputValid(),
                     onEditingComplete: _checkInputValid,
                     isEmailValid: false,
                   ),
