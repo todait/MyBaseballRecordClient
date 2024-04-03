@@ -112,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
     if (_checkEmail) {
       FocusScope.of(context).requestFocus(_passwordFocusNode);
     }
+    _updateInputValid();
   }
 
   void _checkPasswordStatus() {
@@ -122,6 +123,16 @@ class _LoginPageState extends State<LoginPage> {
           : AppTextList.passwordNotFoundErrorMessage;
       _checkPassword = _passwordError.isEmpty;
       _isInputValid = _checkPassword;
+    });
+    _updateInputValid();
+  }
+
+  void _updateInputValid() {
+    setState(() {
+      _isInputValid = _emailError.isEmpty &&
+          _passwordError.isEmpty &&
+          _emailController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty;
     });
   }
 
@@ -134,12 +145,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _navigateToMainPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const MainPage(),
-      ),
-    );
+    if (_isInputValid) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainPage(),
+        ),
+      );
+    }
   }
 
   @override
