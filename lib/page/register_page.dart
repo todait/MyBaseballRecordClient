@@ -48,14 +48,30 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
+  void _navigateToMainPage() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const MainPage(),
+      ),
+    );
+  }
+
+  void _updateFinalPasswordStatus(String value) {
+    setState(() {
+      _showFinalPassword = value == _passwordController.text;
+    });
+  }
+
   void _updateEmailStatus() {
     final email = _emailController.text;
     setState(() {
       _emailError =
           validateEmail(email) ? "" : AppTextList.criticalAlertEmailText;
-      _showPasswordInput = _emailError.isEmpty;
+      if (!_showPasswordInput && validateEmail(email)) {
+        _showPasswordInput = true;
+      }
     });
-    if (_showPasswordInput) {
+    if (_showPasswordInput && _emailError.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         FocusScope.of(context).requestFocus(_passwordFocusNode);
       });
@@ -67,9 +83,11 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() {
       _passwordError =
           validatePassword(password) ? "" : AppTextList.passwordValidationText;
-      _showConfirmPasswordInput = _passwordError.isEmpty;
+      if (!_showConfirmPasswordInput && _passwordError.isEmpty) {
+        _showConfirmPasswordInput = true;
+      }
     });
-    if (_showConfirmPasswordInput) {
+    if (_showConfirmPasswordInput && _passwordError.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         FocusScope.of(context).requestFocus(_confirmPasswordFocusNode);
       });
@@ -84,7 +102,9 @@ class _RegisterPageState extends State<RegisterPage> {
           : "";
       _showPasswordCheckInput = _confirmPasswordError.isEmpty;
     });
-    if (_showPasswordCheckInput) {
+    if (_confirmPasswordError.isEmpty &&
+        _emailError.isEmpty &&
+        _passwordError.isEmpty) {
       _showModelSheet();
     }
   }
@@ -156,20 +176,6 @@ class _RegisterPageState extends State<RegisterPage> {
         borderRadius: BorderRadius.circular(15),
       ),
     );
-  }
-
-  void _navigateToMainPage() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const MainPage(),
-      ),
-    );
-  }
-
-  void _updateFinalPasswordStatus(String value) {
-    setState(() {
-      _showFinalPassword = value == _passwordController.text;
-    });
   }
 
   @override
