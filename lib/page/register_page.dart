@@ -62,6 +62,117 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+  bool _shouldShowImportantNotificationEmail() {
+    return _emailError.isEmpty && !_showPasswordInput;
+  }
+
+  bool _shouldShowPasswordRequirements() {
+    return _passwordError.isEmpty &&
+        _showPasswordInput &&
+        !_showConfirmPasswordInput;
+  }
+
+  bool _shouldShowConfirmPasswordError() {
+    return _confirmPasswordError.isNotEmpty && !_showFinalPassword;
+  }
+
+  bool _shouldShowReenterPasswordPrompt() {
+    return _confirmPasswordError.isEmpty &&
+        _showConfirmPasswordInput &&
+        !_showPasswordCheckInput &&
+        !_showFinalPassword;
+  }
+
+  bool _isAllInputValid() {
+    return _confirmPasswordError.isEmpty &&
+        _emailError.isEmpty &&
+        _passwordError.isEmpty;
+  }
+
+  Widget _buildEmailErrorText() {
+    if (_emailError.isNotEmpty) {
+      return Text(
+        _emailError,
+        style: AppTextStyle.caption213R.copyWith(
+          color: AppColor.accentRed100,
+        ),
+      );
+    }
+    return Container();
+  }
+
+  Widget _buildImportantNotificationEmailText() {
+    if (_shouldShowImportantNotificationEmail()) {
+      return Text(
+        AppTextList.importantNotificationEmailText,
+        style: AppTextStyle.caption213R.copyWith(
+          color: AppColor.textHint,
+        ),
+      );
+    }
+    return Container();
+  }
+
+  Widget _buildPasswordErrorText() {
+    if (_passwordError.isNotEmpty) {
+      return Text(
+        _passwordError,
+        style: AppTextStyle.caption213R.copyWith(
+          color: AppColor.accentRed100,
+        ),
+      );
+    }
+    return Container();
+  }
+
+  Widget _buildPasswordRequirementsText() {
+    if (_shouldShowPasswordRequirements()) {
+      return Text(
+        AppTextList.passwordRequirementsText,
+        style: AppTextStyle.caption213R.copyWith(
+          color: AppColor.textHint,
+        ),
+      );
+    }
+    return Container();
+  }
+
+  Widget _buildConfirmPasswordErrorText() {
+    if (_shouldShowConfirmPasswordError()) {
+      return Text(
+        _confirmPasswordError,
+        style: AppTextStyle.caption213R.copyWith(
+          color: AppColor.accentRed100,
+        ),
+      );
+    }
+    return Container();
+  }
+
+  Widget _buildReenterPasswordPromptText() {
+    if (_shouldShowReenterPasswordPrompt()) {
+      return Text(
+        AppTextList.reenterPasswordPrompt,
+        style: AppTextStyle.caption213R.copyWith(
+          color: AppColor.textHint,
+        ),
+      );
+    }
+    return Container();
+  }
+
+  Widget _buildPasswordConfirmationSuccessText() {
+    if (_showFinalPassword) {
+      return Text(
+        AppTextList.passwordConfirmationSuccessText,
+        style: AppTextStyle.caption213R.copyWith(
+          color: AppColor.accentGreen100,
+        ),
+      );
+    }
+    return Container();
+  }
+
   void _updateEmailStatus() {
     final email = _emailController.text;
     setState(() {
@@ -102,9 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
           : "";
       _showPasswordCheckInput = _confirmPasswordError.isEmpty;
     });
-    if (_confirmPasswordError.isEmpty &&
-        _emailError.isEmpty &&
-        _passwordError.isEmpty) {
+    if (_isAllInputValid()) {
       _showModelSheet();
     }
   }
@@ -233,20 +342,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  if (_emailError.isNotEmpty)
-                    Text(
-                      _emailError,
-                      style: AppTextStyle.caption213R.copyWith(
-                        color: AppColor.accentRed100,
-                      ),
-                    ),
-                  if (_emailError.isEmpty && !_showPasswordInput)
-                    Text(
-                      AppTextList.importantNotificationEmailText,
-                      style: AppTextStyle.caption213R.copyWith(
-                        color: AppColor.textHint,
-                      ),
-                    ),
+                  _buildEmailErrorText(),
+                  _buildImportantNotificationEmailText(),
                   const Visibility(
                     visible: true,
                     child: SizedBox(
@@ -272,22 +369,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  if (_passwordError.isNotEmpty)
-                    Text(
-                      _passwordError,
-                      style: AppTextStyle.caption213R.copyWith(
-                        color: AppColor.accentRed100,
-                      ),
-                    ),
-                  if (_passwordError.isEmpty &&
-                      _showPasswordInput &&
-                      !_showConfirmPasswordInput)
-                    Text(
-                      AppTextList.passwordRequirementsText,
-                      style: AppTextStyle.caption213R.copyWith(
-                        color: AppColor.textHint,
-                      ),
-                    ),
+                  _buildPasswordErrorText(),
+                  _buildPasswordRequirementsText(),
                   const Visibility(
                     visible: true,
                     child: SizedBox(
@@ -313,30 +396,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  if (_confirmPasswordError.isNotEmpty && !_showFinalPassword)
-                    Text(
-                      _confirmPasswordError,
-                      style: AppTextStyle.caption213R.copyWith(
-                        color: AppColor.accentRed100,
-                      ),
-                    ),
-                  if (_confirmPasswordError.isEmpty &&
-                      _showConfirmPasswordInput &&
-                      !_showPasswordCheckInput &&
-                      !_showFinalPassword)
-                    Text(
-                      AppTextList.reenterPasswordPrompt,
-                      style: AppTextStyle.caption213R.copyWith(
-                        color: AppColor.textHint,
-                      ),
-                    ),
-                  if (_showFinalPassword)
-                    Text(
-                      AppTextList.passwordConfirmationSuccessText,
-                      style: AppTextStyle.caption213R.copyWith(
-                        color: AppColor.accentGreen100,
-                      ),
-                    ),
+                  _buildConfirmPasswordErrorText(),
+                  _buildReenterPasswordPromptText(),
+                  _buildPasswordConfirmationSuccessText(),
                 ],
               ),
             ),
