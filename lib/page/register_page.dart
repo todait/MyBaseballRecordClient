@@ -182,6 +182,10 @@ class _RegisterPageState extends State<RegisterPage> {
         _showPasswordInput = true;
       }
     });
+    _focusPasswordInputIfNeeded();
+  }
+
+  void _focusPasswordInputIfNeeded() {
     if (_showPasswordInput && _emailError.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         FocusScope.of(context).requestFocus(_passwordFocusNode);
@@ -198,6 +202,10 @@ class _RegisterPageState extends State<RegisterPage> {
         _showConfirmPasswordInput = true;
       }
     });
+    _focusConfirmPasswordInputIfNeeded();
+  }
+
+  void _focusConfirmPasswordInputIfNeeded() {
     if (_showConfirmPasswordInput && _passwordError.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         FocusScope.of(context).requestFocus(_confirmPasswordFocusNode);
