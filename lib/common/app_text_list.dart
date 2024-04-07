@@ -49,4 +49,6 @@ class AppTextList {
   static const addResultTitle = '결과 추가';
   static const addScheduleTitle = '미리 일정을 추가해보세요';
   static const addEventTitle = '일정 추가';
+  static const recordTitle = '기록';
+  static const profileTitle = '프로필';
 }
