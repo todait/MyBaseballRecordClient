@@ -6,6 +6,7 @@ import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
+import 'package:my_baseball_record/common/empty_card.dart';
 import 'package:my_baseball_record/page/profile_page.dart';
 import 'package:my_baseball_record/page/record_page.dart';
 
@@ -100,20 +101,28 @@ class _MainPageState extends State<MainPage>
           setState(() {
             _selectedIndex = index;
           });
-          _tabController.animateTo(index);
         },
         children: [
           TabBarView(
             controller: _tabController,
-            children: const [
-              Center(
-                child: Text(AppTextList.gameOfTheDay),
+            children: [
+              EmptyCard(
+                icon: Image.asset('assets/icon/group_342.png'),
+                text1: AppTextList.noGamesTodayMessage,
+                text2: AppTextList.restForNextScheduleMessage,
+                text3: AppTextList.addScheduleButton,
               ),
-              Center(
-                child: Text(AppTextList.upcoming),
+              EmptyCard(
+                icon: Image.asset('assets/icon/group_343.png'),
+                text1: AppTextList.hasScheduledGames,
+                text2: AppTextList.addScheduleTitle,
+                text3: AppTextList.addPreMatchSchedule,
               ),
-              Center(
-                child: Text(AppTextList.finished),
+              EmptyCard(
+                icon: Image.asset('assets/icon/group_341.png'),
+                text1: AppTextList.hasParticipatedGames,
+                text2: AppTextList.recordGameResultMessage,
+                text3: AppTextList.addPastRecord,
               ),
             ],
           ),
