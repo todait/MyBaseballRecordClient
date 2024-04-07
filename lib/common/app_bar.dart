@@ -31,7 +31,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 24),
+            padding: const EdgeInsets.only(
+              right: 24,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -39,9 +41,13 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
           ),
-          const SizedBox(height: 26),
+          const SizedBox(
+            height: 26,
+          ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -53,20 +59,35 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                         style: titleStyle,
                       )
                     : const SizedBox(),
-                const SizedBox(width: 16),
+                const SizedBox(
+                  width: 16,
+                ),
                 timeTitle != null
                     ? Text(
-                        DateFormat('M월 d일 E a h:mm', 'ko_KR')
-                            .format(timeTitle!)
-                            .replaceAll('AM', '오전')
-                            .replaceAll('PM', '오후'),
+                        DateFormat(
+                          'M월 d일 E a h:mm',
+                          'ko_KR',
+                        )
+                            .format(
+                              timeTitle!,
+                            )
+                            .replaceAll(
+                              'AM',
+                              '오전',
+                            )
+                            .replaceAll(
+                              'PM',
+                              '오후',
+                            ),
                         style: timeStyle,
                       )
                     : const SizedBox(),
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(
+            height: 20,
+          ),
           TabBar(
             controller: tabController,
             tabs: tabs,
@@ -77,7 +98,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             unselectedLabelStyle: AppTextStyle.h418M,
             indicatorWeight: 2,
             indicatorSize: TabBarIndicatorSize.tab,
-            labelPadding: const EdgeInsets.only(bottom: 8),
+            labelPadding: const EdgeInsets.only(
+              bottom: 8,
+            ),
           ),
         ],
       ),

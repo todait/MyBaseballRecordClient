@@ -38,10 +38,13 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.close)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.close,
+          ),
+        ),
       ),
       body: _isRegistering
           ? RegisterPage(

@@ -30,17 +30,24 @@ class GameCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(
+        vertical: 24,
+      ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: titleTextStyle),
-              Text('$count$countTitle  >', style: countTitleStyle),
+              Text(
+                '$count$countTitle  >',
+                style: countTitleStyle,
+              ),
             ],
           ),
-          const SizedBox(height: 34),
+          const SizedBox(
+            height: 34,
+          ),
           Column(
             children: [
               Text(
@@ -48,7 +55,9 @@ class GameCard extends StatelessWidget {
                 style: subTitleStyle,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 28),
+              const SizedBox(
+                height: 28,
+              ),
               Container(
                 height: 44,
                 width: double.infinity,

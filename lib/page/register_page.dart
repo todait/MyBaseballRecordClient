@@ -94,29 +94,39 @@ class _RegisterPageState extends State<RegisterPage> {
       context,
       Text(
         AppTextList.lastStepMessage,
-        style: AppTextStyle.h224B.copyWith(color: AppColor.textPrimary),
+        style: AppTextStyle.h224B.copyWith(
+          color: AppColor.textPrimary,
+        ),
       ),
       Text(
         AppTextList.agreementNotice,
-        style: AppTextStyle.body315M
-            .copyWith(fontSize: 16, height: 1.5, color: AppColor.textSecondary),
+        style: AppTextStyle.body315M.copyWith(
+          fontSize: 16,
+          height: 1.5,
+          color: AppColor.textSecondary,
+        ),
       ),
       Text(
         AppTextList.personalInfoAgreement,
-        style: AppTextStyle.body315M
-            .copyWith(fontSize: 16, color: AppColor.textSecondary),
+        style: AppTextStyle.body315M.copyWith(
+          fontSize: 16,
+          color: AppColor.textSecondary,
+        ),
       ),
       Text(
         AppTextList.viewText,
         style: AppTextStyle.body315M.copyWith(
-            color: AppColor.textHint,
-            decoration: TextDecoration.underline,
-            decorationColor: AppColor.textHint),
+          color: AppColor.textHint,
+          decoration: TextDecoration.underline,
+          decorationColor: AppColor.textHint,
+        ),
       ),
       AuthButton(
         height: 40,
-        textStyle: AppTextStyle.body315M
-            .copyWith(fontSize: 16, color: AppColor.textHint),
+        textStyle: AppTextStyle.body315M.copyWith(
+          fontSize: 16,
+          color: AppColor.textHint,
+        ),
         onClick: () {
           Navigator.pop(context);
         },
@@ -130,8 +140,10 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       AuthButton(
         height: 40,
-        textStyle: AppTextStyle.body315M
-            .copyWith(fontSize: 16, color: AppColor.graysWhite),
+        textStyle: AppTextStyle.body315M.copyWith(
+          fontSize: 16,
+          color: AppColor.graysWhite,
+        ),
         onClick: () {
           _navigateToMainPage();
         },
@@ -147,8 +159,11 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _navigateToMainPage() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const MainPage()));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const MainPage(),
+      ),
+    );
   }
 
   void _updateFinalPasswordStatus(String value) {
@@ -172,28 +187,34 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       Text(
                         AppTextList.registerText,
-                        style: AppTextStyle.h224B
-                            .copyWith(color: AppColor.textPrimary),
+                        style: AppTextStyle.h224B.copyWith(
+                          color: AppColor.textPrimary,
+                        ),
                       ),
                       Text(
                         AppTextList.divider,
-                        style: AppTextStyle.h224B
-                            .copyWith(color: AppColor.graysGray),
+                        style: AppTextStyle.h224B.copyWith(
+                          color: AppColor.graysGray,
+                        ),
                       ),
                       GestureDetector(
                         onTap: widget.toggleAuthMode,
                         child: Text(
                           AppTextList.loginText,
-                          style: AppTextStyle.h224B
-                              .copyWith(color: AppColor.textPrimary20),
+                          style: AppTextStyle.h224B.copyWith(
+                            color: AppColor.textPrimary20,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(
+                    height: 32,
+                  ),
                   AuthTextInputWidget(
-                    textStyle: AppTextStyle.body120M
-                        .copyWith(color: AppColor.textPrimary),
+                    textStyle: AppTextStyle.body120M.copyWith(
+                      color: AppColor.textPrimary,
+                    ),
                     labelText: AppTextList.emailLabel,
                     hintText: AppTextList.emailLabel,
                     controller: _emailController,
@@ -203,29 +224,36 @@ class _RegisterPageState extends State<RegisterPage> {
                     onEditingComplete: _updateEmailStatus,
                     isEmailValid: _showPasswordInput,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   if (_emailError.isNotEmpty)
                     Text(
                       _emailError,
-                      style: AppTextStyle.caption213R
-                          .copyWith(color: AppColor.accentRed100),
+                      style: AppTextStyle.caption213R.copyWith(
+                        color: AppColor.accentRed100,
+                      ),
                     ),
                   if (_emailError.isEmpty && !_showPasswordInput)
                     Text(
                       AppTextList.importantNotificationEmailText,
-                      style: AppTextStyle.caption213R
-                          .copyWith(color: AppColor.textHint),
+                      style: AppTextStyle.caption213R.copyWith(
+                        color: AppColor.textHint,
+                      ),
                     ),
                   const Visibility(
                     visible: true,
-                    child: SizedBox(height: 8),
+                    child: SizedBox(
+                      height: 8,
+                    ),
                   ),
                   if (_showPasswordInput)
                     AuthTextInputWidget(
                       focusNode: _passwordFocusNode,
                       obscureText: true,
-                      textStyle: AppTextStyle.body120M
-                          .copyWith(color: AppColor.textPrimary),
+                      textStyle: AppTextStyle.body120M.copyWith(
+                        color: AppColor.textPrimary,
+                      ),
                       labelText: AppTextList.passwordSetupText,
                       hintText: AppTextList.passwordText,
                       controller: _passwordController,
@@ -235,31 +263,38 @@ class _RegisterPageState extends State<RegisterPage> {
                       onEditingComplete: _updatePasswordStatus,
                       isEmailValid: _showConfirmPasswordInput,
                     ),
-                  const SizedBox(height: 8),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   if (_passwordError.isNotEmpty)
                     Text(
                       _passwordError,
-                      style: AppTextStyle.caption213R
-                          .copyWith(color: AppColor.accentRed100),
+                      style: AppTextStyle.caption213R.copyWith(
+                        color: AppColor.accentRed100,
+                      ),
                     ),
                   if (_passwordError.isEmpty &&
                       _showPasswordInput &&
                       !_showConfirmPasswordInput)
                     Text(
                       AppTextList.passwordRequirementsText,
-                      style: AppTextStyle.caption213R
-                          .copyWith(color: AppColor.textHint),
+                      style: AppTextStyle.caption213R.copyWith(
+                        color: AppColor.textHint,
+                      ),
                     ),
                   const Visibility(
                     visible: true,
-                    child: SizedBox(height: 8),
+                    child: SizedBox(
+                      height: 8,
+                    ),
                   ),
                   if (_showConfirmPasswordInput)
                     AuthTextInputWidget(
                       focusNode: _confirmPasswordFocusNode,
                       obscureText: true,
-                      textStyle: AppTextStyle.body120M
-                          .copyWith(color: AppColor.textPrimary),
+                      textStyle: AppTextStyle.body120M.copyWith(
+                        color: AppColor.textPrimary,
+                      ),
                       labelText: AppTextList.passwordConfirmationText,
                       hintText: AppTextList.passwordText,
                       controller: _confirmPasswordController,
@@ -269,12 +304,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       onEditingComplete: _updateConfirmPasswordStatus,
                       isEmailValid: false,
                     ),
-                  const SizedBox(height: 8),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   if (_confirmPasswordError.isNotEmpty && !_showFinalPassword)
                     Text(
                       _confirmPasswordError,
-                      style: AppTextStyle.caption213R
-                          .copyWith(color: AppColor.accentRed100),
+                      style: AppTextStyle.caption213R.copyWith(
+                        color: AppColor.accentRed100,
+                      ),
                     ),
                   if (_confirmPasswordError.isEmpty &&
                       _showConfirmPasswordInput &&
@@ -282,14 +320,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       !_showFinalPassword)
                     Text(
                       AppTextList.reenterPasswordPrompt,
-                      style: AppTextStyle.caption213R
-                          .copyWith(color: AppColor.textHint),
+                      style: AppTextStyle.caption213R.copyWith(
+                        color: AppColor.textHint,
+                      ),
                     ),
                   if (_showFinalPassword)
                     Text(
                       AppTextList.passwordConfirmationSuccessText,
-                      style: AppTextStyle.caption213R
-                          .copyWith(color: AppColor.accentGreen100),
+                      style: AppTextStyle.caption213R.copyWith(
+                        color: AppColor.accentGreen100,
+                      ),
                     ),
                 ],
               ),

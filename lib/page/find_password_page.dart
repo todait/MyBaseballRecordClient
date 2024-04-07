@@ -48,10 +48,13 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.close)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.close,
+          ),
+        ),
       ),
       body: SafeArea(
         bottom: false,
@@ -70,16 +73,23 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                       color: AppColor.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   Text(
                     AppTextList.sendResetPasswordEmailText,
-                    style: AppTextStyle.body315M
-                        .copyWith(color: AppColor.textHint, height: 1.5),
+                    style: AppTextStyle.body315M.copyWith(
+                      color: AppColor.textHint,
+                      height: 1.5,
+                    ),
                   ),
-                  const SizedBox(height: 48),
+                  const SizedBox(
+                    height: 48,
+                  ),
                   AuthTextInputWidget(
-                    textStyle: AppTextStyle.body120M
-                        .copyWith(color: AppColor.textPrimary),
+                    textStyle: AppTextStyle.body120M.copyWith(
+                      color: AppColor.textPrimary,
+                    ),
                     labelText: AppTextList.emailLabel,
                     hintText: AppTextList.emailLabel,
                     controller: _emailController,
