@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
               color: AppColor.accentRed100,
             ),
           )
-        : Container();
+        : const SizedBox.shrink();
   }
 
   Widget _buildPasswordInfoText() {
@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
               color: AppColor.accentRed100,
             ),
           )
-        : Container();
+        : const SizedBox.shrink();
   }
 
   void _checkEmailStatus() {
