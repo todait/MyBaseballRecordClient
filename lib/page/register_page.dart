@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:my_baseball_record/common/app_bottom_sheet.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
+import 'package:my_baseball_record/common/auth_button.dart';
 import 'package:my_baseball_record/common/auth_text_input_widget.dart';
 import 'package:my_baseball_record/common/util/validate.dart';
 import 'package:my_baseball_record/page/main_page.dart';
@@ -92,8 +95,63 @@ class _RegisterPageState extends State<RegisterPage> {
         confirmPasswordError = null;
         showPasswordCheckInput = true;
       });
-      navigateToMainPage();
+      _showModelSheet();
     }
+  }
+
+  void _showModelSheet() {
+    AppBottomSheet.show(
+      context,
+      Text(
+        AppTextList.lastStepMessage,
+        style: AppTextStyle.h224B.copyWith(color: AppColor.textPrimary),
+      ),
+      Text(
+        AppTextList.agreementNotice,
+        style: AppTextStyle.body315M
+            .copyWith(fontSize: 16, height: 1.5, color: AppColor.textSecondary),
+      ),
+      Text(
+        AppTextList.personalInfoAgreement,
+        style: AppTextStyle.body315M
+            .copyWith(fontSize: 16, color: AppColor.textSecondary),
+      ),
+      Text(
+        AppTextList.viewText,
+        style: AppTextStyle.body315M.copyWith(
+            color: AppColor.textHint,
+            decoration: TextDecoration.underline,
+            decorationColor: AppColor.textHint),
+      ),
+      AuthButton(
+        height: 40,
+        textStyle: AppTextStyle.body315M
+            .copyWith(fontSize: 16, color: AppColor.textHint),
+        onClick: () {},
+        icon: Container(),
+        backgroundColor: AppColor.background246,
+        text: AppTextList.closeText,
+        borderColor: AppColor.background246,
+        textColor: AppColor.textHint,
+        iconColor: AppColor.transparent,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      AuthButton(
+        height: 40,
+        textStyle: AppTextStyle.body315M
+            .copyWith(fontSize: 16, color: AppColor.graysWhite),
+        onClick: () {
+          navigateToMainPage();
+        },
+        icon: Container(),
+        backgroundColor: AppColor.textPrimary,
+        text: AppTextList.agreeAndSignUp,
+        borderColor: AppColor.background246,
+        textColor: AppColor.graysWhite,
+        iconColor: AppColor.transparent,
+        borderRadius: BorderRadius.circular(15),
+      ),
+    );
   }
 
   void navigateToMainPage() {

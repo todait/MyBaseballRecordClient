@@ -32,4 +32,11 @@ class AppTextList {
       '아래의 메일의 수신함을 확인해주세요 :)\n비밀번호 변경 후, 바로 로그인할 수 있어요';
   static const loginAgain = '다시 로그인하기';
   static const resendEmail = '메일 재발송';
+  static const lastStepMessage = '짜잔! 마지막 단계입니다💫';
+  static const agreementNotice =
+      '회원가입 과정에서 개인정보 수집 및 이용에 대한 동의는 필수랍니다. 아래 항목에 대해 동의해 주세요 :)';
+  static const personalInfoAgreement = '개인정보 수집·이용 동의';
+  static const viewText = '보기';
+  static const closeText = '닫기';
+  static const agreeAndSignUp = '동의하고 회원가입하기';
 }
