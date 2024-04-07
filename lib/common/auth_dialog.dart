@@ -13,12 +13,28 @@ class AuthDialog extends StatelessWidget {
     required this.email,
   });
 
-  void navigateToLoginPage(BuildContext context, bool isRegistering) {
-    Navigator.of(context).push(MaterialPageRoute(
+  void navigateToLoginPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
         builder: (context) => EmailAuthPage(
-              isRegistering: isRegistering,
-              email: email,
-            )));
+          isRegistering: false,
+          email: email,
+          showToast: false,
+        ),
+      ),
+    );
+  }
+
+  void navigateToLoginPageWithToast(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EmailAuthPage(
+          isRegistering: false,
+          email: email,
+          showToast: true,
+        ),
+      ),
+    );
   }
 
   @override
@@ -61,7 +77,7 @@ class AuthDialog extends StatelessWidget {
               textStyle:
                   AppTextStyle.body315M.copyWith(color: AppColor.graysWhite),
               onClick: () {
-                navigateToLoginPage(context, false);
+                navigateToLoginPage(context);
               },
               icon: Container(),
               backgroundColor: AppColor.primaryBlue2,
@@ -76,7 +92,7 @@ class AuthDialog extends StatelessWidget {
               textStyle:
                   AppTextStyle.body315M.copyWith(color: AppColor.textHint),
               onClick: () {
-                navigateToLoginPage(context, false);
+                navigateToLoginPageWithToast(context);
               },
               icon: Container(),
               backgroundColor: AppColor.background246,
