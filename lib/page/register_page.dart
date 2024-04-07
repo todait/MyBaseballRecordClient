@@ -89,88 +89,80 @@ class _RegisterPageState extends State<RegisterPage> {
         _passwordError.isEmpty;
   }
 
-  Widget _buildEmailErrorText() {
-    if (_emailError.isNotEmpty) {
-      return Text(
-        _emailError,
-        style: AppTextStyle.caption213R.copyWith(
-          color: AppColor.accentRed100,
-        ),
-      );
-    }
-    return Container();
+  Widget _buildEmailInfoText() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _emailError.isNotEmpty
+            ? Text(
+                _emailError,
+                style: AppTextStyle.caption213R.copyWith(
+                  color: AppColor.accentRed100,
+                ),
+              )
+            : _shouldShowImportantNotificationEmail()
+                ? Text(
+                    AppTextList.importantNotificationEmailText,
+                    style: AppTextStyle.caption213R.copyWith(
+                      color: AppColor.textHint,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+      ],
+    );
   }
 
-  Widget _buildImportantNotificationEmailText() {
-    if (_shouldShowImportantNotificationEmail()) {
-      return Text(
-        AppTextList.importantNotificationEmailText,
-        style: AppTextStyle.caption213R.copyWith(
-          color: AppColor.textHint,
-        ),
-      );
-    }
-    return Container();
+  Widget _buildPasswordInfoText() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _passwordError.isNotEmpty
+            ? Text(
+                _passwordError,
+                style: AppTextStyle.caption213R.copyWith(
+                  color: AppColor.accentRed100,
+                ),
+              )
+            : _shouldShowPasswordRequirements()
+                ? Text(
+                    AppTextList.passwordRequirementsText,
+                    style: AppTextStyle.caption213R.copyWith(
+                      color: AppColor.textHint,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+      ],
+    );
   }
 
-  Widget _buildPasswordErrorText() {
-    if (_passwordError.isNotEmpty) {
-      return Text(
-        _passwordError,
-        style: AppTextStyle.caption213R.copyWith(
-          color: AppColor.accentRed100,
-        ),
-      );
-    }
-    return Container();
-  }
-
-  Widget _buildPasswordRequirementsText() {
-    if (_shouldShowPasswordRequirements()) {
-      return Text(
-        AppTextList.passwordRequirementsText,
-        style: AppTextStyle.caption213R.copyWith(
-          color: AppColor.textHint,
-        ),
-      );
-    }
-    return Container();
-  }
-
-  Widget _buildConfirmPasswordErrorText() {
-    if (_shouldShowConfirmPasswordError()) {
-      return Text(
-        _confirmPasswordError,
-        style: AppTextStyle.caption213R.copyWith(
-          color: AppColor.accentRed100,
-        ),
-      );
-    }
-    return Container();
-  }
-
-  Widget _buildReenterPasswordPromptText() {
-    if (_shouldShowReenterPasswordPrompt()) {
-      return Text(
-        AppTextList.reenterPasswordPrompt,
-        style: AppTextStyle.caption213R.copyWith(
-          color: AppColor.textHint,
-        ),
-      );
-    }
-    return Container();
-  }
-
-  Widget _buildPasswordConfirmationSuccessText() {
-    if (_showFinalPassword) {
-      return Text(
-        AppTextList.passwordConfirmationSuccessText,
-        style: AppTextStyle.caption213R.copyWith(
-          color: AppColor.accentGreen100,
-        ),
-      );
-    }
-    return Container();
+  Widget _buildConfirmPasswordInfoText() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _shouldShowConfirmPasswordError()
+            ? Text(
+                _confirmPasswordError,
+                style: AppTextStyle.caption213R.copyWith(
+                  color: AppColor.accentRed100,
+                ),
+              )
+            : _shouldShowReenterPasswordPrompt()
+                ? Text(
+                    AppTextList.reenterPasswordPrompt,
+                    style: AppTextStyle.caption213R.copyWith(
+                      color: AppColor.textHint,
+                    ),
+                  )
+                : _showFinalPassword
+                    ? Text(
+                        AppTextList.passwordConfirmationSuccessText,
+                        style: AppTextStyle.caption213R.copyWith(
+                          color: AppColor.accentGreen100,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+      ],
+    );
   }
 
   void _updateEmailStatus() {
@@ -299,118 +291,111 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        AppTextList.registerText,
-                        style: AppTextStyle.h224B.copyWith(
-                          color: AppColor.textPrimary,
-                        ),
-                      ),
-                      Text(
-                        AppTextList.divider,
-                        style: AppTextStyle.h224B.copyWith(
-                          color: AppColor.graysGray,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: widget.toggleAuthMode,
-                        child: Text(
-                          AppTextList.loginText,
+        child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          AppTextList.registerText,
                           style: AppTextStyle.h224B.copyWith(
-                            color: AppColor.textPrimary20,
+                            color: AppColor.textPrimary,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  AuthTextInputWidget(
-                    textStyle: AppTextStyle.body120M.copyWith(
-                      color: AppColor.textPrimary,
+                        Text(
+                          AppTextList.divider,
+                          style: AppTextStyle.h224B.copyWith(
+                            color: AppColor.graysGray,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: widget.toggleAuthMode,
+                          child: Text(
+                            AppTextList.loginText,
+                            style: AppTextStyle.h224B.copyWith(
+                              color: AppColor.textPrimary20,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    labelText: AppTextList.emailLabel,
-                    hintText: AppTextList.emailLabel,
-                    controller: _emailController,
-                    onClearPressed: () => _emailController.clear(),
-                    keyboardType: TextInputType.text,
-                    onChanged: (String value) {},
-                    onEditingComplete: _updateEmailStatus,
-                    isEmailValid: _showPasswordInput,
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  _buildEmailErrorText(),
-                  _buildImportantNotificationEmailText(),
-                  const Visibility(
-                    visible: true,
-                    child: SizedBox(
-                      height: 8,
+                    const SizedBox(
+                      height: 32,
                     ),
-                  ),
-                  if (_showPasswordInput)
                     AuthTextInputWidget(
-                      focusNode: _passwordFocusNode,
-                      obscureText: true,
                       textStyle: AppTextStyle.body120M.copyWith(
                         color: AppColor.textPrimary,
                       ),
-                      labelText: AppTextList.passwordSetupText,
-                      hintText: AppTextList.passwordText,
-                      controller: _passwordController,
-                      onClearPressed: () => _passwordController.clear(),
+                      labelText: AppTextList.emailLabel,
+                      hintText: AppTextList.emailLabel,
+                      controller: _emailController,
+                      onClearPressed: () => _emailController.clear(),
                       keyboardType: TextInputType.text,
                       onChanged: (String value) {},
-                      onEditingComplete: _updatePasswordStatus,
-                      isEmailValid: _showConfirmPasswordInput,
+                      onEditingComplete: _updateEmailStatus,
+                      isEmailValid: _showPasswordInput,
                     ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  _buildPasswordErrorText(),
-                  _buildPasswordRequirementsText(),
-                  const Visibility(
-                    visible: true,
-                    child: SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
-                  ),
-                  if (_showConfirmPasswordInput)
-                    AuthTextInputWidget(
-                      focusNode: _confirmPasswordFocusNode,
-                      obscureText: true,
-                      textStyle: AppTextStyle.body120M.copyWith(
-                        color: AppColor.textPrimary,
-                      ),
-                      labelText: AppTextList.passwordConfirmationText,
-                      hintText: AppTextList.passwordText,
-                      controller: _confirmPasswordController,
-                      onClearPressed: () => _confirmPasswordController.clear(),
-                      keyboardType: TextInputType.text,
-                      onChanged: _updateFinalPasswordStatus,
-                      onEditingComplete: _updateConfirmPasswordStatus,
-                      isEmailValid: false,
+                    _buildEmailInfoText(),
+                    const SizedBox(
+                      height: 8,
                     ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  _buildConfirmPasswordErrorText(),
-                  _buildReenterPasswordPromptText(),
-                  _buildPasswordConfirmationSuccessText(),
-                ],
+                    if (_showPasswordInput)
+                      AuthTextInputWidget(
+                        focusNode: _passwordFocusNode,
+                        obscureText: true,
+                        textStyle: AppTextStyle.body120M.copyWith(
+                          color: AppColor.textPrimary,
+                        ),
+                        labelText: AppTextList.passwordSetupText,
+                        hintText: AppTextList.passwordText,
+                        controller: _passwordController,
+                        onClearPressed: () => _passwordController.clear(),
+                        keyboardType: TextInputType.text,
+                        onChanged: (String value) {},
+                        onEditingComplete: _updatePasswordStatus,
+                        isEmailValid: _showConfirmPasswordInput,
+                      ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    _buildPasswordInfoText(),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    if (_showConfirmPasswordInput)
+                      AuthTextInputWidget(
+                        focusNode: _confirmPasswordFocusNode,
+                        obscureText: true,
+                        textStyle: AppTextStyle.body120M.copyWith(
+                          color: AppColor.textPrimary,
+                        ),
+                        labelText: AppTextList.passwordConfirmationText,
+                        hintText: AppTextList.passwordText,
+                        controller: _confirmPasswordController,
+                        onClearPressed: () =>
+                            _confirmPasswordController.clear(),
+                        keyboardType: TextInputType.text,
+                        onChanged: _updateFinalPasswordStatus,
+                        onEditingComplete: _updateConfirmPasswordStatus,
+                        isEmailValid: false,
+                      ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    _buildConfirmPasswordInfoText(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
