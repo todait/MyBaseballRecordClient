@@ -16,12 +16,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int selectedIndex = 0;
+  int _selectedIndex = 0;
   final PageController _pageController = PageController();
 
   void onTabIcon(int index) {
     setState(() {
-      selectedIndex = index;
+      _selectedIndex = index;
     });
     _pageController.animateToPage(
       index,
@@ -44,7 +44,7 @@ class _MainPageState extends State<MainPage> {
         controller: _pageController,
         onPageChanged: (index) {
           setState(() {
-            selectedIndex = index;
+            _selectedIndex = index;
           });
         },
         children: [
@@ -84,7 +84,7 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBarWidget(
-        selectedIndex: selectedIndex,
+        selectedIndex: _selectedIndex,
         onTabIcon: onTabIcon,
       ),
     );

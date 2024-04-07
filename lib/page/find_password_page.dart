@@ -15,35 +15,29 @@ class FindPasswordPage extends StatefulWidget {
 }
 
 class _FindPasswordPageState extends State<FindPasswordPage> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  bool isInputValid = false;
+  bool _isInputValid = false;
 
   @override
   void dispose() {
-    emailController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
-  void checkInputValid() {
-    final email = emailController.text;
-    if (!validateEmail(email)) {
-      setState(() {
-        isInputValid = false;
-      });
-    } else {
-      setState(() {
-        isInputValid = true;
-      });
-    }
+  void _checkInputValid() {
+    final email = _emailController.text;
+    setState(() {
+      _isInputValid = validateEmail(email);
+    });
   }
 
-  void showResetPasswordDialog(BuildContext context) {
+  void _showResetPasswordDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AuthDialog(
-          email: emailController.text,
+          email: _emailController.text,
         );
       },
     );
@@ -88,11 +82,11 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                         .copyWith(color: AppColor.textPrimary),
                     labelText: AppTextList.emailLabel,
                     hintText: AppTextList.emailLabel,
-                    controller: emailController,
-                    onClearPressed: () => emailController.clear(),
+                    controller: _emailController,
+                    onClearPressed: () => _emailController.clear(),
                     keyboardType: TextInputType.text,
                     onChanged: (String value) {},
-                    onEditingComplete: checkInputValid,
+                    onEditingComplete: _checkInputValid,
                     isEmailValid: false,
                   ),
                 ],
@@ -105,11 +99,11 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
               child: StickyBottomButton(
                 text: AppTextList.resetLink,
                 onClick: () {
-                  if (isInputValid) {
-                    showResetPasswordDialog(context);
+                  if (_isInputValid) {
+                    _showResetPasswordDialog(context);
                   }
                 },
-                enabled: isInputValid,
+                enabled: _isInputValid,
               ),
             ),
           ],
