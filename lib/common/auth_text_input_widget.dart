@@ -63,6 +63,7 @@ class AuthTextInputWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                    autofocus: true,
                     onEditingComplete: onEditingComplete,
                     textInputAction: TextInputAction.next,
                     autocorrect: false,
@@ -88,8 +89,8 @@ class AuthTextInputWidget extends StatelessWidget {
                     size: 20,
                     color: AppColor.textHint,
                   ),
-                  splashColor: null,
-                  highlightColor: null,
+                  splashColor: AppColor.transparent,
+                  highlightColor: AppColor.transparent,
                 ),
               ],
             ),
