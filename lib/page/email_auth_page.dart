@@ -4,10 +4,12 @@ import 'package:my_baseball_record/page/register_page.dart';
 
 class EmailAuthPage extends StatefulWidget {
   final bool isRegistering;
+  final String? email;
 
   const EmailAuthPage({
     super.key,
     required this.isRegistering,
+    this.email,
   });
 
   @override
@@ -45,6 +47,7 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
             )
           : LoginPage(
               toggleAuthMode: _toggleAuthMode,
+              email: widget.email,
             ),
     );
   }
