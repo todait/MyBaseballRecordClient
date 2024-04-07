@@ -288,7 +288,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       !showPasswordCheckInput &&
                       !showFinalPassword)
                     Text(
-                      AppTextList.passwordRequirementsText,
+                      AppTextList.reenterPasswordPrompt,
                       style: AppTextStyle.caption213R
                           .copyWith(color: AppColor.textHint),
                     ),

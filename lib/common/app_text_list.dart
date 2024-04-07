@@ -15,6 +15,7 @@ class AppTextList {
   static const passwordText = '비밀번호';
   static const passwordRequirementsText = '영문/숫자/특수문자를 8-16자리로 조합해주세요';
   static const passwordValidationText = '영문/숫자/특수문자를 조합한 8-16자인지 확인해주세요';
+  static const reenterPasswordPrompt = '앞서 입력한 비밀번호를 다시 한번 입력해주세요';
   static const passwordConfirmationText = '비밀번호 확인';
   static const passwordConfirmationPrompt = '앞서 입력한 비밀번호를 다시 한번 입력해주세요';
   static const passwordConfirmationSuccessText = '비밀번호 확인 완료!';
