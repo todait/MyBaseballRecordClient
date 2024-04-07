@@ -15,9 +15,9 @@ class StickyBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const greyBtnColor = AppColor.graysBlack20;
+    const greyBtnColor = AppColor.textPrimary10;
 
-    Color buttonColor = enabled ? AppColor.graysBlack : greyBtnColor;
+    Color buttonColor = enabled ? AppColor.textPrimary : greyBtnColor;
 
     return BottomAppBar(
       color: enabled ? buttonColor : greyBtnColor,
