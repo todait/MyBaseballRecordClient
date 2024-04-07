@@ -101,6 +101,30 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  Widget _buildEmailErrorText() {
+    if (_emailError.isNotEmpty) {
+      return Text(
+        _emailError,
+        style: AppTextStyle.caption213R.copyWith(
+          color: AppColor.accentRed100,
+        ),
+      );
+    }
+    return Container();
+  }
+
+  Widget _buildPasswordErrorText() {
+    if (_passwordError.isNotEmpty) {
+      return Text(
+        _passwordError,
+        style: AppTextStyle.caption213R.copyWith(
+          color: AppColor.accentRed100,
+        ),
+      );
+    }
+    return Container();
+  }
+
   void _checkEmailStatus() {
     final email = _emailController.text;
     setState(() {
@@ -127,12 +151,17 @@ class _LoginPageState extends State<LoginPage> {
     _updateInputValid();
   }
 
+  bool _isEmailValid() {
+    return _emailError.isEmpty && _emailController.text.isNotEmpty;
+  }
+
+  bool _isPasswordValid() {
+    return _passwordError.isEmpty && _passwordController.text.isNotEmpty;
+  }
+
   void _updateInputValid() {
     setState(() {
-      _isInputValid = _emailError.isEmpty &&
-          _passwordError.isEmpty &&
-          _emailController.text.isNotEmpty &&
-          _passwordController.text.isNotEmpty;
+      _isInputValid = _isEmailValid() && _isPasswordValid();
     });
   }
 
@@ -209,13 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                     isEmailValid: _checkEmail,
                   ),
                   const SizedBox(height: 8),
-                  if (_emailError.isNotEmpty)
-                    Text(
-                      _emailError,
-                      style: AppTextStyle.caption213R.copyWith(
-                        color: AppColor.accentRed100,
-                      ),
-                    ),
+                  _buildEmailErrorText(),
                   const SizedBox(height: 11),
                   AuthTextInputWidget(
                     focusNode: _passwordFocusNode,
@@ -232,16 +255,8 @@ class _LoginPageState extends State<LoginPage> {
                     onEditingComplete: _checkPasswordStatus,
                     isEmailValid: _checkPassword,
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  if (_passwordError.isNotEmpty)
-                    Text(
-                      _passwordError,
-                      style: AppTextStyle.caption213R.copyWith(
-                        color: AppColor.accentRed100,
-                      ),
-                    ),
+                  const SizedBox(height: 8),
+                  _buildPasswordErrorText(),
                   const SizedBox(height: 11),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
