@@ -117,7 +117,9 @@ class _RegisterPageState extends State<RegisterPage> {
         height: 40,
         textStyle: AppTextStyle.body315M
             .copyWith(fontSize: 16, color: AppColor.textHint),
-        onClick: () {},
+        onClick: () {
+          Navigator.pop(context);
+        },
         icon: Container(),
         backgroundColor: AppColor.background246,
         text: AppTextList.closeText,

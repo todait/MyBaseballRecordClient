@@ -7,6 +7,7 @@ import 'package:my_baseball_record/common/sticky_bottom_button.dart';
 import 'package:my_baseball_record/common/util/validate.dart';
 import 'package:my_baseball_record/page/find_password_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:my_baseball_record/page/main_page.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback toggleAuthMode;
@@ -125,7 +126,19 @@ class _LoginPageState extends State<LoginPage> {
 
   void _navigateToFindPasswordPage() {
     Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const FindPasswordPage()));
+      MaterialPageRoute(
+        builder: (context) => const FindPasswordPage(),
+      ),
+    );
+  }
+
+  void _navigateToMainPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainPage(),
+      ),
+    );
   }
 
   @override
@@ -227,7 +240,9 @@ class _LoginPageState extends State<LoginPage> {
               bottom: 0,
               child: StickyBottomButton(
                 text: AppTextList.loginText,
-                onClick: () {},
+                onClick: () {
+                  _navigateToMainPage();
+                },
                 enabled: _isInputValid,
               ),
             ),
