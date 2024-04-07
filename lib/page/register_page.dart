@@ -54,10 +54,12 @@ class _RegisterPageState extends State<RegisterPage> {
         showPasswordInput = false;
       });
     } else {
-      setState(() {
-        emailError = null;
-        showPasswordInput = true;
-      });
+      setState(
+        () {
+          emailError = null;
+          showPasswordInput = true;
+        },
+      );
       FocusScope.of(context).requestFocus(passwordFocusNode);
     }
   }
@@ -97,6 +99,12 @@ class _RegisterPageState extends State<RegisterPage> {
   void navigateToMainPage() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MainPage()));
+  }
+
+  void _updateFinalPasswordStatus(String value) {
+    setState(() {
+      showFinalPassword = value == passwordController.text;
+    });
   }
 
   @override
@@ -207,17 +215,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: confirmPasswordController,
                       onClearPressed: () => confirmPasswordController.clear(),
                       keyboardType: TextInputType.text,
-                      onChanged: (String value) {
-                        if (value == passwordController.text) {
-                          setState(() {
-                            showFinalPassword = true;
-                          });
-                        } else {
-                          setState(() {
-                            showFinalPassword = false;
-                          });
-                        }
-                      },
+                      onChanged: _updateFinalPasswordStatus,
                       onEditingComplete: updateConfirmPasswordStatus,
                       isEmailValid: false,
                     ),
