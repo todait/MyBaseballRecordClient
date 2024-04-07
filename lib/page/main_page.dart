@@ -1,10 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:my_baseball_record/common/app_bar.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
-import 'package:my_baseball_record/common/game_card.dart';
 import 'package:my_baseball_record/page/profile_page.dart';
 import 'package:my_baseball_record/page/record_page.dart';
 
@@ -15,9 +16,28 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+class _MainPageState extends State<MainPage>
+    with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
+  late TabController _tabController;
+
+  int _selectedIndex = 0;
+  DateTime _currentTime = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  void startTimer() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _currentTime = DateTime.now();
+      });
+    });
+  }
 
   void onTabIcon(int index) {
     setState(() {
@@ -30,15 +50,49 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
+  Widget _buildTabLabel(String selectedText, String unselectedText, int index) {
+    final isSelected = _tabController.index == index;
+    return Tab(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          const SizedBox(height: 8),
+          Text(
+            isSelected ? selectedText : unselectedText,
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(
-        trailingIcon: Icon(
+      appBar: AppBarWidget(
+        trailingIcon: const Icon(
           Icons.add,
           size: 24,
           color: AppColor.textHint,
         ),
+        title: AppTextList.upcomingMatches,
+        titleStyle: AppTextStyle.h224B.copyWith(color: AppColor.textPrimary),
+        timeTitle: _currentTime,
+        timeStyle: AppTextStyle.body315M.copyWith(color: AppColor.textHint),
+        tabController: _tabController,
+        tabs: [
+          _buildTabLabel(AppTextList.gameOfTheDay, AppTextList.today, 0),
+          _buildTabLabel(
+              AppTextList.upcomingMatchesTitle, AppTextList.upcoming, 1),
+          _buildTabLabel(AppTextList.completedMatches, AppTextList.finished, 2),
+        ],
       ),
       body: PageView(
         controller: _pageController,
@@ -46,54 +100,22 @@ class _MainPageState extends State<MainPage> {
           setState(() {
             _selectedIndex = index;
           });
+          _tabController.animateTo(index);
         },
         children: [
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppTextList.upcomingMatches,
-                    style: AppTextStyle.h224B
-                        .copyWith(color: AppColor.textPrimary),
-                  ),
-                  const SizedBox(height: 8),
-                  GameCard(
-                    title: AppTextList.upcomingMatchesTitle,
-                    titleTextStyle: AppTextStyle.h318B
-                        .copyWith(color: AppColor.textPrimary),
-                    count: 0,
-                    countTitle: AppTextList.countMatchesTitle,
-                    countTitleStyle: AppTextStyle.body413M
-                        .copyWith(color: AppColor.textHint),
-                    subTitle: AppTextList.upcomingMatchesEmpty,
-                    subTitleStyle: AppTextStyle.body315M
-                        .copyWith(color: AppColor.textHint),
-                    btnTitle: AppTextList.addPreMatchSchedule,
-                    btnTitleStyle: AppTextStyle.body315M
-                        .copyWith(color: AppColor.primaryBlue2),
-                  ),
-                  const SizedBox(height: 20),
-                  GameCard(
-                    title: AppTextList.completedMatches,
-                    titleTextStyle: AppTextStyle.h318B
-                        .copyWith(color: AppColor.textPrimary),
-                    count: 0,
-                    countTitle: AppTextList.countMatchesTitle,
-                    countTitleStyle: AppTextStyle.body413M
-                        .copyWith(color: AppColor.textHint),
-                    subTitle: AppTextList.completedMatchesAvailable,
-                    subTitleStyle: AppTextStyle.body315M
-                        .copyWith(color: AppColor.textHint),
-                    btnTitle: AppTextList.addPastRecord,
-                    btnTitleStyle: AppTextStyle.body315M
-                        .copyWith(color: AppColor.primaryBlue2),
-                  ),
-                ],
+          TabBarView(
+            controller: _tabController,
+            children: const [
+              Center(
+                child: Text(AppTextList.gameOfTheDay),
               ),
-            ),
+              Center(
+                child: Text(AppTextList.upcoming),
+              ),
+              Center(
+                child: Text(AppTextList.finished),
+              ),
+            ],
           ),
           const RecordPage(),
           const ProfilePage(),
