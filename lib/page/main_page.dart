@@ -31,9 +31,8 @@ class _MainPageState extends State<MainPage>
     super.initState();
     _startTimer();
     _tabController = TabController(
-      length: 3,
+      length: 2,
       vsync: this,
-      animationDuration: null,
     );
   }
 
@@ -62,15 +61,14 @@ class _MainPageState extends State<MainPage>
     );
   }
 
-  Widget _buildTabLabel(String selectedText, String unselectedText, int index) {
-    final isSelected = _tabController.index == index;
+  Widget _buildTabLabel(String selectedText, int index) {
     return Tab(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const SizedBox(height: 8),
           Text(
-            isSelected ? selectedText : unselectedText,
+            selectedText,
           ),
           const SizedBox(height: 8),
         ],
@@ -107,17 +105,10 @@ class _MainPageState extends State<MainPage>
         tabController: _tabController,
         tabs: [
           _buildTabLabel(
-            AppTextList.gameOfTheDay,
-            AppTextList.today,
-            0,
-          ),
-          _buildTabLabel(
-            AppTextList.upcomingMatchesTitle,
             AppTextList.upcoming,
             1,
           ),
           _buildTabLabel(
-            AppTextList.completedMatches,
             AppTextList.finished,
             2,
           ),
@@ -134,14 +125,6 @@ class _MainPageState extends State<MainPage>
           TabBarView(
             controller: _tabController,
             children: [
-              EmptyCard(
-                icon: Image.asset(
-                  'assets/icon/group_342.png',
-                ),
-                text1: AppTextList.noGamesTodayMessage,
-                text2: AppTextList.restForNextScheduleMessage,
-                text3: AppTextList.addScheduleButton,
-              ),
               EmptyCard(
                 icon: Image.asset(
                   'assets/icon/group_343.png',
