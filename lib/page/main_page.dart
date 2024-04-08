@@ -7,6 +7,7 @@ import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
 import 'package:my_baseball_record/common/empty_card.dart';
+import 'package:my_baseball_record/common/game_card.dart';
 import 'package:my_baseball_record/page/profile_page.dart';
 import 'package:my_baseball_record/page/record_page.dart';
 
@@ -25,6 +26,38 @@ class _MainPageState extends State<MainPage>
   int _selectedIndex = 0;
   DateTime _currentTime = DateTime.now();
   late Timer _timer;
+  final List<GameCard> _upcomingGames = [
+    const GameCard(
+      title: '시범1',
+      count: 10,
+      countTitle: '건',
+      subTitle: '시범1 전용입니다.',
+      btnTitle: '시범1',
+    ),
+    const GameCard(
+      title: '시범2',
+      count: 20,
+      countTitle: '건',
+      subTitle: '시범2 전용입니다.',
+      btnTitle: '시범2',
+    ),
+  ];
+  final List<GameCard> _finishedGames = [
+    const GameCard(
+      title: '시범3',
+      count: 30,
+      countTitle: '건',
+      subTitle: '시범3 전용입니다.',
+      btnTitle: '시범3',
+    ),
+    const GameCard(
+      title: '시범4',
+      count: 40,
+      countTitle: '건',
+      subTitle: '시범4 전용입니다.',
+      btnTitle: '시범4',
+    ),
+  ];
 
   @override
   void initState() {
@@ -125,21 +158,79 @@ class _MainPageState extends State<MainPage>
           TabBarView(
             controller: _tabController,
             children: [
-              EmptyCard(
-                icon: Image.asset(
-                  'assets/icon/group_343.png',
-                ),
-                text1: AppTextList.hasScheduledGames,
-                text2: AppTextList.addScheduleTitle,
-                text3: AppTextList.addPreMatchSchedule,
+              Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _upcomingGames.isEmpty
+                          ? 1
+                          : _upcomingGames.length + 1,
+                      itemBuilder: (context, index) {
+                        if (_upcomingGames.isEmpty) {
+                          EmptyCard(
+                            icon: Image.asset(
+                              'assets/icon/group_343.png',
+                            ),
+                            text1: AppTextList.hasScheduledGames,
+                            text2: AppTextList.addScheduleTitle,
+                            text3: AppTextList.addPreMatchSchedule,
+                          );
+                        } else {
+                          if (index < _upcomingGames.length) {
+                            return _upcomingGames[index];
+                          } else {
+                            return EmptyCard(
+                              icon: Image.asset(
+                                'assets/icon/group_343.png',
+                              ),
+                              text1: AppTextList.hasScheduledGames,
+                              text2: AppTextList.addScheduleTitle,
+                              text3: AppTextList.addPreMatchSchedule,
+                            );
+                          }
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
               ),
-              EmptyCard(
-                icon: Image.asset(
-                  'assets/icon/group_341.png',
-                ),
-                text1: AppTextList.hasParticipatedGames,
-                text2: AppTextList.recordGameResultMessage,
-                text3: AppTextList.addPastRecord,
+              Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _finishedGames.isEmpty
+                          ? 1
+                          : _finishedGames.length + 1,
+                      itemBuilder: (context, index) {
+                        if (_finishedGames.isEmpty) {
+                          EmptyCard(
+                            icon: Image.asset(
+                              'assets/icon/group_341.png',
+                            ),
+                            text1: AppTextList.hasParticipatedGames,
+                            text2: AppTextList.recordGameResultMessage,
+                            text3: AppTextList.addPastRecord,
+                          );
+                        } else {
+                          if (index < _finishedGames.length) {
+                            return _finishedGames[index];
+                          } else {
+                            return EmptyCard(
+                              icon: Image.asset(
+                                'assets/icon/group_341.png',
+                              ),
+                              text1: AppTextList.hasParticipatedGames,
+                              text2: AppTextList.recordGameResultMessage,
+                              text3: AppTextList.addPastRecord,
+                            );
+                          }
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
