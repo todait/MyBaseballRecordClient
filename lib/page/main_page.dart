@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:my_baseball_record/common/app_bar.dart';
+import 'package:intl/intl.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
 import 'package:my_baseball_record/common/empty_card.dart';
 import 'package:my_baseball_record/common/game_card.dart';
-import 'package:my_baseball_record/page/profile_page.dart';
-import 'package:my_baseball_record/page/record_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -121,141 +119,236 @@ class _MainPageState extends State<MainPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        trailingIcon: const Icon(
-          Icons.add,
-          size: 24,
-          color: AppColor.textHint,
-        ),
-        title: AppTextList.upcomingMatches,
-        titleStyle: AppTextStyle.h224B.copyWith(
-          color: AppColor.textPrimary,
-        ),
-        timeTitle: _currentTime,
-        timeStyle: AppTextStyle.body315M.copyWith(
-          color: AppColor.textHint,
-        ),
-        tabController: _tabController,
-        tabs: [
-          _buildTabLabel(
-            AppTextList.upcoming,
-            1,
-          ),
-          _buildTabLabel(
-            AppTextList.finished,
-            2,
-          ),
-        ],
-      ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        children: [
-          TabBarView(
-            controller: _tabController,
-            children: [
-              Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _upcomingGames.isEmpty
-                          ? 1
-                          : _upcomingGames.length + 1,
-                      itemBuilder: (context, index) {
-                        if (_upcomingGames.isEmpty) {
-                          EmptyCard(
-                            icon: Image.asset(
-                              'assets/icon/group_343.png',
+      body: SafeArea(
+        child: DefaultTabController(
+          length: 2,
+          child: NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                  backgroundColor: AppColor.graysWhite,
+                  automaticallyImplyLeading: false,
+                  elevation: 0,
+                  expandedHeight: 95,
+                  toolbarHeight: 45,
+                  collapsedHeight: 45,
+                  pinned: true,
+                  centerTitle: false,
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: innerBoxIsScrolled
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  DateFormat(
+                                    'M월 d일 E a h:mm',
+                                    'ko_KR',
+                                  )
+                                      .format(
+                                        _currentTime,
+                                      )
+                                      .replaceAll(
+                                        'AM',
+                                        '오전',
+                                      )
+                                      .replaceAll(
+                                        'PM',
+                                        '오후',
+                                      ),
+                                  style: AppTextStyle.body315M.copyWith(
+                                    color: AppColor.textHint,
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.add,
+                                  size: 24,
+                                  color: AppColor.textHint,
+                                ),
+                              ],
                             ),
-                            text1: AppTextList.hasScheduledGames,
-                            text2: AppTextList.addScheduleTitle,
-                            text3: AppTextList.addPreMatchSchedule,
-                          );
-                        } else {
-                          if (index < _upcomingGames.length) {
-                            return _upcomingGames[index];
-                          } else {
-                            return EmptyCard(
-                              icon: Image.asset(
-                                'assets/icon/group_343.png',
+                          )
+                        : null,
+                    background: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 24,
+                        right: 24,
+                      ),
+                      child: Column(
+                        children: [
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 24,
+                                color: AppColor.textHint,
                               ),
-                              text1: AppTextList.hasScheduledGames,
-                              text2: AppTextList.addScheduleTitle,
-                              text3: AppTextList.addPreMatchSchedule,
-                            );
-                          }
-                        }
-                        return EmptyCard(
-                          icon: Image.asset(
-                            'assets/icon/group_343.png',
+                            ],
                           ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                AppTextList.upcomingMatches,
+                                style: AppTextStyle.h224B.copyWith(
+                                  color: AppColor.textPrimary,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Text(
+                                DateFormat(
+                                  'M월 d일 E a h:mm',
+                                  'ko_KR',
+                                )
+                                    .format(
+                                      _currentTime,
+                                    )
+                                    .replaceAll(
+                                      'AM',
+                                      '오전',
+                                    )
+                                    .replaceAll(
+                                      'PM',
+                                      '오후',
+                                    ),
+                                style: AppTextStyle.body315M.copyWith(
+                                  color: AppColor.textHint,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SliverPersistentHeader(
+                  delegate: _SliverAppBarDelegate(
+                    TabBar(
+                      controller: _tabController,
+                      tabs: [
+                        _buildTabLabel(AppTextList.upcoming, 1),
+                        _buildTabLabel(AppTextList.finished, 2),
+                      ],
+                      indicatorColor: AppColor.textPrimary,
+                      labelColor: AppColor.textPrimary,
+                      labelStyle: AppTextStyle.h318B,
+                      unselectedLabelColor: AppColor.textHint,
+                      unselectedLabelStyle: AppTextStyle.h418M,
+                      indicatorWeight: 2,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicatorPadding:
+                          const EdgeInsets.symmetric(horizontal: 24),
+                      labelPadding: const EdgeInsets.only(bottom: 5),
+                    ),
+                  ),
+                  pinned: true,
+                ),
+              ];
+            },
+            body: TabBarView(
+              controller: _tabController,
+              children: [
+                ListView.builder(
+                  itemCount:
+                      _upcomingGames.isEmpty ? 1 : _upcomingGames.length + 1,
+                  itemBuilder: (context, index) {
+                    if (_upcomingGames.isEmpty) {
+                      return EmptyCard(
+                        text1: AppTextList.hasScheduledGames,
+                        text2: AppTextList.addScheduleTitle,
+                        text3: AppTextList.addPreMatchSchedule,
+                        icon: Image.asset(
+                          'assets/icon/group_343.png',
+                        ),
+                      );
+                    } else {
+                      if (index < _upcomingGames.length) {
+                        return _upcomingGames[index];
+                      } else {
+                        return EmptyCard(
                           text1: AppTextList.hasScheduledGames,
                           text2: AppTextList.addScheduleTitle,
                           text3: AppTextList.addPreMatchSchedule,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _finishedGames.isEmpty
-                          ? 1
-                          : _finishedGames.length + 1,
-                      itemBuilder: (context, index) {
-                        if (_finishedGames.isEmpty) {
-                          EmptyCard(
-                            icon: Image.asset(
-                              'assets/icon/group_341.png',
-                            ),
-                            text1: AppTextList.hasParticipatedGames,
-                            text2: AppTextList.recordGameResultMessage,
-                            text3: AppTextList.addPastRecord,
-                          );
-                        } else {
-                          if (index < _finishedGames.length) {
-                            return _finishedGames[index];
-                          } else {
-                            return EmptyCard(
-                              icon: Image.asset(
-                                'assets/icon/group_341.png',
-                              ),
-                              text1: AppTextList.hasParticipatedGames,
-                              text2: AppTextList.recordGameResultMessage,
-                              text3: AppTextList.addPastRecord,
-                            );
-                          }
-                        }
-                        return EmptyCard(
                           icon: Image.asset(
-                            'assets/icon/group_341.png',
+                            'assets/icon/group_343.png',
                           ),
+                        );
+                      }
+                    }
+                  },
+                ),
+                ListView.builder(
+                  itemCount:
+                      _finishedGames.isEmpty ? 1 : _finishedGames.length + 1,
+                  itemBuilder: (context, index) {
+                    if (_finishedGames.isEmpty) {
+                      return EmptyCard(
+                        text1: AppTextList.hasParticipatedGames,
+                        text2: AppTextList.recordGameResultMessage,
+                        text3: AppTextList.addPastRecord,
+                        icon: Image.asset(
+                          'assets/icon/group_341.png',
+                        ),
+                      );
+                    } else {
+                      if (index < _finishedGames.length) {
+                        return _finishedGames[index];
+                      } else {
+                        return EmptyCard(
                           text1: AppTextList.hasParticipatedGames,
                           text2: AppTextList.recordGameResultMessage,
                           text3: AppTextList.addPastRecord,
+                          icon: Image.asset(
+                            'assets/icon/group_341.png',
+                          ),
                         );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
-          const RecordPage(),
-          const ProfilePage(),
-        ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBarWidget(
         selectedIndex: _selectedIndex,
         onTabIcon: onTabIcon,
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate(this._tabBar);
+
+  final TabBar _tabBar;
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: AppColor.transparent,
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
   }
 }
