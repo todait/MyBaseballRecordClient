@@ -25,35 +25,57 @@ class _MainPageState extends State<MainPage>
   DateTime _currentTime = DateTime.now();
   late Timer _timer;
   final List<GameCard> _upcomingGames = [
-    const GameCard(
-      title: '시범1',
-      count: 10,
-      countTitle: '건',
-      subTitle: '시범1 전용입니다.',
-      btnTitle: '시범1',
+    GameCard(
+      sectionTitle: '오늘의 경기',
+      sectionTitleStyle:
+          AppTextStyle.h318B.copyWith(color: AppColor.textPrimary),
+      totalNumber: 20,
+      statusChip: '진행중',
+      time: '오전 10시 30분',
+      position: '포지션 미정',
+      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
+      teamIcon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      teamName: '발키리',
+      btnTitle: '결과 입력하기',
+      btnTitleStyle: AppTextStyle.body315M
+          .copyWith(fontSize: 16, color: AppColor.graysWhite),
     ),
     const GameCard(
-      title: '시범2',
-      count: 20,
-      countTitle: '건',
-      subTitle: '시범2 전용입니다.',
-      btnTitle: '시범2',
+      statusChip: 'statusChip',
+      time: 'time',
+      position: 'position',
+      matchPlace: 'matchPlace',
+      teamIcon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      teamName: 'teamName',
+      btnTitle: 'btnTitle',
     ),
   ];
   final List<GameCard> _finishedGames = [
-    const GameCard(
-      title: '시범3',
-      count: 30,
-      countTitle: '건',
-      subTitle: '시범3 전용입니다.',
-      btnTitle: '시범3',
+    GameCard(
+      sectionTitle: '오늘의 경기',
+      sectionTitleStyle:
+          AppTextStyle.h318B.copyWith(color: AppColor.textPrimary),
+      totalNumber: 20,
+      statusChip: 'statusChip',
+      time: 'time',
+      position: 'position',
+      matchPlace: 'matchPlace',
+      teamIcon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      teamName: 'teamName',
+      btnTitle: 'btnTitle',
     ),
     const GameCard(
-      title: '시범4',
-      count: 40,
-      countTitle: '건',
-      subTitle: '시범4 전용입니다.',
-      btnTitle: '시범4',
+      statusChip: 'statusChip',
+      time: 'time',
+      position: 'position',
+      matchPlace: 'matchPlace',
+      teamIcon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      teamName: 'teamName',
+      btnTitle: 'btnTitle',
     ),
   ];
 
