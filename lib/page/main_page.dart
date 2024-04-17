@@ -21,17 +21,12 @@ class _MainPageState extends State<MainPage>
   final PageController _pageController = PageController();
   late TabController _tabController;
 
-  int _selectedIndex = 0;
-  DateTime _currentTime = DateTime.now();
-  late Timer _timer;
   final List<GameCard> _upcomingGames = [
     GameCard(
       sectionTitle: '오늘의 경기',
       sectionTitleStyle:
           AppTextStyle.h318B.copyWith(color: AppColor.textPrimary),
       totalNumber: 20,
-      statusChip: '진행중',
-      time: '오전 10시 30분',
       position: '포지션 미정',
       matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
       teamIcon:
@@ -40,10 +35,36 @@ class _MainPageState extends State<MainPage>
       btnTitle: '결과 입력하기',
       btnTitleStyle: AppTextStyle.body315M
           .copyWith(fontSize: 16, color: AppColor.graysWhite),
+      matchDate: DateTime(2024, 4, 17),
+      startTime: const TimeOfDay(hour: 12, minute: 0),
+      endTime: const TimeOfDay(hour: 16, minute: 0),
     ),
-    const GameCard(
-      statusChip: 'statusChip',
-      time: 'time',
+    GameCard(
+      matchDate: DateTime(2024, 4, 18),
+      startTime: const TimeOfDay(hour: 10, minute: 0),
+      endTime: const TimeOfDay(hour: 12, minute: 0),
+      position: 'position',
+      matchPlace: 'matchPlace',
+      teamIcon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      teamName: 'teamName',
+      btnTitle: 'btnTitle',
+    ),
+    GameCard(
+      matchDate: DateTime(2024, 6, 18),
+      startTime: const TimeOfDay(hour: 10, minute: 0),
+      endTime: const TimeOfDay(hour: 12, minute: 0),
+      position: 'position',
+      matchPlace: 'matchPlace',
+      teamIcon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      teamName: 'teamName',
+      btnTitle: 'btnTitle',
+    ),
+    GameCard(
+      matchDate: DateTime(2024, 12, 18),
+      startTime: const TimeOfDay(hour: 10, minute: 0),
+      endTime: const TimeOfDay(hour: 12, minute: 0),
       position: 'position',
       matchPlace: 'matchPlace',
       teamIcon:
@@ -52,14 +73,26 @@ class _MainPageState extends State<MainPage>
       btnTitle: 'btnTitle',
     ),
   ];
+
+  List<GameCard> _getTodayGames(List<GameCard> games) {
+    final today = DateTime.now();
+    return games
+        .where((game) =>
+            game.matchDate.year == today.year &&
+            game.matchDate.month == today.month &&
+            game.matchDate.day == today.day)
+        .toList();
+  }
+
   final List<GameCard> _finishedGames = [
     GameCard(
       sectionTitle: '오늘의 경기',
       sectionTitleStyle:
           AppTextStyle.h318B.copyWith(color: AppColor.textPrimary),
       totalNumber: 20,
-      statusChip: 'statusChip',
-      time: 'time',
+      matchDate: DateTime(2024, 4, 17),
+      startTime: const TimeOfDay(hour: 10, minute: 0),
+      endTime: const TimeOfDay(hour: 12, minute: 0),
       position: 'position',
       matchPlace: 'matchPlace',
       teamIcon:
@@ -67,9 +100,10 @@ class _MainPageState extends State<MainPage>
       teamName: 'teamName',
       btnTitle: 'btnTitle',
     ),
-    const GameCard(
-      statusChip: 'statusChip',
-      time: 'time',
+    GameCard(
+      matchDate: DateTime(2024, 4, 17),
+      startTime: const TimeOfDay(hour: 10, minute: 0),
+      endTime: const TimeOfDay(hour: 12, minute: 0),
       position: 'position',
       matchPlace: 'matchPlace',
       teamIcon:
@@ -78,6 +112,10 @@ class _MainPageState extends State<MainPage>
       btnTitle: 'btnTitle',
     ),
   ];
+
+  int _selectedIndex = 0;
+  DateTime _currentTime = DateTime.now();
+  late Timer _timer;
 
   @override
   void initState() {
@@ -140,6 +178,8 @@ class _MainPageState extends State<MainPage>
 
   @override
   Widget build(BuildContext context) {
+    final todayGames = _getTodayGames(_upcomingGames);
+
     return Scaffold(
       body: SafeArea(
         child: DefaultTabController(
@@ -280,8 +320,9 @@ class _MainPageState extends State<MainPage>
               controller: _tabController,
               children: [
                 ListView.builder(
-                  itemCount:
-                      _upcomingGames.isEmpty ? 1 : _upcomingGames.length + 1,
+                  itemCount: _upcomingGames.isEmpty
+                      ? 1
+                      : _upcomingGames.length + (todayGames.isNotEmpty ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (_upcomingGames.isEmpty) {
                       return EmptyCard(
@@ -293,17 +334,44 @@ class _MainPageState extends State<MainPage>
                         ),
                       );
                     } else {
-                      if (index < _upcomingGames.length) {
-                        return _upcomingGames[index];
-                      } else {
-                        return EmptyCard(
-                          text1: AppTextList.hasScheduledGames,
-                          text2: AppTextList.addScheduleTitle,
-                          text3: AppTextList.addPreMatchSchedule,
-                          icon: Image.asset(
-                            'assets/icon/group_343.png',
-                          ),
+                      if (index == 0 && todayGames.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16, horizontal: 24),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('오늘의 경기',
+                                      style: AppTextStyle.h318B),
+                                  Text('${todayGames.length} >',
+                                      style: AppTextStyle.body315M),
+                                ],
+                              ),
+                            ),
+                            GameCard(
+                              sectionTitle: null,
+                              sectionTitleStyle: null,
+                              totalNumber: null,
+                              matchDate: _upcomingGames[index].matchDate,
+                              startTime: _upcomingGames[index].startTime,
+                              endTime: _upcomingGames[index].endTime,
+                              position: _upcomingGames[index].position,
+                              matchPlace: _upcomingGames[index].matchPlace,
+                              teamIcon: _upcomingGames[index].teamIcon,
+                              teamName: _upcomingGames[index].teamName,
+                              btnTitle: _upcomingGames[index].btnTitle,
+                              btnTitleStyle:
+                                  _upcomingGames[index].btnTitleStyle,
+                            ),
+                          ],
                         );
+                      } else {
+                        return _upcomingGames[
+                            index - (todayGames.isNotEmpty ? 1 : 0)];
                       }
                     }
                   },
