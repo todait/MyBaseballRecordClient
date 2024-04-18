@@ -4,7 +4,6 @@ import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/auth_button.dart';
 
 class GameCard extends StatelessWidget {
-  final String? sectionTitle;
   final int? totalNumber;
   final DateTime matchDate;
   final TimeOfDay startTime;
@@ -15,7 +14,6 @@ class GameCard extends StatelessWidget {
   final String teamName;
   final String btnTitle;
 
-  final TextStyle? sectionTitleStyle;
   final TextStyle? totalNumberStyle;
   final TextStyle? statusChipStyle;
   final TextStyle? timeStyle;
@@ -23,10 +21,10 @@ class GameCard extends StatelessWidget {
   final TextStyle? matchPlaceStyle;
   final TextStyle? teamNameStyle;
   final TextStyle? btnTitleStyle;
+  final bool isFirstCard;
 
   const GameCard({
     super.key,
-    this.sectionTitle,
     this.totalNumber,
     required this.matchDate,
     required this.startTime,
@@ -36,7 +34,7 @@ class GameCard extends StatelessWidget {
     required this.teamIcon,
     required this.teamName,
     required this.btnTitle,
-    this.sectionTitleStyle,
+    this.isFirstCard = false,
     this.totalNumberStyle,
     this.statusChipStyle,
     this.timeStyle,
@@ -61,7 +59,7 @@ class GameCard extends StatelessWidget {
       return '';
     } else if (matchDate == today) {
       if (now.isAfter(matchStartDateTime) && now.isBefore(matchEndDateTime)) {
-        return '진행중';
+        return '진행중 ${_formatTime(startTime)}';
       } else {
         return '${_formatTime(startTime)} 시작';
       }
@@ -88,23 +86,15 @@ class GameCard extends StatelessWidget {
     final matchStatus = getMatchStatus(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 36,
-        horizontal: 24,
+      padding: EdgeInsets.only(
+        top: isFirstCard ? 36 : 0,
+        bottom: 36,
+        left: 24,
+        right: 24,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(sectionTitle ?? '', style: sectionTitleStyle),
-              Text(
-                totalNumber != null ? '$totalNumber >' : '',
-                style: totalNumberStyle,
-              ),
-            ],
-          ),
           const SizedBox(height: 30),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
