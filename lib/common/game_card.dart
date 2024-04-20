@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_baseball_record/common/app_color.dart';
+import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/auth_button.dart';
 
 class GameCard extends StatelessWidget {
@@ -8,10 +9,12 @@ class GameCard extends StatelessWidget {
   final DateTime matchDate;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
-  final String position;
+  final List<String> positions;
   final String matchPlace;
-  final String teamIcon;
-  final String teamName;
+  final String team1Icon;
+  final String team1Name;
+  final String team2Icon;
+  final String team2Name;
   final String btnTitle;
 
   final TextStyle? totalNumberStyle;
@@ -21,7 +24,6 @@ class GameCard extends StatelessWidget {
   final TextStyle? matchPlaceStyle;
   final TextStyle? teamNameStyle;
   final TextStyle? btnTitleStyle;
-  final bool isFirstCard;
 
   const GameCard({
     super.key,
@@ -29,12 +31,13 @@ class GameCard extends StatelessWidget {
     required this.matchDate,
     required this.startTime,
     required this.endTime,
-    required this.position,
+    this.positions = const ['포지션 미정'],
     required this.matchPlace,
-    required this.teamIcon,
-    required this.teamName,
+    required this.team1Icon,
+    required this.team1Name,
+    required this.team2Icon,
+    required this.team2Name,
     required this.btnTitle,
-    this.isFirstCard = false,
     this.totalNumberStyle,
     this.statusChipStyle,
     this.timeStyle,
@@ -44,7 +47,7 @@ class GameCard extends StatelessWidget {
     this.btnTitleStyle,
   });
 
-  String getMatchStatus(BuildContext context) {
+  Widget getMatchStatus(BuildContext context) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final tomorrow = today.add(const Duration(days: 1));
@@ -56,19 +59,137 @@ class GameCard extends StatelessWidget {
         matchDate.day, endTime.hour, endTime.minute);
 
     if (matchDate.isBefore(today)) {
-      return '';
+      return const Text('');
     } else if (matchDate == today) {
       if (now.isAfter(matchStartDateTime) && now.isBefore(matchEndDateTime)) {
-        return '진행중 ${_formatTime(startTime)}';
+        return Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: AppColor.primaryBlue3,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.circle,
+                      color: AppColor.primaryBlue1,
+                      size: 10,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      '진행중',
+                      style: AppTextStyle.caption113B1.copyWith(
+                        color: AppColor.primaryBlue1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Text(
+              _formatTime(startTime),
+              style: AppTextStyle.body315M.copyWith(
+                fontSize: 16,
+                color: AppColor.primaryBlue1,
+              ),
+            ),
+          ],
+        );
       } else {
-        return '${_formatTime(startTime)} 시작';
+        return Text(
+          '${_formatTime(startTime)} 시작',
+          style: AppTextStyle.body315M.copyWith(
+            fontSize: 16,
+            color: AppColor.primaryBlue1,
+          ),
+        );
       }
     } else if (matchDate == tomorrow) {
-      return '내일 ${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}';
+      return Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColor.accentRed10,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '내일',
+                style: AppTextStyle.caption113B1.copyWith(
+                  color: AppColor.accentRed100,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+              '${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}'),
+        ],
+      );
+    } else if (diff <= 50) {
+      return Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColor.accentRed10,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'D-$diff',
+                style: AppTextStyle.caption113B1.copyWith(
+                  color: AppColor.accentRed100,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+              '${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}'),
+        ],
+      );
     } else if (diff <= 100) {
-      return 'D-$diff ${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}';
+      return Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColor.primaryBlue3,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'D-$diff',
+                style: AppTextStyle.caption113B1.copyWith(
+                  color: AppColor.primaryBlue2,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+              '${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}'),
+        ],
+      );
     } else {
-      return '${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}';
+      return Text(
+          '${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}');
     }
   }
 
@@ -81,49 +202,189 @@ class GameCard extends StatelessWidget {
     return '$amPm $formattedHour시 $formattedMinute분';
   }
 
+  List<Widget> getPositionChips(List<String> positions) {
+    return positions.map((position) {
+      if (position == "포지션 미정") {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(
+              color: AppColor.textHint,
+              width: 0.2,
+            ),
+          ),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.emergency,
+                color: AppColor.accentRed100,
+                size: 10,
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+              Text(
+                "포지션 미정",
+                style: AppTextStyle.body413M.copyWith(
+                  color: AppColor.textHint,
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        Color chipColor;
+        String chipText;
+        TextStyle textStyle;
+
+        switch (position) {
+          case "타자":
+            chipColor = AppColor.additionalPurple10;
+            chipText = "타자";
+            textStyle = AppTextStyle.caption113B1
+                .copyWith(color: AppColor.additionalPurple100);
+            break;
+          case "투수":
+            chipColor = AppColor.additionalOrange10;
+            chipText = "투수";
+            textStyle = AppTextStyle.caption113B1
+                .copyWith(color: AppColor.additionalOrange100);
+            break;
+          default:
+            chipColor = AppColor.textHint;
+            chipText = position;
+            textStyle =
+                AppTextStyle.caption113B1.copyWith(color: AppColor.textHint);
+        }
+
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          margin: const EdgeInsets.only(right: 4),
+          decoration: BoxDecoration(
+            color: chipColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            chipText,
+            style: textStyle,
+          ),
+        );
+      }
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final matchStatus = getMatchStatus(context);
+    final positionChips = getPositionChips(positions);
 
-    return Container(
-      padding: EdgeInsets.only(
-        top: isFirstCard ? 36 : 0,
-        bottom: 36,
-        left: 24,
-        right: 24,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 30),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(matchStatus, style: statusChipStyle),
-                  const SizedBox(width: 8),
+                  Row(
+                    children: [
+                      matchStatus,
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on_outlined,
+                        color: AppColor.textHint,
+                        size: 15,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        matchPlace,
+                        style: AppTextStyle.body413M.copyWith(
+                          color: AppColor.textHint,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              const SizedBox(height: 4),
-              Text(matchPlace, style: matchPlaceStyle),
+              Wrap(
+                children: positionChips,
+              )
             ],
           ),
           const SizedBox(height: 26),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildTeamInfo(teamIcon, teamName),
-              Text(position, style: positionStyle),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset('assets/icon/Polygon 2.png'),
+                  Image.network(
+                    team1Icon,
+                    width: 150,
+                    height: 150,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    team1Name,
+                    style: AppTextStyle.body413M.copyWith(
+                      color: AppColor.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                'VS',
+                style: AppTextStyle.body120M.copyWith(
+                  color: AppColor.textHint,
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset('assets/icon/Polygon 1.png'),
+                  Image.network(
+                    team2Icon,
+                    width: 150,
+                    height: 150,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    team2Name,
+                    style: AppTextStyle.body413M.copyWith(
+                      color: AppColor.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
-          const SizedBox(height: 30),
+          const SizedBox(
+            height: 40,
+          ),
           AuthButton(
             onClick: () {},
             icon: Container(),
             backgroundColor: AppColor.textSecondary,
             text: btnTitle,
-            textStyle: btnTitleStyle,
+            textStyle: AppTextStyle.body315M
+                .copyWith(fontSize: 16, color: AppColor.graysWhite),
             borderColor: AppColor.textSecondary,
             textColor: AppColor.graysWhite,
             iconColor: AppColor.transparent,
@@ -134,19 +395,6 @@ class GameCard extends StatelessWidget {
           const Divider(),
         ],
       ),
-    );
-  }
-
-  Widget _buildTeamInfo(String teamIcon, String teamName) {
-    return Row(
-      children: [
-        Image.network(
-          teamIcon,
-          scale: 1.2,
-        ),
-        const SizedBox(width: 8),
-        Text(teamName, style: teamNameStyle),
-      ],
     );
   }
 }

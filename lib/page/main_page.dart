@@ -21,107 +21,165 @@ class _MainPageState extends State<MainPage>
   final PageController _pageController = PageController();
   late TabController _tabController;
 
+  int _selectedIndex = 0;
+  DateTime _currentTime = DateTime.now();
+  late Timer _timer;
+
   final List<GameCard> _upcomingGames = [
     GameCard(
-      position: '포지션 미정',
       matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      teamIcon:
+      team1Icon:
           'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      teamName: '발키리',
+      team1Name: '발키리',
       btnTitle: '결과 입력하기',
-      btnTitleStyle: AppTextStyle.body315M
-          .copyWith(fontSize: 16, color: AppColor.graysWhite),
-      matchDate: DateTime(2024, 4, 18),
-      startTime: const TimeOfDay(hour: 14, minute: 0),
-      endTime: const TimeOfDay(hour: 16, minute: 0),
+      matchDate: DateTime(2024, 4, 20),
+      startTime: const TimeOfDay(hour: 18, minute: 0),
+      endTime: const TimeOfDay(hour: 20, minute: 0),
+      team2Icon:
+          'http://file.clubone.kr/symbol/club/20180201202334_368_thumb.jpg',
+      team2Name: 'ZeroSevens',
     ),
     GameCard(
-      position: '포지션 미정',
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      teamIcon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      teamName: '발키리',
-      btnTitle: '결과 입력하기',
-      btnTitleStyle: AppTextStyle.body315M
-          .copyWith(fontSize: 16, color: AppColor.graysWhite),
-      matchDate: DateTime(2024, 4, 18),
+      matchDate: DateTime(2024, 4, 20),
       startTime: const TimeOfDay(hour: 16, minute: 0),
       endTime: const TimeOfDay(hour: 18, minute: 0),
+      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
+      team1Icon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      team1Name: '발키리',
+      btnTitle: '결과 입력하기',
+      team2Icon:
+          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
+      team2Name: '국제로타리3710광주',
     ),
     GameCard(
-      matchDate: DateTime(2024, 4, 19),
+      positions: const ['타자', '투수'],
+      matchDate: DateTime(2024, 4, 20),
+      startTime: const TimeOfDay(hour: 20, minute: 0),
+      endTime: const TimeOfDay(hour: 22, minute: 0),
+      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
+      team1Icon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      team1Name: '발키리',
+      btnTitle: '결과 입력하기',
+      team2Icon:
+          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
+      team2Name: '국제로타리3710지구',
+    ),
+    GameCard(
+      matchDate: DateTime(2024, 4, 22),
       startTime: const TimeOfDay(hour: 10, minute: 0),
       endTime: const TimeOfDay(hour: 12, minute: 0),
-      position: 'position',
-      matchPlace: 'matchPlace',
-      teamIcon:
+      positions: const ['타자'],
+      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
+      team1Icon:
           'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      teamName: 'teamName',
-      btnTitle: 'btnTitle',
+      team1Name: '발키리',
+      btnTitle: '결과 입력하기',
+      team2Icon:
+          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
+      team2Name: '국제로타리3710지구',
     ),
     GameCard(
-      matchDate: DateTime(2024, 6, 18),
+      matchDate: DateTime(2024, 4, 21),
       startTime: const TimeOfDay(hour: 10, minute: 0),
       endTime: const TimeOfDay(hour: 12, minute: 0),
-      position: 'position',
-      matchPlace: 'matchPlace',
-      teamIcon:
+      positions: const ['투수'],
+      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
+      team1Icon:
           'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      teamName: 'teamName',
-      btnTitle: 'btnTitle',
+      team1Name: '발키리',
+      btnTitle: '결과 입력하기',
+      team2Icon:
+          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
+      team2Name: '국제로타리3710지구',
     ),
     GameCard(
-      matchDate: DateTime(2024, 12, 18),
+      matchDate: DateTime(2024, 6, 20),
       startTime: const TimeOfDay(hour: 16, minute: 0),
       endTime: const TimeOfDay(hour: 18, minute: 0),
-      position: 'position',
-      matchPlace: 'matchPlace',
-      teamIcon:
+      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
+      team1Icon:
           'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      teamName: 'teamName',
-      btnTitle: 'btnTitle',
+      team1Name: '발키리',
+      btnTitle: '결과 입력하기',
+      team2Icon:
+          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
+      team2Name: '국제로타리3710지구',
+    ),
+    GameCard(
+      matchDate: DateTime(2024, 8, 20),
+      startTime: const TimeOfDay(hour: 16, minute: 0),
+      endTime: const TimeOfDay(hour: 18, minute: 0),
+      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
+      team1Icon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      team1Name: '발키리',
+      btnTitle: '결과 입력하기',
+      team2Icon:
+          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
+      team2Name: '국제로타리3710지구',
     ),
   ];
 
   List<GameCard> _getTodayGames(List<GameCard> games) {
-    final today = DateTime.now();
-    return games
-        .where((game) =>
-            game.matchDate.year == today.year &&
-            game.matchDate.month == today.month &&
-            game.matchDate.day == today.day)
-        .toList();
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(const Duration(days: 1));
+
+    return games.where((game) {
+      final gameStartDateTime = DateTime(
+        game.matchDate.year,
+        game.matchDate.month,
+        game.matchDate.day,
+        game.startTime.hour,
+        game.startTime.minute,
+      );
+      final gameEndDateTime = DateTime(
+        game.matchDate.year,
+        game.matchDate.month,
+        game.matchDate.day,
+        game.endTime.hour,
+        game.endTime.minute,
+      );
+
+      final isGameInProgress =
+          now.isAfter(gameStartDateTime) && now.isBefore(gameEndDateTime);
+      final isGameUpcoming = gameStartDateTime.isAfter(now) &&
+          gameStartDateTime.isBefore(tomorrow);
+
+      return isGameInProgress || isGameUpcoming;
+    }).toList();
   }
 
   final List<GameCard> _finishedGames = [
     GameCard(
-      totalNumber: 20,
-      matchDate: DateTime(2024, 4, 20),
+      matchDate: DateTime(2024, 4, 17),
       startTime: const TimeOfDay(hour: 10, minute: 0),
       endTime: const TimeOfDay(hour: 12, minute: 0),
-      position: 'position',
-      matchPlace: 'matchPlace',
-      teamIcon:
+      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
+      team1Icon:
           'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      teamName: 'teamName',
-      btnTitle: 'btnTitle',
+      team1Name: 'teamName',
+      btnTitle: '결과 입력하기',
+      team2Icon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      team2Name: 'teamName',
     ),
     GameCard(
-      matchDate: DateTime(2024, 4, 24),
+      matchDate: DateTime(2024, 4, 17),
       startTime: const TimeOfDay(hour: 10, minute: 0),
       endTime: const TimeOfDay(hour: 12, minute: 0),
-      position: 'position',
-      matchPlace: 'matchPlace',
-      teamIcon:
+      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
+      team1Icon:
           'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      teamName: 'teamName',
-      btnTitle: 'btnTitle',
+      team1Name: 'teamName',
+      btnTitle: '결과 입력하기',
+      team2Icon:
+          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
+      team2Name: 'teamName',
     ),
   ];
-
-  int _selectedIndex = 0;
-  DateTime _currentTime = DateTime.now();
-  late Timer _timer;
 
   @override
   void initState() {
@@ -184,7 +242,14 @@ class _MainPageState extends State<MainPage>
 
   @override
   Widget build(BuildContext context) {
-    final todayGames = _getTodayGames(_upcomingGames);
+    final today = DateTime.now();
+    final sortedUpcomingGames = List<GameCard>.from(_upcomingGames)
+      ..sort((a, b) => a.matchDate.compareTo(b.matchDate));
+
+    final todayGames = _getTodayGames(sortedUpcomingGames);
+    final filteredUpcomingGames = sortedUpcomingGames
+        .where((game) => game.matchDate.isAfter(today))
+        .toList();
 
     return Scaffold(
       body: SafeArea(
@@ -326,13 +391,12 @@ class _MainPageState extends State<MainPage>
               controller: _tabController,
               children: [
                 ListView.builder(
-                  itemCount: _upcomingGames.isEmpty
+                  itemCount: sortedUpcomingGames.isEmpty
                       ? 1
                       : todayGames.length +
-                          (_upcomingGames.length - todayGames.length) +
-                          2,
+                          (filteredUpcomingGames.isNotEmpty ? 2 : 1),
                   itemBuilder: (context, index) {
-                    if (_upcomingGames.isEmpty) {
+                    if (sortedUpcomingGames.isEmpty) {
                       return EmptyCard(
                         text1: AppTextList.hasScheduledGames,
                         text2: AppTextList.addScheduleTitle,
@@ -342,60 +406,100 @@ class _MainPageState extends State<MainPage>
                         ),
                       );
                     } else {
-                      if (index == 0) {
-                        return todayGames.isNotEmpty
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      if (index == 0 && todayGames.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(24, 16, 24, 8),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Padding(
-                                    padding: EdgeInsets.fromLTRB(24, 50, 24, 8),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('오늘의 경기',
-                                            style: AppTextStyle.h318B),
-                                      ],
+                                  Text(
+                                    '오늘의 경기',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  ...todayGames.map((game) => game),
                                 ],
-                              )
-                            : Container();
-                      } else if (index == todayGames.length + 1) {
-                        final futureGames =
-                            _upcomingGames.sublist(todayGames.length);
-                        return futureGames.isNotEmpty
-                            ? Column(
+                              ),
+                            ),
+                            ...todayGames.map(
+                              (game) {
+                                final isFirstCard =
+                                    todayGames.indexOf(game) == 0;
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (isFirstCard) const SizedBox(height: 16),
+                                    GameCard(
+                                      matchDate: game.matchDate,
+                                      startTime: game.startTime,
+                                      endTime: game.endTime,
+                                      positions: game.positions,
+                                      matchPlace: game.matchPlace,
+                                      team1Icon: game.team1Icon,
+                                      team1Name: game.team1Name,
+                                      btnTitle: game.btnTitle,
+                                      team2Icon: game.team2Icon,
+                                      team2Name: game.team2Name,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      } else if (index == (todayGames.isNotEmpty ? 1 : 0) &&
+                          filteredUpcomingGames.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('다음 경기 일정',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)),
+                                  Text('${filteredUpcomingGames.length} >',
+                                      style: const TextStyle(fontSize: 14)),
+                                ],
+                              ),
+                            ),
+                            ...filteredUpcomingGames.map((game) {
+                              final isFirstCard =
+                                  filteredUpcomingGames.indexOf(game) == 0;
+                              return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text('다음 경기 일정',
-                                            style: AppTextStyle.h318B),
-                                        Text('${futureGames.length} >',
-                                            style: AppTextStyle.body315M),
-                                      ],
-                                    ),
+                                  if (isFirstCard) const SizedBox(height: 16),
+                                  GameCard(
+                                    matchDate: game.matchDate,
+                                    startTime: game.startTime,
+                                    endTime: game.endTime,
+                                    positions: game.positions,
+                                    matchPlace: game.matchPlace,
+                                    team1Icon: game.team1Icon,
+                                    team1Name: game.team1Name,
+                                    btnTitle: game.btnTitle,
+                                    team2Icon: game.team2Icon,
+                                    team2Name: game.team2Name,
                                   ),
-                                  ...futureGames.map((game) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(top: 0),
-                                      child: game,
-                                    );
-                                  }),
                                 ],
-                              )
-                            : Container();
+                              );
+                            }),
+                          ],
+                        );
                       } else if (index ==
                           todayGames.length +
-                              (_upcomingGames.length - todayGames.length) +
-                              1) {
+                              (filteredUpcomingGames.isNotEmpty ? 1 : 0)) {
                         return EmptyCard(
                           text1: AppTextList.hasScheduledGames,
                           text2: AppTextList.addScheduleTitle,
