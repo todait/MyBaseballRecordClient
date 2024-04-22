@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:my_baseball_record/common/app_bottom_sheet.dart';
 import 'package:my_baseball_record/common/app_color.dart';
@@ -5,6 +8,7 @@ import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/auth_button.dart';
 import 'package:my_baseball_record/common/auth_text_input_widget.dart';
+import 'package:my_baseball_record/common/const/data.dart';
 import 'package:my_baseball_record/common/util/validate.dart';
 import 'package:my_baseball_record/page/main_page.dart';
 
@@ -214,6 +218,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _showPasswordCheckInput = _confirmPasswordError.isEmpty;
     });
     if (_isAllInputValid()) {
+      registerUser();
       _showModelSheet();
     }
   }
@@ -285,6 +290,31 @@ class _RegisterPageState extends State<RegisterPage> {
         borderRadius: BorderRadius.circular(15),
       ),
     );
+  }
+
+  void registerUser() async {
+    final dio = Dio();
+
+    const emulatorIp = '10.0.2.2:4000';
+    const simulatorIp = '127.0.0.1:4000';
+
+    final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    final response = await dio.post(
+      'http://$ip/api/register',
+      data: {
+        'email': email,
+        'password': password,
+      },
+    );
+
+    print(response.data);
+
+    final accessToken = response.data['access_token'];
+    await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
   }
 
   @override

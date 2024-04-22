@@ -6,6 +6,7 @@ import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
+import 'package:my_baseball_record/common/const/data.dart';
 import 'package:my_baseball_record/common/empty_card.dart';
 import 'package:my_baseball_record/page/profile_page.dart';
 import 'package:my_baseball_record/page/record_page.dart';
@@ -35,6 +36,11 @@ class _MainPageState extends State<MainPage>
       vsync: this,
       animationDuration: null,
     );
+  }
+
+  void checkToken() async {
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    print(accessToken);
   }
 
   void _startTimer() {
