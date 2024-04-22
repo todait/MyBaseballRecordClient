@@ -146,6 +146,35 @@ class _MainPageState extends State<MainPage>
     );
   }
 
+  Widget _buildGameList(List<GameCard> games) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: games.map(
+        (game) {
+          final isFirstCard = games.indexOf(game) == 0;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isFirstCard) const SizedBox(height: 16),
+              GameCard(
+                matchDate: game.matchDate,
+                startTime: game.startTime,
+                endTime: game.endTime,
+                positions: game.positions,
+                matchPlace: game.matchPlace,
+                team1Icon: game.team1Icon,
+                team1Name: game.team1Name,
+                btnTitle: game.btnTitle,
+                team2Icon: game.team2Icon,
+                team2Name: game.team2Name,
+              ),
+            ],
+          );
+        },
+      ).toList(),
+    );
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -337,30 +366,7 @@ class _MainPageState extends State<MainPage>
                                 ],
                               ),
                             ),
-                            ...todayGames.map(
-                              (game) {
-                                final isFirstCard =
-                                    todayGames.indexOf(game) == 0;
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (isFirstCard) const SizedBox(height: 16),
-                                    GameCard(
-                                      matchDate: game.matchDate,
-                                      startTime: game.startTime,
-                                      endTime: game.endTime,
-                                      positions: game.positions,
-                                      matchPlace: game.matchPlace,
-                                      team1Icon: game.team1Icon,
-                                      team1Name: game.team1Name,
-                                      btnTitle: game.btnTitle,
-                                      team2Icon: game.team2Icon,
-                                      team2Name: game.team2Name,
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
+                            _buildGameList(todayGames),
                           ],
                         );
                       } else if (index == (todayGames.isNotEmpty ? 1 : 0) &&
@@ -384,28 +390,7 @@ class _MainPageState extends State<MainPage>
                                 ],
                               ),
                             ),
-                            ...filteredUpcomingGames.map((game) {
-                              final isFirstCard =
-                                  filteredUpcomingGames.indexOf(game) == 0;
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (isFirstCard) const SizedBox(height: 16),
-                                  GameCard(
-                                    matchDate: game.matchDate,
-                                    startTime: game.startTime,
-                                    endTime: game.endTime,
-                                    positions: game.positions,
-                                    matchPlace: game.matchPlace,
-                                    team1Icon: game.team1Icon,
-                                    team1Name: game.team1Name,
-                                    btnTitle: game.btnTitle,
-                                    team2Icon: game.team2Icon,
-                                    team2Name: game.team2Name,
-                                  ),
-                                ],
-                              );
-                            }),
+                            _buildGameList(filteredUpcomingGames),
                           ],
                         );
                       } else if (index ==
