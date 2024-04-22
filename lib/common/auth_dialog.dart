@@ -3,35 +3,76 @@ import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/auth_button.dart';
+import 'package:my_baseball_record/page/email_auth_page.dart';
 
 class AuthDialog extends StatelessWidget {
   final String email;
+
   const AuthDialog({
     super.key,
     required this.email,
   });
 
+  void _navigateToLoginPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EmailAuthPage(
+          isRegistering: false,
+          email: email,
+          showToast: false,
+        ),
+      ),
+    );
+  }
+
+  void _navigateToLoginPageWithToast(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EmailAuthPage(
+          isRegistering: false,
+          email: email,
+          showToast: true,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColor.background246,
-      insetPadding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
+      insetPadding: const EdgeInsets.only(
+        left: 30,
+        right: 30,
+        bottom: 20,
+      ),
       child: Container(
         height: 306,
         decoration: BoxDecoration(
           color: AppColor.background246,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
         ),
-        padding: const EdgeInsets.only(top: 32, left: 24, right: 24, bottom: 0),
+        padding: const EdgeInsets.only(
+          top: 32,
+          left: 24,
+          right: 24,
+          bottom: 0,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               AppTextList.passwordResetSentMessage,
-              style: AppTextStyle.h318B.copyWith(color: AppColor.textPrimary),
+              style: AppTextStyle.h318B.copyWith(
+                color: AppColor.textPrimary,
+              ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(
+              height: 32,
+            ),
             Text(
               AppTextList.checkInboxAndLoginImmediatelyAfterPasswordChange,
               style: AppTextStyle.body315M.copyWith(
@@ -39,15 +80,27 @@ class AuthDialog extends StatelessWidget {
                 color: AppColor.textSecondary,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
             Text(
               email,
-              style: AppTextStyle.body315M
-                  .copyWith(fontSize: 16, color: AppColor.primaryBlue2),
+              style: AppTextStyle.body315M.copyWith(
+                fontSize: 16,
+                color: AppColor.primaryBlue2,
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(
+              height: 24,
+            ),
             AuthButton(
-              onClick: () {},
+              height: 30,
+              textStyle: AppTextStyle.body315M.copyWith(
+                color: AppColor.graysWhite,
+              ),
+              onClick: () {
+                _navigateToLoginPage(context);
+              },
               icon: Container(),
               backgroundColor: AppColor.primaryBlue2,
               text: AppTextList.loginAgain,
@@ -57,7 +110,13 @@ class AuthDialog extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             AuthButton(
-              onClick: () {},
+              height: 30,
+              textStyle: AppTextStyle.body315M.copyWith(
+                color: AppColor.textHint,
+              ),
+              onClick: () {
+                _navigateToLoginPageWithToast(context);
+              },
               icon: Container(),
               backgroundColor: AppColor.background246,
               text: AppTextList.resendEmail,

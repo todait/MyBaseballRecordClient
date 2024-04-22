@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
+import 'package:my_baseball_record/common/pressed_button.dart';
 
 class StickyBottomButton extends StatelessWidget {
   final String text;
   final VoidCallback onClick;
   final bool enabled;
+
   const StickyBottomButton({
     super.key,
     required this.text,
@@ -15,20 +17,23 @@ class StickyBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const greyBtnColor = AppColor.graysBlack20;
+    const greyBtnColor = AppColor.textPrimary20;
 
-    Color buttonColor = enabled ? AppColor.graysBlack : greyBtnColor;
+    Color buttonColor = enabled ? AppColor.textPrimary : greyBtnColor;
 
-    return BottomAppBar(
-      color: enabled ? buttonColor : greyBtnColor,
-      child: GestureDetector(
-        onTap: enabled ? onClick : null,
-        child: Container(
-          height: 60,
-          alignment: Alignment.center,
-          child: Text(
-            text,
-            style: AppTextStyle.body315M.copyWith(color: AppColor.graysWhite),
+    return PressedButton(
+      borderRadius: BorderRadius.circular(0),
+      borderColor: AppColor.graysWhite,
+      backgroundColor: buttonColor,
+      onTap: enabled ? onClick : () {},
+      borderWidth: 0,
+      child: Container(
+        height: 62,
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: AppTextStyle.body315M.copyWith(
+            color: AppColor.graysWhite,
           ),
         ),
       ),

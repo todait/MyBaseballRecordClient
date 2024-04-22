@@ -3,14 +3,29 @@ import 'package:my_baseball_record/page/login_page.dart';
 import 'package:my_baseball_record/page/register_page.dart';
 
 class EmailAuthPage extends StatefulWidget {
-  const EmailAuthPage({super.key});
+  final bool isRegistering;
+  final String? email;
+  final bool showToast;
+
+  const EmailAuthPage({
+    super.key,
+    required this.isRegistering,
+    this.email,
+    this.showToast = false,
+  });
 
   @override
   State<EmailAuthPage> createState() => _EmailAuthPageState();
 }
 
 class _EmailAuthPageState extends State<EmailAuthPage> {
-  bool _isRegistering = true;
+  late bool _isRegistering;
+
+  @override
+  void initState() {
+    super.initState();
+    _isRegistering = widget.isRegistering;
+  }
 
   void _toggleAuthMode() {
     setState(() {
@@ -23,10 +38,13 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.close)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.close,
+          ),
+        ),
       ),
       body: _isRegistering
           ? RegisterPage(
@@ -34,6 +52,8 @@ class _EmailAuthPageState extends State<EmailAuthPage> {
             )
           : LoginPage(
               toggleAuthMode: _toggleAuthMode,
+              email: widget.email,
+              showToast: widget.showToast,
             ),
     );
   }

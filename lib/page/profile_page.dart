@@ -6,7 +6,11 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: Text('Hi, I\'m your profile.')),
+      body: Center(
+        child: Text(
+          'Hi, I\'m your profile.',
+        ),
+      ),
     );
   }
 }

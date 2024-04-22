@@ -14,6 +14,7 @@ class AuthTextInputWidget extends StatelessWidget {
   final Function(String) onChanged;
   final VoidCallback onEditingComplete;
   final bool isEmailValid;
+  final FocusNode? focusNode;
 
   const AuthTextInputWidget({
     super.key,
@@ -27,6 +28,7 @@ class AuthTextInputWidget extends StatelessWidget {
     required this.onChanged,
     required this.onEditingComplete,
     required this.isEmailValid,
+    this.focusNode,
   });
 
   @override
@@ -49,7 +51,9 @@ class AuthTextInputWidget extends StatelessWidget {
             right: 0,
             child: Text(
               labelText,
-              style: AppTextStyle.body413M.copyWith(color: labelTextColor),
+              style: AppTextStyle.body413M.copyWith(
+                color: labelTextColor,
+              ),
             ),
           ),
           Positioned(
@@ -63,6 +67,8 @@ class AuthTextInputWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                    focusNode: focusNode,
+                    autofocus: true,
                     onEditingComplete: onEditingComplete,
                     textInputAction: TextInputAction.next,
                     autocorrect: false,
@@ -76,8 +82,9 @@ class AuthTextInputWidget extends StatelessWidget {
                       contentPadding: EdgeInsets.zero,
                       border: InputBorder.none,
                       hintText: hintText,
-                      hintStyle: AppTextStyle.body120M
-                          .copyWith(color: AppColor.textPrimary20),
+                      hintStyle: AppTextStyle.body120M.copyWith(
+                        color: AppColor.textPrimary20,
+                      ),
                     ),
                   ),
                 ),
@@ -88,8 +95,8 @@ class AuthTextInputWidget extends StatelessWidget {
                     size: 20,
                     color: AppColor.textHint,
                   ),
-                  splashColor: null,
-                  highlightColor: null,
+                  splashColor: AppColor.transparent,
+                  highlightColor: AppColor.transparent,
                 ),
               ],
             ),

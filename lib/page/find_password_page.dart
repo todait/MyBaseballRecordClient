@@ -15,35 +15,29 @@ class FindPasswordPage extends StatefulWidget {
 }
 
 class _FindPasswordPageState extends State<FindPasswordPage> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  bool isInputValid = false;
+  bool _isInputValid = false;
 
   @override
   void dispose() {
-    emailController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
-  void checkInputValid() {
-    final email = emailController.text;
-    if (!validateEmail(email)) {
-      setState(() {
-        isInputValid = false;
-      });
-    } else {
-      setState(() {
-        isInputValid = true;
-      });
-    }
+  void _checkInputValid() {
+    final email = _emailController.text;
+    setState(() {
+      _isInputValid = validateEmail(email);
+    });
   }
 
-  void showResetPasswordDialog(BuildContext context) {
+  void _showResetPasswordDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AuthDialog(
-          email: emailController.text,
+          email: _emailController.text,
         );
       },
     );
@@ -54,10 +48,13 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.close)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.close,
+          ),
+        ),
       ),
       body: SafeArea(
         bottom: false,
@@ -76,23 +73,30 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                       color: AppColor.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   Text(
                     AppTextList.sendResetPasswordEmailText,
-                    style: AppTextStyle.body315M
-                        .copyWith(color: AppColor.textHint, height: 1.5),
+                    style: AppTextStyle.body315M.copyWith(
+                      color: AppColor.textHint,
+                      height: 1.5,
+                    ),
                   ),
-                  const SizedBox(height: 48),
+                  const SizedBox(
+                    height: 48,
+                  ),
                   AuthTextInputWidget(
-                    textStyle: AppTextStyle.body120M
-                        .copyWith(color: AppColor.textPrimary),
+                    textStyle: AppTextStyle.body120M.copyWith(
+                      color: AppColor.textPrimary,
+                    ),
                     labelText: AppTextList.emailLabel,
                     hintText: AppTextList.emailLabel,
-                    controller: emailController,
-                    onClearPressed: () => emailController.clear(),
+                    controller: _emailController,
+                    onClearPressed: () => _emailController.clear(),
                     keyboardType: TextInputType.text,
-                    onChanged: (String value) {},
-                    onEditingComplete: checkInputValid,
+                    onChanged: (value) => _checkInputValid(),
+                    onEditingComplete: _checkInputValid,
                     isEmailValid: false,
                   ),
                 ],
@@ -105,11 +109,11 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
               child: StickyBottomButton(
                 text: AppTextList.resetLink,
                 onClick: () {
-                  if (isInputValid) {
-                    showResetPasswordDialog(context);
+                  if (_isInputValid) {
+                    _showResetPasswordDialog(context);
                   }
                 },
-                enabled: isInputValid,
+                enabled: _isInputValid,
               ),
             ),
           ],
