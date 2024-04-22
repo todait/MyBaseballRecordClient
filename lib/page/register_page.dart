@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
@@ -86,6 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
         showPasswordCheckInput = true;
       });
       FocusScope.of(context).nextFocus();
+      registerUser();
       navigateToMainPage();
     }
   }
@@ -93,6 +97,28 @@ class _RegisterPageState extends State<RegisterPage> {
   void navigateToMainPage() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MainPage()));
+  }
+
+  void registerUser() async {
+    final dio = Dio();
+
+    const emulatorIp = '10.0.2.2:4000';
+    const simulatorIp = '127.0.0.1:4000';
+
+    final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+
+    final email = emailController.text;
+    final password = passwordController.text;
+
+    final response = await dio.post(
+      'http://$ip/api/register',
+      data: {
+        'email': email,
+        'password': password,
+      },
+    );
+
+    print(response.data);
   }
 
   @override
