@@ -9,7 +9,7 @@ class GameCard extends StatelessWidget {
   final int? totalNumber;
   final DateTime matchDate;
   final TimeOfDay startTime;
-  final TimeOfDay endTime;
+
   final List<String> positions;
   final String matchPlace;
   final String team1Icon;
@@ -17,6 +17,7 @@ class GameCard extends StatelessWidget {
   final String team2Icon;
   final String team2Name;
   final String btnTitle;
+  final FinishedMatchStatus? finishedMatchStatus;
 
   final TextStyle? totalNumberStyle;
   final TextStyle? statusChipStyle;
@@ -31,7 +32,6 @@ class GameCard extends StatelessWidget {
     this.totalNumber,
     required this.matchDate,
     required this.startTime,
-    required this.endTime,
     this.positions = const ['포지션 미정'],
     required this.matchPlace,
     required this.team1Icon,
@@ -46,6 +46,7 @@ class GameCard extends StatelessWidget {
     this.matchPlaceStyle,
     this.teamNameStyle,
     this.btnTitleStyle,
+    this.finishedMatchStatus,
   });
 
   MatchStatus _getMatchStatus() {
@@ -54,14 +55,10 @@ class GameCard extends StatelessWidget {
     final diff = matchDate.difference(today).inDays;
     final matchStartDateTime = DateTime(matchDate.year, matchDate.month,
         matchDate.day, startTime.hour, startTime.minute);
-    final matchEndDateTime = DateTime(matchDate.year, matchDate.month,
-        matchDate.day, endTime.hour, endTime.minute);
 
     if (matchDate.isBefore(today)) {
       return MatchStatus.notStarted;
-    } else if (matchDate == today &&
-        now.isAfter(matchStartDateTime) &&
-        now.isBefore(matchEndDateTime)) {
+    } else if (matchDate == today && now.isAfter(matchStartDateTime)) {
       return MatchStatus.inProgress;
     } else if (diff == 0) {
       return MatchStatus.startToday;
@@ -79,11 +76,8 @@ class GameCard extends StatelessWidget {
     final matchStatus = _getMatchStatus();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,15 +85,18 @@ class GameCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      MatchStatusWidget(
-                        status: matchStatus,
-                        matchDate: matchDate,
-                        startTime: startTime,
-                        endTime: endTime,
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: finishedMatchStatus != null
+                        ? FinishedMatchStatusWidget(
+                            startTime: startTime,
+                            matchDate: matchDate,
+                          )
+                        : MatchStatusWidget(
+                            status: matchStatus,
+                            matchDate: matchDate,
+                            startTime: startTime,
+                          ),
                   ),
                   const SizedBox(height: 4),
                   Row(
