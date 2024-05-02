@@ -96,6 +96,9 @@ class GameCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchStatus = _getMatchStatus();
+    final isMatchStarted = matchStatus == MatchStatus.inProgress ||
+        matchStatus == MatchStatus.startToday;
+    final isMatchFinished = finishedMatchStatus != null;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -191,19 +194,20 @@ class GameCard extends StatelessWidget {
           const SizedBox(
             height: 40,
           ),
-          AuthButton(
-            onClick: () {},
-            icon: Container(),
-            backgroundColor: AppColor.textSecondary,
-            text: btnTitle,
-            textStyle: AppTextStyle.body315M
-                .copyWith(fontSize: 16, color: AppColor.graysWhite),
-            borderColor: AppColor.textSecondary,
-            textColor: AppColor.graysWhite,
-            iconColor: AppColor.transparent,
-            borderRadius: BorderRadius.circular(12),
-            height: 36,
-          ),
+          if (isMatchStarted || isMatchFinished)
+            AuthButton(
+              onClick: () {},
+              icon: Container(),
+              backgroundColor: AppColor.textSecondary,
+              text: btnTitle,
+              textStyle: AppTextStyle.body315M
+                  .copyWith(fontSize: 16, color: AppColor.graysWhite),
+              borderColor: AppColor.textSecondary,
+              textColor: AppColor.graysWhite,
+              iconColor: AppColor.transparent,
+              borderRadius: BorderRadius.circular(12),
+              height: 36,
+            ),
           const SizedBox(height: 16),
           const Divider(),
         ],
