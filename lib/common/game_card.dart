@@ -12,9 +12,9 @@ class GameCard extends StatelessWidget {
 
   final List<String> positions;
   final String matchPlace;
-  final String team1Icon;
+  final String? team1Icon;
   final String team1Name;
-  final String team2Icon;
+  final String? team2Icon;
   final String team2Name;
   final String btnTitle;
   final FinishedMatchStatus? finishedMatchStatus;
@@ -34,9 +34,9 @@ class GameCard extends StatelessWidget {
     required this.startTime,
     this.positions = const ['포지션 미정'],
     required this.matchPlace,
-    required this.team1Icon,
+    this.team1Icon,
     required this.team1Name,
-    required this.team2Icon,
+    this.team2Icon,
     required this.team2Name,
     required this.btnTitle,
     this.totalNumberStyle,
@@ -71,6 +71,25 @@ class GameCard extends StatelessWidget {
       return MatchStatus.upcoming;
     } else {
       return MatchStatus.future;
+    }
+  }
+
+  Widget _buildTeamIcon(String? iconUrl) {
+    if (iconUrl == null || iconUrl.isEmpty) {
+      return Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          color: AppColor.graysGray,
+          borderRadius: BorderRadius.circular(8),
+        ),
+      );
+    } else {
+      return Image.network(
+        iconUrl,
+        width: 150,
+        height: 150,
+      );
     }
   }
 
@@ -133,11 +152,7 @@ class GameCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset('assets/icon/Polygon 2.png'),
-                  Image.network(
-                    team1Icon,
-                    width: 150,
-                    height: 150,
-                  ),
+                  _buildTeamIcon(team1Icon),
                   const SizedBox(
                     width: 8,
                   ),
@@ -159,11 +174,7 @@ class GameCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset('assets/icon/Polygon 1.png'),
-                  Image.network(
-                    team2Icon,
-                    width: 150,
-                    height: 150,
-                  ),
+                  _buildTeamIcon(team2Icon),
                   const SizedBox(
                     width: 8,
                   ),
