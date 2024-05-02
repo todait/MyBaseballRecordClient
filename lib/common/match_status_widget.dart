@@ -108,28 +108,23 @@ class MatchStatusWidget extends StatelessWidget {
   }
 
   Widget _buildUpcomingWidget() {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final diff = matchDate.difference(today).inDays;
-
+    final diff = matchDate.difference(DateTime.now()).inDays;
     final formattedDate = DateFormat('M월 d일 E', 'ko_KR').format(matchDate);
     final formattedTime = _formatTime(startTime);
 
-    if (diff >= 1 && diff <= 14) {
+    Widget buildDDayWidget(int diff, Color bgColor, Color textColor) {
       return Row(
         children: [
           Container(
             decoration: BoxDecoration(
-              color: AppColor.accentRed10,
+              color: bgColor,
               borderRadius: BorderRadius.circular(15),
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 'D-$diff',
-                style: AppTextStyle.caption113B1.copyWith(
-                  color: AppColor.accentRed100,
-                ),
+                style: AppTextStyle.caption113B1.copyWith(color: textColor),
               ),
             ),
           ),
@@ -137,28 +132,13 @@ class MatchStatusWidget extends StatelessWidget {
           Text('$formattedDate • $formattedTime'),
         ],
       );
+    }
+
+    if (diff >= 2 && diff <= 14) {
+      return buildDDayWidget(diff, AppColor.accentRed10, AppColor.accentRed100);
     } else if (diff >= 15 && diff <= 100) {
-      return Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColor.primaryBlue3,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'D-$diff',
-                style: AppTextStyle.caption113B1.copyWith(
-                  color: AppColor.primaryBlue2,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text('$formattedDate • $formattedTime'),
-        ],
-      );
+      return buildDDayWidget(
+          diff, AppColor.primaryBlue3, AppColor.primaryBlue2);
     } else {
       return Row(
         children: [

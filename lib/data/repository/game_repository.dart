@@ -18,7 +18,7 @@ class GameRepository {
         team2Name: '국제로타리3710광주',
       ),
       GameCard(
-        matchDate: DateTime(2024, 4, 28),
+        matchDate: DateTime(2024, 5, 2),
         startTime: const TimeOfDay(hour: 07, minute: 30),
         matchPlace: '맥도 생태공원',
         team1Icon:
@@ -28,6 +28,7 @@ class GameRepository {
         team2Icon:
             'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
         team2Name: '국제로타리3710광주',
+        positions: const ['타자', '투수'],
       ),
       GameCard(
         matchPlace: '화명 A구장',
