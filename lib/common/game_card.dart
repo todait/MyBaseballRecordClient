@@ -4,6 +4,7 @@ import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/auth_button.dart';
 import 'package:my_baseball_record/common/match_status_widget.dart';
 import 'package:my_baseball_record/common/position_chip_widget.dart';
+import 'package:my_baseball_record/page/game_result_page.dart';
 
 class GameCard extends StatelessWidget {
   final int? totalNumber;
@@ -196,7 +197,13 @@ class GameCard extends StatelessWidget {
           ),
           if (isMatchStarted || isMatchFinished)
             AuthButton(
-              onClick: () {},
+              onClick: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const GameResultPage(),
+                  ),
+                );
+              },
               icon: Container(),
               backgroundColor: AppColor.textSecondary,
               text: btnTitle,
