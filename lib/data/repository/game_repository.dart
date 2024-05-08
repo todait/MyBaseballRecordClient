@@ -206,7 +206,7 @@ class GameRepository {
       ),
       GameCard(
         matchDate: DateTime(2024, 5, 5),
-        startTime: const TimeOfDay(hour: 09, minute: 40),
+        startTime: const TimeOfDay(hour: 19, minute: 40),
         matchPlace: '화명 A구장',
         team1Name: '용병',
         btnTitle: '결과 입력하기',

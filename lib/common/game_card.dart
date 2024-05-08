@@ -200,7 +200,9 @@ class GameCard extends StatelessWidget {
               onClick: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const GameResultPage(),
+                    builder: (context) => GameResultPage(
+                      gameCard: this,
+                    ),
                   ),
                 );
               },
