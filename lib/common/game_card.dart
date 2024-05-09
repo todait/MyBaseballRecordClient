@@ -152,21 +152,29 @@ class GameCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset('assets/icon/Polygon 2.png'),
-                  _buildTeamIcon(team1Icon),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    team1Name,
-                    style: AppTextStyle.body413M.copyWith(
-                      color: AppColor.textSecondary,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset('assets/icon/Polygon 2.png'),
+                    _buildTeamIcon(team1Icon),
+                    const SizedBox(
+                      width: 8,
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        team1Name,
+                        style: AppTextStyle.body413M.copyWith(
+                          color: AppColor.textSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Text(
                 'VS',
@@ -174,21 +182,29 @@ class GameCard extends StatelessWidget {
                   color: AppColor.textHint,
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset('assets/icon/Polygon 1.png'),
-                  _buildTeamIcon(team2Icon),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    team2Name,
-                    style: AppTextStyle.body413M.copyWith(
-                      color: AppColor.textSecondary,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset('assets/icon/Polygon 1.png'),
+                    _buildTeamIcon(team2Icon),
+                    const SizedBox(
+                      width: 8,
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        team2Name,
+                        style: AppTextStyle.body413M.copyWith(
+                          color: AppColor.textSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

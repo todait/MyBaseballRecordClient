@@ -86,7 +86,7 @@ class _GameResultPageState extends State<GameResultPage> {
         _resultColor = AppColor.accentRed100;
       } else if (_ourTeamScore == _opponentTeamScore) {
         _result = '무';
-        _resultColor = AppColor.graysWhite;
+        _resultColor = AppColor.textHint;
       }
     });
   }
@@ -288,17 +288,29 @@ class _GameResultPageState extends State<GameResultPage> {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Text(
-                      widget.gameCard.team1Name,
-                      style: AppTextStyle.body315M.copyWith(
-                        color: AppColor.textSecondary,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      child: Text(
+                        widget.gameCard.team1Name,
+                        style: AppTextStyle.body315M.copyWith(
+                          color: AppColor.textSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const Spacer(),
-                    Text(
-                      widget.gameCard.team2Name,
-                      style: AppTextStyle.body315M.copyWith(
-                        color: AppColor.textPrimary10,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      child: Text(
+                        widget.gameCard.team2Name,
+                        style: AppTextStyle.body315M.copyWith(
+                          color: AppColor.textPrimary10,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
