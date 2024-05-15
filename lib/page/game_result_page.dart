@@ -114,6 +114,42 @@ class _GameResultPageState extends State<GameResultPage> {
     });
   }
 
+  Widget _buildHeader() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.close),
+            ),
+            GestureDetector(
+              onTap: _saveResult,
+              child: Text(
+                AppTextList.saveData,
+                style: AppTextStyle.body315M.copyWith(
+                  color: AppColor.textPrimary,
+                ),
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 21,
+        ),
+        Text(
+          AppTextList.matchResult,
+          style: AppTextStyle.h224B.copyWith(
+            color: AppColor.textPrimary,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final formattedDate =
@@ -134,38 +170,7 @@ class _GameResultPageState extends State<GameResultPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(Icons.close),
-                    ),
-                    GestureDetector(
-                      onTap: _saveResult,
-                      child: Text(
-                        AppTextList.saveData,
-                        style: AppTextStyle.body315M.copyWith(
-                          color: AppColor.textPrimary,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 21,
-                ),
-                Text(
-                  AppTextList.matchResult,
-                  style: AppTextStyle.h224B.copyWith(
-                    color: AppColor.textPrimary,
-                  ),
-                ),
-                const SizedBox(
-                  height: 31,
-                ),
+                _buildHeader(),
                 Text(
                   '$formattedDate • $formattedTime',
                   style: AppTextStyle.body315M.copyWith(
@@ -243,6 +248,7 @@ class _GameResultPageState extends State<GameResultPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // TODO: Expanded 똑같은 컴포넌트 두개 리팩토링 필요 (하나의 _build 함수로)
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.symmetric(
