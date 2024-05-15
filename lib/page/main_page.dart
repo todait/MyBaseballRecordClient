@@ -189,7 +189,14 @@ class _MainPageState extends State<MainPage>
                             );
                           }
                         }
-                        return null;
+                        return EmptyCard(
+                          icon: Image.asset(
+                            'assets/icon/group_343.png',
+                          ),
+                          text1: AppTextList.hasScheduledGames,
+                          text2: AppTextList.addScheduleTitle,
+                          text3: AppTextList.addPreMatchSchedule,
+                        );
                       },
                     ),
                   ),
@@ -226,7 +233,14 @@ class _MainPageState extends State<MainPage>
                             );
                           }
                         }
-                        return null;
+                        return EmptyCard(
+                          icon: Image.asset(
+                            'assets/icon/group_341.png',
+                          ),
+                          text1: AppTextList.hasParticipatedGames,
+                          text2: AppTextList.recordGameResultMessage,
+                          text3: AppTextList.addPastRecord,
+                        );
                       },
                     ),
                   ),
