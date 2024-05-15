@@ -98,6 +98,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             unselectedLabelStyle: AppTextStyle.h418M,
             indicatorWeight: 2,
             indicatorSize: TabBarIndicatorSize.tab,
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 24),
             labelPadding: const EdgeInsets.only(
               bottom: 8,
             ),
