@@ -21,19 +21,13 @@ class GameRepository {
         matchDate: DateTime(2024, 5, 2),
         startTime: const TimeOfDay(hour: 07, minute: 30),
         matchPlace: '맥도 생태공원',
-        team1Icon:
-            'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
         team1Name: '용병',
         btnTitle: '결과 입력하기',
-        team2Icon:
-            'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
-        team2Name: '국제로타리3710광주',
+        team2Name: '용병',
         positions: const ['타자', '투수'],
       ),
       GameCard(
         matchPlace: '화명 A구장',
-        team1Icon:
-            'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
         team1Name: '용병',
         btnTitle: '결과 입력하기',
         matchDate: DateTime(2024, 5, 5),
@@ -47,8 +41,6 @@ class GameRepository {
         matchDate: DateTime(2024, 5, 6),
         startTime: const TimeOfDay(hour: 10, minute: 0),
         matchPlace: '화명 B구장',
-        team1Icon:
-            'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
         team1Name: '용병',
         btnTitle: '결과 입력하기',
         team2Icon:
@@ -59,8 +51,6 @@ class GameRepository {
         matchDate: DateTime(2024, 5, 11),
         startTime: const TimeOfDay(hour: 10, minute: 0),
         matchPlace: '화명 B구장',
-        team1Icon:
-            'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
         team1Name: '용병',
         btnTitle: '결과 입력하기',
         team2Icon:
