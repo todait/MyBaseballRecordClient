@@ -6,6 +6,7 @@ import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
+import 'package:my_baseball_record/common/const/data.dart';
 import 'package:my_baseball_record/common/empty_card.dart';
 import 'package:my_baseball_record/common/game_card.dart';
 import 'package:my_baseball_record/data/repository/game_repository.dart';
@@ -82,6 +83,7 @@ class _MainPageState extends State<MainPage>
     );
   }
 
+
   Future<void> _fetchGames() async {
     final games = await repository.getGames();
     setState(() {
@@ -122,6 +124,11 @@ class _MainPageState extends State<MainPage>
 
       return isGameToday && (isGameInProgress || isGameUpcoming);
     }).toList();
+
+  void checkToken() async {
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    print(accessToken);
+
   }
 
   void _startTimer() {
