@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/auth_button.dart';
+import 'package:my_baseball_record/common/match_status_widget.dart';
 
 class GameCard extends StatelessWidget {
   final int? totalNumber;
@@ -47,162 +47,33 @@ class GameCard extends StatelessWidget {
     this.btnTitleStyle,
   });
 
-  Widget getMatchStatus(BuildContext context) {
+  MatchStatus _getMatchStatus() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final tomorrow = today.add(const Duration(days: 1));
     final diff = matchDate.difference(today).inDays;
-
     final matchStartDateTime = DateTime(matchDate.year, matchDate.month,
         matchDate.day, startTime.hour, startTime.minute);
     final matchEndDateTime = DateTime(matchDate.year, matchDate.month,
         matchDate.day, endTime.hour, endTime.minute);
 
     if (matchDate.isBefore(today)) {
-      return const Text('');
-    } else if (matchDate == today) {
-      if (now.isAfter(matchStartDateTime) && now.isBefore(matchEndDateTime)) {
-        return Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: AppColor.primaryBlue3,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.circle,
-                      color: AppColor.primaryBlue1,
-                      size: 10,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      '진행중',
-                      style: AppTextStyle.caption113B1.copyWith(
-                        color: AppColor.primaryBlue1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Text(
-              _formatTime(startTime),
-              style: AppTextStyle.body315M.copyWith(
-                fontSize: 16,
-                color: AppColor.primaryBlue1,
-              ),
-            ),
-          ],
-        );
-      } else {
-        return Text(
-          '${_formatTime(startTime)} 시작',
-          style: AppTextStyle.body315M.copyWith(
-            fontSize: 16,
-            color: AppColor.primaryBlue1,
-          ),
-        );
-      }
-    } else if (matchDate == tomorrow) {
-      return Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColor.accentRed10,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                '내일',
-                style: AppTextStyle.caption113B1.copyWith(
-                  color: AppColor.accentRed100,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          Text(
-              '${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}'),
-        ],
-      );
-    } else if (diff <= 50) {
-      return Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColor.accentRed10,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'D-$diff',
-                style: AppTextStyle.caption113B1.copyWith(
-                  color: AppColor.accentRed100,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          Text(
-              '${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}'),
-        ],
-      );
+      return MatchStatus.notStarted;
+    } else if (matchDate == today &&
+        now.isAfter(matchStartDateTime) &&
+        now.isBefore(matchEndDateTime)) {
+      return MatchStatus.inProgress;
+    } else if (diff == 0) {
+      return MatchStatus.startToday;
+    } else if (diff == 1) {
+      return MatchStatus.tomorrow;
     } else if (diff <= 100) {
-      return Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColor.primaryBlue3,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'D-$diff',
-                style: AppTextStyle.caption113B1.copyWith(
-                  color: AppColor.primaryBlue2,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          Text(
-              '${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}'),
-        ],
-      );
+      return MatchStatus.upcoming;
     } else {
-      return Text(
-          '${DateFormat('M월 d일 E', 'ko_KR').format(matchDate)} • ${_formatTime(startTime)}');
+      return MatchStatus.future;
     }
   }
 
-  String _formatTime(TimeOfDay time) {
-    final hour = time.hour;
-    final minute = time.minute;
-    final amPm = hour < 12 ? '오전' : '오후';
-    final formattedHour = hour > 12 ? hour - 12 : hour;
-    final formattedMinute = minute.toString().padLeft(2, '0');
-    return '$amPm $formattedHour시 $formattedMinute분';
-  }
-
-  List<Widget> getPositionChips(List<String> positions) {
+  List<Widget> _getPositionChips(List<String> positions) {
     return positions.map((position) {
       if (position == "포지션 미정") {
         return Container(
@@ -276,8 +147,7 @@ class GameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final matchStatus = getMatchStatus(context);
-    final positionChips = getPositionChips(positions);
+    final matchStatus = _getMatchStatus();
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -294,7 +164,12 @@ class GameCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      matchStatus,
+                      MatchStatusWidget(
+                        status: matchStatus,
+                        matchDate: matchDate,
+                        startTime: startTime,
+                        endTime: endTime,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -319,7 +194,7 @@ class GameCard extends StatelessWidget {
                 ],
               ),
               Wrap(
-                children: positionChips,
+                children: _getPositionChips(positions),
               )
             ],
           ),
