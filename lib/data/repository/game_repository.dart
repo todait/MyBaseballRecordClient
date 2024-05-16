@@ -3,6 +3,7 @@ import 'package:my_baseball_record/common/game_card.dart';
 import 'package:my_baseball_record/common/match_status_widget.dart';
 
 class GameRepository {
+  // GameModel추가
   Future<List<GameCard>> getGames() async {
     return [
       GameCard(
