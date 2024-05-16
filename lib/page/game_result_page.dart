@@ -102,6 +102,18 @@ class _GameResultPageState extends State<GameResultPage> {
     super.dispose();
   }
 
+  void _saveResult() {
+    int ourTeamScore = _ourTeamScore;
+    int opponentTeamScore = _opponentTeamScore;
+    String result = _result;
+
+    Navigator.pop(context, {
+      'ourTeamScore': ourTeamScore,
+      'opponentTeamScore': opponentTeamScore,
+      'result': result,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final formattedDate =
@@ -125,11 +137,19 @@ class _GameResultPageState extends State<GameResultPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.close),
-                    Text(
-                      AppTextList.saveData,
-                      style: AppTextStyle.body315M.copyWith(
-                        color: AppColor.textPrimary,
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    TextButton(
+                      onPressed: _saveResult,
+                      child: Text(
+                        AppTextList.saveData,
+                        style: AppTextStyle.body315M.copyWith(
+                          color: AppColor.textPrimary,
+                        ),
                       ),
                     ),
                   ],

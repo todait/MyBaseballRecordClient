@@ -156,11 +156,7 @@ class GameCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset('assets/icon/Polygon 2.png'),
                     _buildTeamIcon(team1Icon),
-                    const SizedBox(
-                      width: 8,
-                    ),
                     SizedBox(
                       width: 100,
                       child: Text(
@@ -186,11 +182,7 @@ class GameCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset('assets/icon/Polygon 1.png'),
                     _buildTeamIcon(team2Icon),
-                    const SizedBox(
-                      width: 8,
-                    ),
                     SizedBox(
                       width: 100,
                       child: Text(
@@ -238,5 +230,18 @@ class GameCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color _getResultColor(String result) {
+    switch (result) {
+      case '승':
+        return Colors.green;
+      case '무':
+        return Colors.grey;
+      case '패':
+        return Colors.red;
+      default:
+        return Colors.transparent;
+    }
   }
 }
