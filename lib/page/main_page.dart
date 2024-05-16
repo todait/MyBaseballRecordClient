@@ -8,6 +8,7 @@ import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
 import 'package:my_baseball_record/common/empty_card.dart';
 import 'package:my_baseball_record/common/game_card.dart';
+import 'package:my_baseball_record/data/repository/game_repository.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -24,133 +25,6 @@ class _MainPageState extends State<MainPage>
   int _selectedIndex = 0;
   DateTime _currentTime = DateTime.now();
   late Timer _timer;
-
-  final List<GameCard> _upcomingGames = [
-    GameCard(
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      team1Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team1Name: '발키리',
-      btnTitle: '결과 입력하기',
-      matchDate: DateTime(2024, 4, 20),
-      startTime: const TimeOfDay(hour: 18, minute: 0),
-      endTime: const TimeOfDay(hour: 20, minute: 0),
-      team2Icon:
-          'http://file.clubone.kr/symbol/club/20180201202334_368_thumb.jpg',
-      team2Name: 'ZeroSevens',
-    ),
-    GameCard(
-      matchDate: DateTime(2024, 4, 20),
-      startTime: const TimeOfDay(hour: 16, minute: 0),
-      endTime: const TimeOfDay(hour: 18, minute: 0),
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      team1Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team1Name: '발키리',
-      btnTitle: '결과 입력하기',
-      team2Icon:
-          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
-      team2Name: '국제로타리3710광주',
-    ),
-    GameCard(
-      positions: const ['타자', '투수'],
-      matchDate: DateTime(2024, 4, 20),
-      startTime: const TimeOfDay(hour: 20, minute: 0),
-      endTime: const TimeOfDay(hour: 22, minute: 0),
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      team1Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team1Name: '발키리',
-      btnTitle: '결과 입력하기',
-      team2Icon:
-          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
-      team2Name: '국제로타리3710지구',
-    ),
-    GameCard(
-      matchDate: DateTime(2024, 4, 22),
-      startTime: const TimeOfDay(hour: 10, minute: 0),
-      endTime: const TimeOfDay(hour: 12, minute: 0),
-      positions: const ['타자'],
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      team1Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team1Name: '발키리',
-      btnTitle: '결과 입력하기',
-      team2Icon:
-          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
-      team2Name: '국제로타리3710지구',
-    ),
-    GameCard(
-      matchDate: DateTime(2024, 4, 21),
-      startTime: const TimeOfDay(hour: 10, minute: 0),
-      endTime: const TimeOfDay(hour: 12, minute: 0),
-      positions: const ['투수'],
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      team1Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team1Name: '발키리',
-      btnTitle: '결과 입력하기',
-      team2Icon:
-          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
-      team2Name: '국제로타리3710지구',
-    ),
-    GameCard(
-      matchDate: DateTime(2024, 6, 20),
-      startTime: const TimeOfDay(hour: 16, minute: 0),
-      endTime: const TimeOfDay(hour: 18, minute: 0),
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      team1Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team1Name: '발키리',
-      btnTitle: '결과 입력하기',
-      team2Icon:
-          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
-      team2Name: '국제로타리3710지구',
-    ),
-    GameCard(
-      matchDate: DateTime(2024, 8, 20),
-      startTime: const TimeOfDay(hour: 16, minute: 0),
-      endTime: const TimeOfDay(hour: 18, minute: 0),
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      team1Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team1Name: '발키리',
-      btnTitle: '결과 입력하기',
-      team2Icon:
-          'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
-      team2Name: '국제로타리3710지구',
-    ),
-  ];
-
-  List<GameCard> _getTodayGames(List<GameCard> games) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final tomorrow = today.add(const Duration(days: 1));
-
-    return games.where((game) {
-      final gameStartDateTime = DateTime(
-        game.matchDate.year,
-        game.matchDate.month,
-        game.matchDate.day,
-        game.startTime.hour,
-        game.startTime.minute,
-      );
-      final gameEndDateTime = DateTime(
-        game.matchDate.year,
-        game.matchDate.month,
-        game.matchDate.day,
-        game.endTime.hour,
-        game.endTime.minute,
-      );
-
-      final isGameInProgress =
-          now.isAfter(gameStartDateTime) && now.isBefore(gameEndDateTime);
-      final isGameUpcoming = gameStartDateTime.isAfter(now) &&
-          gameStartDateTime.isBefore(tomorrow);
-
-      return isGameInProgress || isGameUpcoming;
-    }).toList();
-  }
 
   final List<GameCard> _finishedGames = [
     GameCard(
@@ -184,11 +58,52 @@ class _MainPageState extends State<MainPage>
   @override
   void initState() {
     super.initState();
+    _fetchGames();
     _startTimer();
     _tabController = TabController(
       length: 2,
       vsync: this,
     );
+  }
+
+  final repository = GameRepository();
+  List<GameCard> gameItems = [];
+
+  Future<void> _fetchGames() async {
+    final games = await repository.getGames('game');
+    setState(() {
+      gameItems = games;
+    });
+  }
+
+  List<GameCard> _getTodayGames(gameItems) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(const Duration(days: 1));
+
+    return gameItems.where((game) {
+      final gameStartDateTime = DateTime(
+        game.matchDate.year,
+        game.matchDate.month,
+        game.matchDate.day,
+        game.startTime.hour,
+        game.startTime.minute,
+      );
+      final gameEndDateTime = DateTime(
+        game.matchDate.year,
+        game.matchDate.month,
+        game.matchDate.day,
+        game.endTime.hour,
+        game.endTime.minute,
+      );
+
+      final isGameInProgress =
+          now.isAfter(gameStartDateTime) && now.isBefore(gameEndDateTime);
+      final isGameUpcoming = gameStartDateTime.isAfter(now) &&
+          gameStartDateTime.isBefore(tomorrow);
+
+      return isGameInProgress || isGameUpcoming;
+    }).toList();
   }
 
   void _startTimer() {
@@ -243,13 +158,9 @@ class _MainPageState extends State<MainPage>
   @override
   Widget build(BuildContext context) {
     final today = DateTime.now();
-    final sortedUpcomingGames = List<GameCard>.from(_upcomingGames)
-      ..sort((a, b) => a.matchDate.compareTo(b.matchDate));
-
-    final todayGames = _getTodayGames(sortedUpcomingGames);
-    final filteredUpcomingGames = sortedUpcomingGames
-        .where((game) => game.matchDate.isAfter(today))
-        .toList();
+    final todayGames = _getTodayGames(gameItems);
+    final filteredUpcomingGames =
+        gameItems.where((game) => game.matchDate.isAfter(today)).toList();
 
     return Scaffold(
       body: SafeArea(
@@ -391,12 +302,12 @@ class _MainPageState extends State<MainPage>
               controller: _tabController,
               children: [
                 ListView.builder(
-                  itemCount: sortedUpcomingGames.isEmpty
+                  itemCount: gameItems.isEmpty
                       ? 1
                       : todayGames.length +
                           (filteredUpcomingGames.isNotEmpty ? 2 : 1),
                   itemBuilder: (context, index) {
-                    if (sortedUpcomingGames.isEmpty) {
+                    if (gameItems.isEmpty) {
                       return EmptyCard(
                         text1: AppTextList.hasScheduledGames,
                         text2: AppTextList.addScheduleTitle,
