@@ -104,9 +104,10 @@ class _MainPageState extends State<MainPage>
   List<GameCard> _getTodayGames(gameItems) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final tomorrow = today.add(const Duration(days: 1));
 
     return gameItems.where((game) {
+      final gameDate = DateTime(
+          game.matchDate.year, game.matchDate.month, game.matchDate.day);
       final gameStartDateTime = DateTime(
         game.matchDate.year,
         game.matchDate.month,
@@ -115,11 +116,11 @@ class _MainPageState extends State<MainPage>
         game.startTime.minute,
       );
 
+      final isGameToday = gameDate == today;
       final isGameInProgress = now.isAfter(gameStartDateTime);
-      final isGameUpcoming = gameStartDateTime.isAfter(now) &&
-          gameStartDateTime.isBefore(tomorrow);
+      final isGameUpcoming = gameStartDateTime.isAfter(now);
 
-      return isGameInProgress || isGameUpcoming;
+      return isGameToday && (isGameInProgress || isGameUpcoming);
     }).toList();
   }
 

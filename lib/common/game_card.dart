@@ -55,10 +55,13 @@ class GameCard extends StatelessWidget {
     final diff = matchDate.difference(today).inDays;
     final matchStartDateTime = DateTime(matchDate.year, matchDate.month,
         matchDate.day, startTime.hour, startTime.minute);
+    final matchEndDateTime = matchStartDateTime.add(const Duration(hours: 2));
 
     if (matchDate.isBefore(today)) {
       return MatchStatus.notStarted;
-    } else if (matchDate == today && now.isAfter(matchStartDateTime)) {
+    } else if (matchDate == today &&
+        now.isAfter(matchStartDateTime) &&
+        now.isBefore(matchEndDateTime)) {
       return MatchStatus.inProgress;
     } else if (diff == 0) {
       return MatchStatus.startToday;
