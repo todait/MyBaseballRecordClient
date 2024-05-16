@@ -107,8 +107,53 @@ class MatchStatusWidget extends StatelessWidget {
     );
   }
 
+  // Widget _buildUpcomingWidget() {
+  //   final diff = matchDate.difference(DateTime.now()).inDays;
+  //   final formattedDate = DateFormat('M월 d일 E', 'ko_KR').format(matchDate);
+  //   final formattedTime = _formatTime(startTime);
+
+  //   Widget buildDDayWidget(int diff, Color bgColor, Color textColor) {
+  //     return Row(
+  //       children: [
+  //         Container(
+  //           decoration: BoxDecoration(
+  //             color: bgColor,
+  //             borderRadius: BorderRadius.circular(15),
+  //           ),
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: Text(
+  //               'D-$diff',
+  //               style: AppTextStyle.caption113B1.copyWith(color: textColor),
+  //             ),
+  //           ),
+  //         ),
+  //         const SizedBox(width: 8),
+  //         Text('$formattedDate • $formattedTime'),
+  //       ],
+  //     );
+  //   }
+
+  //   if (diff >= 2 && diff <= 14) {
+  //     return buildDDayWidget(diff, AppColor.accentRed10, AppColor.accentRed100);
+  //   } else if (diff >= 15 && diff <= 100) {
+  //     return buildDDayWidget(
+  //         diff, AppColor.primaryBlue3, AppColor.primaryBlue2);
+  //   } else {
+  //     return Row(
+  //       children: [
+  //         Text('$formattedDate • $formattedTime'),
+  //       ],
+  //     );
+  //   }
+  // }
   Widget _buildUpcomingWidget() {
-    final diff = matchDate.difference(DateTime.now()).inDays;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final matchDateOnly =
+        DateTime(matchDate.year, matchDate.month, matchDate.day);
+    final diff = matchDateOnly.difference(today).inDays;
+
     final formattedDate = DateFormat('M월 d일 E', 'ko_KR').format(matchDate);
     final formattedTime = _formatTime(startTime);
 
