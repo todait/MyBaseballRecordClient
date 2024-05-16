@@ -9,6 +9,11 @@ class GameModel {
   final String? team2Icon;
   final List<String>? positions;
 
+  int? ourTeamScore;
+  int? opponentTeamScore;
+  String? result;
+  bool isFinished;
+
   GameModel({
     required this.matchDate,
     required this.matchPlace,
@@ -17,6 +22,10 @@ class GameModel {
     required this.team2Name,
     this.team2Icon,
     this.positions = const ['포지션 미정'],
+    this.ourTeamScore,
+    this.opponentTeamScore,
+    this.result,
+    this.isFinished = false,
   });
 
   TimeOfDay get startTime {

@@ -113,6 +113,7 @@ class GameRepository {
         team2Icon:
             'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
         team2Name: '국제로타리3710지구',
+        isFinished: true,
       ),
       GameModel(
         matchDate: DateTime(2024, 2, 18),
@@ -123,6 +124,7 @@ class GameRepository {
         team2Icon:
             'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
         team2Name: '국제로타리3710지구',
+        isFinished: true,
       ),
       GameModel(
         matchDate: DateTime(2024, 2, 25),
@@ -133,6 +135,7 @@ class GameRepository {
         team2Icon:
             'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
         team2Name: '국제로타리3710지구',
+        isFinished: true,
       ),
       GameModel(
         matchDate: DateTime(2024, 3, 10),
@@ -143,6 +146,7 @@ class GameRepository {
         team2Icon:
             'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
         team2Name: '국제로타리3710지구',
+        isFinished: true,
       ),
       GameModel(
         matchDate: DateTime(2024, 3, 31),
@@ -153,6 +157,7 @@ class GameRepository {
         team2Icon:
             'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
         team2Name: '국제로타리3710지구',
+        isFinished: true,
       ),
       GameModel(
         matchDate: DateTime(2024, 4, 7),
@@ -163,6 +168,7 @@ class GameRepository {
         team2Icon:
             'http://file.clubone.kr/symbol/club/20231221132509_525_thumb.png',
         team2Name: '국제로타리3710지구',
+        isFinished: true,
       ),
       GameModel(
         matchDate: DateTime(2024, 5, 5),
@@ -170,6 +176,7 @@ class GameRepository {
         team1Name: '용병',
         team2Name: '용병',
         positions: const ['타자'],
+        isFinished: true,
       ),
     ];
   }
