@@ -83,7 +83,6 @@ class _MainPageState extends State<MainPage>
     );
   }
 
-
   Future<void> _fetchGames() async {
     final games = await repository.getGames();
     setState(() {
@@ -124,11 +123,11 @@ class _MainPageState extends State<MainPage>
 
       return isGameToday && (isGameInProgress || isGameUpcoming);
     }).toList();
+  }
 
   void checkToken() async {
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     print(accessToken);
-
   }
 
   void _startTimer() {
