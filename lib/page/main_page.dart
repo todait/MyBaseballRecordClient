@@ -33,39 +33,48 @@ class _MainPageState extends State<MainPage>
   List<GameCard> _todayGames = [];
   List<GameCard> _filteredUpcomingGames = [];
 
-  final List<GameCard> _finishedGames = [
-    GameCard(
-      matchDate: DateTime(2024, 4, 17),
-      startTime: const TimeOfDay(hour: 10, minute: 0),
-      endTime: const TimeOfDay(hour: 12, minute: 0),
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      team1Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team1Name: 'teamName',
-      btnTitle: '결과 입력하기',
-      team2Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team2Name: 'teamName',
-    ),
-    GameCard(
-      matchDate: DateTime(2024, 4, 17),
-      startTime: const TimeOfDay(hour: 10, minute: 0),
-      endTime: const TimeOfDay(hour: 12, minute: 0),
-      matchPlace: '조안면 체육공원(UA 베이스볼 파크)',
-      team1Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team1Name: 'teamName',
-      btnTitle: '결과 입력하기',
-      team2Icon:
-          'http://file.clubone.kr/symbol/club/20220216162949_239_thumb.jpg',
-      team2Name: 'teamName',
-    ),
-  ];
+  List<GameCard> _finishedGames = [];
+  List<GameCard> _todayFinishedGames = [];
+  List<GameCard> _pastFinishedGames = [];
+
+  Future<void> _fetchFinishedGames() async {
+    final games = await repository.getFinishedGames();
+    setState(() {
+      _finishedGames = games;
+      _updateFilteredFinishedGames();
+    });
+  }
+
+  void _updateFilteredFinishedGames() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    _finishedGames.sort((a, b) => b.matchDate.compareTo(a.matchDate));
+
+    _todayFinishedGames = _finishedGames.where((game) {
+      final gameDate = DateTime(
+        game.matchDate.year,
+        game.matchDate.month,
+        game.matchDate.day,
+      );
+      return gameDate == today;
+    }).toList();
+
+    _pastFinishedGames = _finishedGames.where((game) {
+      final gameDate = DateTime(
+        game.matchDate.year,
+        game.matchDate.month,
+        game.matchDate.day,
+      );
+      return gameDate.isBefore(today);
+    }).toList();
+  }
 
   @override
   void initState() {
     super.initState();
     _fetchGames();
+    _fetchFinishedGames();
     _startTimer();
     _tabController = TabController(
       length: 2,
@@ -74,15 +83,19 @@ class _MainPageState extends State<MainPage>
   }
 
   Future<void> _fetchGames() async {
-    final games = await repository.getGames('game');
+    final games = await repository.getGames();
     setState(() {
       _gameItems = games;
       _updateFilteredGames();
+      _gameItems.sort((a, b) => a.matchDate.compareTo(b.matchDate));
     });
   }
 
   void _updateFilteredGames() {
     _today = DateTime.now();
+
+    _gameItems.sort((a, b) => a.matchDate.compareTo(b.matchDate));
+
     _todayGames = _getTodayGames(_gameItems);
     _filteredUpcomingGames =
         _gameItems.where((game) => game.matchDate.isAfter(_today)).toList();
@@ -101,16 +114,8 @@ class _MainPageState extends State<MainPage>
         game.startTime.hour,
         game.startTime.minute,
       );
-      final gameEndDateTime = DateTime(
-        game.matchDate.year,
-        game.matchDate.month,
-        game.matchDate.day,
-        game.endTime.hour,
-        game.endTime.minute,
-      );
 
-      final isGameInProgress =
-          now.isAfter(gameStartDateTime) && now.isBefore(gameEndDateTime);
+      final isGameInProgress = now.isAfter(gameStartDateTime);
       final isGameUpcoming = gameStartDateTime.isAfter(now) &&
           gameStartDateTime.isBefore(tomorrow);
 
@@ -171,7 +176,6 @@ class _MainPageState extends State<MainPage>
               GameCard(
                 matchDate: game.matchDate,
                 startTime: game.startTime,
-                endTime: game.endTime,
                 positions: game.positions,
                 matchPlace: game.matchPlace,
                 team1Icon: game.team1Icon,
@@ -179,6 +183,36 @@ class _MainPageState extends State<MainPage>
                 btnTitle: game.btnTitle,
                 team2Icon: game.team2Icon,
                 team2Name: game.team2Name,
+              ),
+            ],
+          );
+        },
+      ).toList(),
+    );
+  }
+
+  Widget _buildFinishedGameList(List<GameCard> games, bool isToday) {
+    return Column(
+      children: games.map(
+        (game) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!isToday)
+                const Padding(
+                  padding: EdgeInsets.only(top: 10, left: 24),
+                ),
+              GameCard(
+                matchDate: game.matchDate,
+                startTime: game.startTime,
+                positions: game.positions,
+                matchPlace: game.matchPlace,
+                team1Icon: game.team1Icon,
+                team1Name: game.team1Name,
+                btnTitle: game.btnTitle,
+                team2Icon: game.team2Icon,
+                team2Name: game.team2Name,
+                finishedMatchStatus: game.finishedMatchStatus,
               ),
             ],
           );
@@ -357,17 +391,17 @@ class _MainPageState extends State<MainPage>
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(24, 16, 24, 8),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 16),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     '오늘의 경기',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                    style: AppTextStyle.h318B.copyWith(
+                                      color: AppColor.textPrimary,
                                     ),
                                   ),
                                 ],
@@ -388,12 +422,18 @@ class _MainPageState extends State<MainPage>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('다음 경기 일정',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold)),
-                                  Text('${_filteredUpcomingGames.length} >',
-                                      style: const TextStyle(fontSize: 14)),
+                                  Text(
+                                    '다음 경기 일정',
+                                    style: AppTextStyle.h318B.copyWith(
+                                      color: AppColor.textPrimary,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${_filteredUpcomingGames.length}건  >',
+                                    style: AppTextStyle.body413M.copyWith(
+                                      color: AppColor.textHint,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -412,14 +452,17 @@ class _MainPageState extends State<MainPage>
                           ),
                         );
                       } else {
-                        return Container();
+                        return const SizedBox.shrink();
                       }
                     }
                   },
                 ),
                 ListView.builder(
-                  itemCount:
-                      _finishedGames.isEmpty ? 1 : _finishedGames.length + 1,
+                  itemCount: _finishedGames.isEmpty
+                      ? 1
+                      : (_todayFinishedGames.isNotEmpty ? 1 : 0) +
+                          (_pastFinishedGames.isNotEmpty ? 1 : 0) +
+                          1,
                   itemBuilder: (context, index) {
                     if (_finishedGames.isEmpty) {
                       return EmptyCard(
@@ -431,8 +474,63 @@ class _MainPageState extends State<MainPage>
                         ),
                       );
                     } else {
-                      if (index < _finishedGames.length) {
-                        return _finishedGames[index];
+                      if (index == 0 && _todayFinishedGames.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '오늘의 경기',
+                                    style: AppTextStyle.h318B.copyWith(
+                                      color: AppColor.textPrimary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            _buildFinishedGameList(_todayFinishedGames, true),
+                          ],
+                        );
+                      } else if ((index == 0 &&
+                              _todayFinishedGames.isEmpty &&
+                              _pastFinishedGames.isNotEmpty) ||
+                          (index == 1 &&
+                              _todayFinishedGames.isNotEmpty &&
+                              _pastFinishedGames.isNotEmpty)) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '종료된 경기',
+                                    style: AppTextStyle.h318B.copyWith(
+                                      color: AppColor.textPrimary,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${_pastFinishedGames.length}건  >',
+                                    style: AppTextStyle.body413M.copyWith(
+                                      color: AppColor.textHint,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            _buildFinishedGameList(_pastFinishedGames, false),
+                          ],
+                        );
                       } else {
                         return EmptyCard(
                           text1: AppTextList.hasParticipatedGames,
