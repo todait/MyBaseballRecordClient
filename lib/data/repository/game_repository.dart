@@ -204,6 +204,16 @@ class GameRepository {
         team2Name: '국제로타리3710지구',
         finishedMatchStatus: FinishedMatchStatus.unknown,
       ),
+      GameCard(
+        matchDate: DateTime(2024, 5, 5),
+        startTime: const TimeOfDay(hour: 09, minute: 40),
+        matchPlace: '화명 A구장',
+        team1Name: '용병',
+        btnTitle: '결과 입력하기',
+        team2Name: '용병',
+        finishedMatchStatus: FinishedMatchStatus.unknown,
+        positions: const ['타자'],
+      ),
     ];
   }
 }

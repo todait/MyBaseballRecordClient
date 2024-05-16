@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_baseball_record/common/app_color.dart';
+import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 
 class GameResultPage extends StatelessWidget {
@@ -15,44 +16,73 @@ class GameResultPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.close),
-                    Text('저장'),
+                    const Icon(Icons.close),
+                    Text(
+                      AppTextList.saveData,
+                      style: AppTextStyle.body315M.copyWith(
+                        color: AppColor.textPrimary,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(
                   height: 21,
                 ),
-                const Text(
-                  '경기 득점 결과',
+                Text(
+                  AppTextList.matchResult,
+                  style: AppTextStyle.h224B.copyWith(
+                    color: AppColor.textPrimary,
+                  ),
                 ),
                 const SizedBox(
                   height: 31,
                 ),
-                const Text(
-                  '날짜',
+                Text(
+                  '5월 5일 일 • 오전 9시 40분',
+                  style: AppTextStyle.body315M.copyWith(
+                    fontSize: 16,
+                    color: AppColor.textSecondary,
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                const Text(
-                  '위치',
+                Text(
+                  '화명 A 구장',
+                  style: AppTextStyle.body413M.copyWith(
+                    color: AppColor.textHint,
+                  ),
                 ),
                 const SizedBox(
-                  height: 60,
+                  height: 20,
                 ),
-                const Row(
+                const Divider(
+                  color: AppColor.textHint,
+                  thickness: 0.5,
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      '우리팀',
+                      AppTextList.ourTeam,
+                      style: AppTextStyle.caption113B1.copyWith(
+                        color: AppColor.primaryBlue1,
+                      ),
                     ),
-                    Text(
+                    const Text(
                       '경기결과(승 / 무 / 패)',
                     ),
                     Text(
-                      '상대팀',
+                      AppTextList.opponentTeam,
+                      style: AppTextStyle.body413M.copyWith(
+                        color: AppColor.textHint,
+                      ),
                     ),
                   ],
                 ),
