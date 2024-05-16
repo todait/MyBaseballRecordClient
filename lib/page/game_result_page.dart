@@ -137,21 +137,21 @@ class _GameResultPageState extends State<GameResultPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
+                    GestureDetector(
+                      onTap: () {
                         Navigator.pop(context);
                       },
+                      child: const Icon(Icons.close),
                     ),
-                    TextButton(
-                      onPressed: _saveResult,
+                    GestureDetector(
+                      onTap: _saveResult,
                       child: Text(
                         AppTextList.saveData,
                         style: AppTextStyle.body315M.copyWith(
                           color: AppColor.textPrimary,
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -176,11 +176,23 @@ class _GameResultPageState extends State<GameResultPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  widget.gameCard.matchPlace,
-                  style: AppTextStyle.body413M.copyWith(
-                    color: AppColor.textHint,
-                  ),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.location_on_outlined,
+                      color: AppColor.textHint,
+                      size: 15,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      widget.gameCard.matchPlace,
+                      style: AppTextStyle.body413M.copyWith(
+                        color: AppColor.textHint,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 20,

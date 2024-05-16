@@ -184,6 +184,9 @@ class _MainPageState extends State<MainPage>
                 btnTitle: game.btnTitle,
                 team2Icon: game.team2Icon,
                 team2Name: game.team2Name,
+                ourTeamScore: game.ourTeamScore,
+                opponentTeamScore: game.opponentTeamScore,
+                result: game.result,
               ),
             ],
           );
@@ -214,6 +217,9 @@ class _MainPageState extends State<MainPage>
                 team2Icon: game.team2Icon,
                 team2Name: game.team2Name,
                 finishedMatchStatus: game.finishedMatchStatus,
+                ourTeamScore: game.ourTeamScore,
+                opponentTeamScore: game.opponentTeamScore,
+                result: game.result,
               ),
             ],
           );

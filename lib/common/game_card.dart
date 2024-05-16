@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_baseball_record/common/app_color.dart';
+import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/auth_button.dart';
 import 'package:my_baseball_record/common/match_status_widget.dart';
 import 'package:my_baseball_record/common/position_chip_widget.dart';
 import 'package:my_baseball_record/page/game_result_page.dart';
 
-class GameCard extends StatelessWidget {
+class GameCard extends StatefulWidget {
   final int? totalNumber;
   final DateTime matchDate;
   final TimeOfDay startTime;
+  final int? ourTeamScore;
+  final int? opponentTeamScore;
+  final String? result;
 
   final List<String> positions;
   final String matchPlace;
@@ -48,19 +53,65 @@ class GameCard extends StatelessWidget {
     this.teamNameStyle,
     this.btnTitleStyle,
     this.finishedMatchStatus,
+    this.ourTeamScore,
+    this.opponentTeamScore,
+    this.result,
   });
+
+  @override
+  State<GameCard> createState() => _GameCardState();
+}
+
+class _GameCardState extends State<GameCard> {
+  int? _ourTeamScore;
+  int? _opponentTeamScore;
+  String? _result;
+
+  void _navigateToGameResultPage(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GameResultPage(gameCard: widget),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _ourTeamScore = result['ourTeamScore'];
+        _opponentTeamScore = result['opponentTeamScore'];
+        _result = result['result'];
+      });
+    }
+  }
+
+  Color _getResultColor(String result) {
+    switch (result) {
+      case '승':
+        return AppColor.accentGreen100;
+      case '무':
+        return AppColor.textHint;
+      case '패':
+        return AppColor.accentRed100;
+      default:
+        return AppColor.textHint;
+    }
+  }
 
   MatchStatus _getMatchStatus() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final diff = matchDate.difference(today).inDays;
-    final matchStartDateTime = DateTime(matchDate.year, matchDate.month,
-        matchDate.day, startTime.hour, startTime.minute);
+    final diff = widget.matchDate.difference(today).inDays;
+    final matchStartDateTime = DateTime(
+        widget.matchDate.year,
+        widget.matchDate.month,
+        widget.matchDate.day,
+        widget.startTime.hour,
+        widget.startTime.minute);
     final matchEndDateTime = matchStartDateTime.add(const Duration(hours: 2));
 
-    if (matchDate.isBefore(today)) {
+    if (widget.matchDate.isBefore(today)) {
       return MatchStatus.notStarted;
-    } else if (matchDate == today &&
+    } else if (widget.matchDate == today &&
         now.isAfter(matchStartDateTime) &&
         now.isBefore(matchEndDateTime)) {
       return MatchStatus.inProgress;
@@ -99,7 +150,7 @@ class GameCard extends StatelessWidget {
     final matchStatus = _getMatchStatus();
     final isMatchStarted = matchStatus == MatchStatus.inProgress ||
         matchStatus == MatchStatus.startToday;
-    final isMatchFinished = finishedMatchStatus != null;
+    final isMatchFinished = widget.finishedMatchStatus != null;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -113,15 +164,40 @@ class GameCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
-                    child: finishedMatchStatus != null
-                        ? FinishedMatchStatusWidget(
-                            startTime: startTime,
-                            matchDate: matchDate,
+                    child: widget.finishedMatchStatus != null
+                        ? Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _result != null
+                                      ? _getResultColor(_result!)
+                                      : AppColor.textHint,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  _result ?? AppTextList.finished,
+                                  style: AppTextStyle.caption113B1.copyWith(
+                                    color: AppColor.graysWhite,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                '${widget.matchDate.month}월 ${widget.matchDate.day}일 ${DateFormat('E', 'ko_KR').format(widget.matchDate)} ${DateFormat('HH:mm').format(DateTime(0, 0, 0, widget.startTime.hour, widget.startTime.minute))}',
+                                style: AppTextStyle.body315M.copyWith(
+                                  color: AppColor.textPrimary,
+                                ),
+                              ),
+                            ],
                           )
                         : MatchStatusWidget(
-                            status: matchStatus,
-                            matchDate: matchDate,
-                            startTime: startTime,
+                            status: _getMatchStatus(),
+                            matchDate: widget.matchDate,
+                            startTime: widget.startTime,
                           ),
                   ),
                   const SizedBox(height: 4),
@@ -136,7 +212,7 @@ class GameCard extends StatelessWidget {
                         width: 4,
                       ),
                       Text(
-                        matchPlace,
+                        widget.matchPlace,
                         style: AppTextStyle.body413M.copyWith(
                           color: AppColor.textHint,
                         ),
@@ -145,7 +221,7 @@ class GameCard extends StatelessWidget {
                   ),
                 ],
               ),
-              PositionChipWidget(positions: positions),
+              PositionChipWidget(positions: widget.positions),
             ],
           ),
           const SizedBox(height: 26),
@@ -156,11 +232,11 @@ class GameCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildTeamIcon(team1Icon),
+                    _buildTeamIcon(widget.team1Icon),
                     SizedBox(
                       width: 100,
                       child: Text(
-                        team1Name,
+                        widget.team1Name,
                         style: AppTextStyle.body413M.copyWith(
                           color: AppColor.textSecondary,
                         ),
@@ -169,6 +245,33 @@ class GameCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    _result == null
+                        ? Container()
+                        : Column(
+                            children: [
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 18,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: AppColor.accentRed10,
+                                ),
+                                child: Text(
+                                  _ourTeamScore != null
+                                      ? _ourTeamScore.toString()
+                                      : '',
+                                  style: AppTextStyle.h224B.copyWith(
+                                    color: AppColor.accentRed100,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                   ],
                 ),
               ),
@@ -182,11 +285,11 @@ class GameCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildTeamIcon(team2Icon),
+                    _buildTeamIcon(widget.team2Icon),
                     SizedBox(
                       width: 100,
                       child: Text(
-                        team2Name,
+                        widget.team2Name,
                         style: AppTextStyle.body413M.copyWith(
                           color: AppColor.textSecondary,
                         ),
@@ -195,6 +298,31 @@ class GameCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    _result == null
+                        ? Container()
+                        : Column(
+                            children: [
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 18,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: AppColor.accentRed10,
+                                ),
+                                child: Text(
+                                  _opponentTeamScore?.toString() ?? '',
+                                  style: AppTextStyle.h224B.copyWith(
+                                    color: AppColor.accentRed100,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                   ],
                 ),
               ),
@@ -205,18 +333,10 @@ class GameCard extends StatelessWidget {
           ),
           if (isMatchStarted || isMatchFinished)
             AuthButton(
-              onClick: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => GameResultPage(
-                      gameCard: this,
-                    ),
-                  ),
-                );
-              },
+              onClick: () => _navigateToGameResultPage(context),
               icon: Container(),
               backgroundColor: AppColor.textSecondary,
-              text: btnTitle,
+              text: widget.btnTitle,
               textStyle: AppTextStyle.body315M
                   .copyWith(fontSize: 16, color: AppColor.graysWhite),
               borderColor: AppColor.textSecondary,
@@ -230,18 +350,5 @@ class GameCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Color _getResultColor(String result) {
-    switch (result) {
-      case '승':
-        return Colors.green;
-      case '무':
-        return Colors.grey;
-      case '패':
-        return Colors.red;
-      default:
-        return Colors.transparent;
-    }
   }
 }
