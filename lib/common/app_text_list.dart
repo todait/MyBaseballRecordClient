@@ -66,4 +66,8 @@ class AppTextList {
   static const hasScheduledGames = ' 예정된 경기가 있나요?';
   static const hasParticipatedGames = '참여했던 경기가 있나요?';
   static const recordGameResultMessage = '경기 결과를 기록할 수 있어요';
+  static const saveData = '저장';
+  static const matchResult = '경기 득점 결과';
+  static const ourTeam = '우리팀';
+  static const opponentTeam = '상대팀';
 }

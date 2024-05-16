@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:my_baseball_record/common/app_bar.dart';
+import 'package:intl/intl.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
 import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
 import 'package:my_baseball_record/common/const/data.dart';
 import 'package:my_baseball_record/common/empty_card.dart';
-import 'package:my_baseball_record/page/profile_page.dart';
-import 'package:my_baseball_record/page/record_page.dart';
+import 'package:my_baseball_record/common/game_card.dart';
+import 'package:my_baseball_record/data/repository/game_repository.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -27,20 +27,108 @@ class _MainPageState extends State<MainPage>
   DateTime _currentTime = DateTime.now();
   late Timer _timer;
 
+  final repository = GameRepository();
+  List<GameCard> _gameItems = [];
+
+  DateTime _today = DateTime.now();
+  List<GameCard> _todayGames = [];
+  List<GameCard> _filteredUpcomingGames = [];
+
+  List<GameCard> _finishedGames = [];
+  List<GameCard> _todayFinishedGames = [];
+  List<GameCard> _pastFinishedGames = [];
+
+  Future<void> _fetchFinishedGames() async {
+    final games = await repository.getFinishedGames();
+    setState(() {
+      _finishedGames = games;
+      _updateFilteredFinishedGames();
+    });
+  }
+
+  void _updateFilteredFinishedGames() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    _finishedGames.sort((a, b) => b.matchDate.compareTo(a.matchDate));
+
+    _todayFinishedGames = _finishedGames.where((game) {
+      final gameDate = DateTime(
+        game.matchDate.year,
+        game.matchDate.month,
+        game.matchDate.day,
+      );
+      return gameDate == today;
+    }).toList();
+
+    _pastFinishedGames = _finishedGames.where((game) {
+      final gameDate = DateTime(
+        game.matchDate.year,
+        game.matchDate.month,
+        game.matchDate.day,
+      );
+      return gameDate.isBefore(today);
+    }).toList();
+  }
+
   @override
   void initState() {
     super.initState();
+    _fetchGames();
+    _fetchFinishedGames();
     _startTimer();
     _tabController = TabController(
-      length: 3,
+      length: 2,
       vsync: this,
-      animationDuration: null,
     );
   }
+
+
+  Future<void> _fetchGames() async {
+    final games = await repository.getGames();
+    setState(() {
+      _gameItems = games;
+      _updateFilteredGames();
+      _gameItems.sort((a, b) => a.matchDate.compareTo(b.matchDate));
+    });
+  }
+
+  void _updateFilteredGames() {
+    _today = DateTime.now();
+
+    _gameItems.sort((a, b) => a.matchDate.compareTo(b.matchDate));
+
+    _todayGames = _getTodayGames(_gameItems);
+    _filteredUpcomingGames =
+        _gameItems.where((game) => game.matchDate.isAfter(_today)).toList();
+  }
+
+  List<GameCard> _getTodayGames(gameItems) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    return gameItems.where((game) {
+      final gameDate = DateTime(
+          game.matchDate.year, game.matchDate.month, game.matchDate.day);
+      final gameStartDateTime = DateTime(
+        game.matchDate.year,
+        game.matchDate.month,
+        game.matchDate.day,
+        game.startTime.hour,
+        game.startTime.minute,
+      );
+
+      final isGameToday = gameDate == today;
+      final isGameInProgress = now.isAfter(gameStartDateTime);
+      final isGameUpcoming = gameStartDateTime.isAfter(now);
+
+      return isGameToday && (isGameInProgress || isGameUpcoming);
+    }).toList();
 
   void checkToken() async {
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     print(accessToken);
+
   }
 
   void _startTimer() {
@@ -68,19 +156,82 @@ class _MainPageState extends State<MainPage>
     );
   }
 
-  Widget _buildTabLabel(String selectedText, String unselectedText, int index) {
-    final isSelected = _tabController.index == index;
+  Widget _buildTabLabel(String selectedText, int index) {
     return Tab(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const SizedBox(height: 8),
           Text(
-            isSelected ? selectedText : unselectedText,
+            selectedText,
           ),
           const SizedBox(height: 8),
         ],
       ),
+    );
+  }
+
+  Widget _buildGameList(List<GameCard> games) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: games.map(
+        (game) {
+          final isFirstCard = games.indexOf(game) == 0;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isFirstCard) const SizedBox(height: 16),
+              GameCard(
+                matchDate: game.matchDate,
+                startTime: game.startTime,
+                positions: game.positions,
+                matchPlace: game.matchPlace,
+                team1Icon: game.team1Icon,
+                team1Name: game.team1Name,
+                btnTitle: game.btnTitle,
+                team2Icon: game.team2Icon,
+                team2Name: game.team2Name,
+                ourTeamScore: game.ourTeamScore,
+                opponentTeamScore: game.opponentTeamScore,
+                result: game.result,
+              ),
+            ],
+          );
+        },
+      ).toList(),
+    );
+  }
+
+  Widget _buildFinishedGameList(List<GameCard> games, bool isToday) {
+    return Column(
+      children: games.map(
+        (game) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!isToday)
+                const Padding(
+                  padding: EdgeInsets.only(top: 10, left: 24),
+                ),
+              GameCard(
+                matchDate: game.matchDate,
+                startTime: game.startTime,
+                positions: game.positions,
+                matchPlace: game.matchPlace,
+                team1Icon: game.team1Icon,
+                team1Name: game.team1Name,
+                btnTitle: game.btnTitle,
+                team2Icon: game.team2Icon,
+                team2Name: game.team2Name,
+                finishedMatchStatus: game.finishedMatchStatus,
+                ourTeamScore: game.ourTeamScore,
+                opponentTeamScore: game.opponentTeamScore,
+                result: game.result,
+              ),
+            ],
+          );
+        },
+      ).toList(),
     );
   }
 
@@ -96,84 +247,352 @@ class _MainPageState extends State<MainPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        trailingIcon: const Icon(
-          Icons.add,
-          size: 24,
-          color: AppColor.textHint,
-        ),
-        title: AppTextList.upcomingMatches,
-        titleStyle: AppTextStyle.h224B.copyWith(
-          color: AppColor.textPrimary,
-        ),
-        timeTitle: _currentTime,
-        timeStyle: AppTextStyle.body315M.copyWith(
-          color: AppColor.textHint,
-        ),
-        tabController: _tabController,
-        tabs: [
-          _buildTabLabel(
-            AppTextList.gameOfTheDay,
-            AppTextList.today,
-            0,
-          ),
-          _buildTabLabel(
-            AppTextList.upcomingMatchesTitle,
-            AppTextList.upcoming,
-            1,
-          ),
-          _buildTabLabel(
-            AppTextList.completedMatches,
-            AppTextList.finished,
-            2,
-          ),
-        ],
-      ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        children: [
-          TabBarView(
-            controller: _tabController,
-            children: [
-              EmptyCard(
-                icon: Image.asset(
-                  'assets/icon/group_342.png',
+      body: SafeArea(
+        child: DefaultTabController(
+          length: 2,
+          child: NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                  backgroundColor: Colors.white,
+                  automaticallyImplyLeading: false,
+                  forceElevated: true,
+                  elevation: 0,
+                  expandedHeight: 95,
+                  toolbarHeight: 45,
+                  collapsedHeight: 45,
+                  pinned: true,
+                  centerTitle: false,
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: innerBoxIsScrolled
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  DateFormat(
+                                    'M월 d일 E a h:mm',
+                                    'ko_KR',
+                                  )
+                                      .format(
+                                        _currentTime,
+                                      )
+                                      .replaceAll(
+                                        'AM',
+                                        '오전',
+                                      )
+                                      .replaceAll(
+                                        'PM',
+                                        '오후',
+                                      ),
+                                  style: AppTextStyle.body315M.copyWith(
+                                    color: AppColor.textHint,
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.add,
+                                  size: 24,
+                                  color: AppColor.textHint,
+                                ),
+                              ],
+                            ),
+                          )
+                        : null,
+                    background: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 24,
+                        right: 24,
+                      ),
+                      child: Column(
+                        children: [
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 24,
+                                color: AppColor.textHint,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                AppTextList.upcomingMatches,
+                                style: AppTextStyle.h224B.copyWith(
+                                  color: AppColor.textPrimary,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Text(
+                                DateFormat(
+                                  'M월 d일 E a h:mm',
+                                  'ko_KR',
+                                )
+                                    .format(
+                                      _currentTime,
+                                    )
+                                    .replaceAll(
+                                      'AM',
+                                      '오전',
+                                    )
+                                    .replaceAll(
+                                      'PM',
+                                      '오후',
+                                    ),
+                                style: AppTextStyle.body315M.copyWith(
+                                  color: AppColor.textHint,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                text1: AppTextList.noGamesTodayMessage,
-                text2: AppTextList.restForNextScheduleMessage,
-                text3: AppTextList.addScheduleButton,
-              ),
-              EmptyCard(
-                icon: Image.asset(
-                  'assets/icon/group_343.png',
+                SliverPersistentHeader(
+                  delegate: _SliverAppBarDelegate(
+                    TabBar(
+                      controller: _tabController,
+                      tabs: [
+                        _buildTabLabel(AppTextList.upcoming, 1),
+                        _buildTabLabel(AppTextList.finished, 2),
+                      ],
+                      indicatorColor: AppColor.textPrimary,
+                      labelColor: AppColor.textPrimary,
+                      labelStyle: AppTextStyle.h318B,
+                      unselectedLabelColor: AppColor.textHint,
+                      unselectedLabelStyle: AppTextStyle.h418M,
+                      indicatorWeight: 2,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicatorPadding:
+                          const EdgeInsets.symmetric(horizontal: 24),
+                      labelPadding: const EdgeInsets.only(bottom: 5),
+                    ),
+                  ),
+                  pinned: true,
                 ),
-                text1: AppTextList.hasScheduledGames,
-                text2: AppTextList.addScheduleTitle,
-                text3: AppTextList.addPreMatchSchedule,
-              ),
-              EmptyCard(
-                icon: Image.asset(
-                  'assets/icon/group_341.png',
+              ];
+            },
+            body: TabBarView(
+              controller: _tabController,
+              children: [
+                ListView.builder(
+                  itemCount: _gameItems.isEmpty
+                      ? 1
+                      : _todayGames.length +
+                          (_filteredUpcomingGames.isNotEmpty ? 2 : 1),
+                  itemBuilder: (context, index) {
+                    if (_gameItems.isEmpty) {
+                      return EmptyCard(
+                        text1: AppTextList.hasScheduledGames,
+                        text2: AppTextList.addScheduleTitle,
+                        text3: AppTextList.addPreMatchSchedule,
+                        icon: Image.asset(
+                          'assets/icon/group_343.png',
+                        ),
+                      );
+                    } else {
+                      if (index == 0 && _todayGames.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '오늘의 경기',
+                                    style: AppTextStyle.h318B.copyWith(
+                                      color: AppColor.textPrimary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            _buildGameList(_todayGames),
+                          ],
+                        );
+                      } else if (index == (_todayGames.isNotEmpty ? 1 : 0) &&
+                          _filteredUpcomingGames.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '다음 경기 일정',
+                                    style: AppTextStyle.h318B.copyWith(
+                                      color: AppColor.textPrimary,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${_filteredUpcomingGames.length}건  >',
+                                    style: AppTextStyle.body413M.copyWith(
+                                      color: AppColor.textHint,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            _buildGameList(_filteredUpcomingGames),
+                          ],
+                        );
+                      } else if (index ==
+                          _todayGames.length +
+                              (_filteredUpcomingGames.isNotEmpty ? 1 : 0)) {
+                        return EmptyCard(
+                          text1: AppTextList.hasScheduledGames,
+                          text2: AppTextList.addScheduleTitle,
+                          text3: AppTextList.addPreMatchSchedule,
+                          icon: Image.asset(
+                            'assets/icon/group_343.png',
+                          ),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }
+                  },
                 ),
-                text1: AppTextList.hasParticipatedGames,
-                text2: AppTextList.recordGameResultMessage,
-                text3: AppTextList.addPastRecord,
-              ),
-            ],
+                ListView.builder(
+                  itemCount: _finishedGames.isEmpty
+                      ? 1
+                      : (_todayFinishedGames.isNotEmpty ? 1 : 0) +
+                          (_pastFinishedGames.isNotEmpty ? 1 : 0) +
+                          1,
+                  itemBuilder: (context, index) {
+                    if (_finishedGames.isEmpty) {
+                      return EmptyCard(
+                        text1: AppTextList.hasParticipatedGames,
+                        text2: AppTextList.recordGameResultMessage,
+                        text3: AppTextList.addPastRecord,
+                        icon: Image.asset(
+                          'assets/icon/group_341.png',
+                        ),
+                      );
+                    } else {
+                      if (index == 0 && _todayFinishedGames.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '오늘의 경기',
+                                    style: AppTextStyle.h318B.copyWith(
+                                      color: AppColor.textPrimary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            _buildFinishedGameList(_todayFinishedGames, true),
+                          ],
+                        );
+                      } else if ((index == 0 &&
+                              _todayFinishedGames.isEmpty &&
+                              _pastFinishedGames.isNotEmpty) ||
+                          (index == 1 &&
+                              _todayFinishedGames.isNotEmpty &&
+                              _pastFinishedGames.isNotEmpty)) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '종료된 경기',
+                                    style: AppTextStyle.h318B.copyWith(
+                                      color: AppColor.textPrimary,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${_pastFinishedGames.length}건  >',
+                                    style: AppTextStyle.body413M.copyWith(
+                                      color: AppColor.textHint,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            _buildFinishedGameList(_pastFinishedGames, false),
+                          ],
+                        );
+                      } else {
+                        return EmptyCard(
+                          text1: AppTextList.hasParticipatedGames,
+                          text2: AppTextList.recordGameResultMessage,
+                          text3: AppTextList.addPastRecord,
+                          icon: Image.asset(
+                            'assets/icon/group_341.png',
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
-          const RecordPage(),
-          const ProfilePage(),
-        ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBarWidget(
         selectedIndex: _selectedIndex,
         onTabIcon: onTabIcon,
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate(this._tabBar);
+
+  final TabBar _tabBar;
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: AppColor.graysWhite,
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
   }
 }
