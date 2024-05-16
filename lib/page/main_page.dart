@@ -248,8 +248,9 @@ class _MainPageState extends State<MainPage>
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
-                  backgroundColor: AppColor.graysWhite,
+                  backgroundColor: Colors.white,
                   automaticallyImplyLeading: false,
+                  forceElevated: true,
                   elevation: 0,
                   expandedHeight: 95,
                   toolbarHeight: 45,
@@ -578,7 +579,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: AppColor.transparent,
+      color: AppColor.graysWhite,
       child: _tabBar,
     );
   }

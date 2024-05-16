@@ -3,6 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/page/intro_page.dart';
+import 'package:my_baseball_record/page/main_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
           fontFamily: "Pretendard",
           textSelectionTheme:
               const TextSelectionThemeData(cursorColor: AppColor.graysBlack)),
-      home: const IntroPage(),
+      home: const MainPage(),
     );
   }
 }

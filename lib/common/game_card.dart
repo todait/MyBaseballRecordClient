@@ -127,22 +127,68 @@ class _GameCardState extends State<GameCard> {
   }
 
   Widget _buildTeamIcon(String? iconUrl) {
-    if (iconUrl == null || iconUrl.isEmpty) {
-      return Container(
-        width: 150,
-        height: 150,
-        decoration: BoxDecoration(
-          color: AppColor.graysGray,
-          borderRadius: BorderRadius.circular(8),
-        ),
-      );
-    } else {
-      return Image.network(
-        iconUrl,
-        width: 150,
-        height: 150,
-      );
-    }
+    return (iconUrl == null || iconUrl.isEmpty)
+        ? Container(
+            width: 150,
+            height: 150,
+            decoration: BoxDecoration(
+              color: AppColor.graysGray,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          )
+        : Image.network(
+            iconUrl,
+            width: 150,
+            height: 150,
+          );
+  }
+
+  Widget _buildTeamIconSection(String? teamIcon) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildTeamIcon(teamIcon),
+          SizedBox(
+            width: 100,
+            child: Text(
+              widget.team1Name,
+              style: AppTextStyle.body413M.copyWith(
+                color: AppColor.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          _result == null
+              ? Container()
+              : Column(
+                  children: [
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppColor.accentRed10,
+                      ),
+                      child: Text(
+                        _ourTeamScore != null ? _ourTeamScore.toString() : '',
+                        style: AppTextStyle.h224B.copyWith(
+                          color: AppColor.accentRed100,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -228,104 +274,14 @@ class _GameCardState extends State<GameCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildTeamIcon(widget.team1Icon),
-                    SizedBox(
-                      width: 100,
-                      child: Text(
-                        widget.team1Name,
-                        style: AppTextStyle.body413M.copyWith(
-                          color: AppColor.textSecondary,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    _result == null
-                        ? Container()
-                        : Column(
-                            children: [
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 18,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: AppColor.accentRed10,
-                                ),
-                                child: Text(
-                                  _ourTeamScore != null
-                                      ? _ourTeamScore.toString()
-                                      : '',
-                                  style: AppTextStyle.h224B.copyWith(
-                                    color: AppColor.accentRed100,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                  ],
-                ),
-              ),
+              _buildTeamIconSection(widget.team1Icon),
               Text(
                 'VS',
                 style: AppTextStyle.body120M.copyWith(
                   color: AppColor.textHint,
                 ),
               ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildTeamIcon(widget.team2Icon),
-                    SizedBox(
-                      width: 100,
-                      child: Text(
-                        widget.team2Name,
-                        style: AppTextStyle.body413M.copyWith(
-                          color: AppColor.textSecondary,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    _result == null
-                        ? Container()
-                        : Column(
-                            children: [
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 18,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: AppColor.accentRed10,
-                                ),
-                                child: Text(
-                                  _opponentTeamScore?.toString() ?? '',
-                                  style: AppTextStyle.h224B.copyWith(
-                                    color: AppColor.accentRed100,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                  ],
-                ),
-              ),
+              _buildTeamIconSection(widget.team2Icon),
             ],
           ),
           const SizedBox(
