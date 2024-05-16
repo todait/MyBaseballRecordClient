@@ -26,6 +26,13 @@ class _MainPageState extends State<MainPage>
   DateTime _currentTime = DateTime.now();
   late Timer _timer;
 
+  final repository = GameRepository();
+  List<GameCard> _gameItems = [];
+
+  DateTime _today = DateTime.now();
+  List<GameCard> _todayGames = [];
+  List<GameCard> _filteredUpcomingGames = [];
+
   final List<GameCard> _finishedGames = [
     GameCard(
       matchDate: DateTime(2024, 4, 17),
@@ -66,14 +73,19 @@ class _MainPageState extends State<MainPage>
     );
   }
 
-  final repository = GameRepository();
-  List<GameCard> gameItems = [];
-
   Future<void> _fetchGames() async {
     final games = await repository.getGames('game');
     setState(() {
-      gameItems = games;
+      _gameItems = games;
+      _updateFilteredGames();
     });
+  }
+
+  void _updateFilteredGames() {
+    _today = DateTime.now();
+    _todayGames = _getTodayGames(_gameItems);
+    _filteredUpcomingGames =
+        _gameItems.where((game) => game.matchDate.isAfter(_today)).toList();
   }
 
   List<GameCard> _getTodayGames(gameItems) {
@@ -146,6 +158,35 @@ class _MainPageState extends State<MainPage>
     );
   }
 
+  Widget _buildGameList(List<GameCard> games) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: games.map(
+        (game) {
+          final isFirstCard = games.indexOf(game) == 0;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isFirstCard) const SizedBox(height: 16),
+              GameCard(
+                matchDate: game.matchDate,
+                startTime: game.startTime,
+                endTime: game.endTime,
+                positions: game.positions,
+                matchPlace: game.matchPlace,
+                team1Icon: game.team1Icon,
+                team1Name: game.team1Name,
+                btnTitle: game.btnTitle,
+                team2Icon: game.team2Icon,
+                team2Name: game.team2Name,
+              ),
+            ],
+          );
+        },
+      ).toList(),
+    );
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -157,11 +198,6 @@ class _MainPageState extends State<MainPage>
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
-    final todayGames = _getTodayGames(gameItems);
-    final filteredUpcomingGames =
-        gameItems.where((game) => game.matchDate.isAfter(today)).toList();
-
     return Scaffold(
       body: SafeArea(
         child: DefaultTabController(
@@ -302,12 +338,12 @@ class _MainPageState extends State<MainPage>
               controller: _tabController,
               children: [
                 ListView.builder(
-                  itemCount: gameItems.isEmpty
+                  itemCount: _gameItems.isEmpty
                       ? 1
-                      : todayGames.length +
-                          (filteredUpcomingGames.isNotEmpty ? 2 : 1),
+                      : _todayGames.length +
+                          (_filteredUpcomingGames.isNotEmpty ? 2 : 1),
                   itemBuilder: (context, index) {
-                    if (gameItems.isEmpty) {
+                    if (_gameItems.isEmpty) {
                       return EmptyCard(
                         text1: AppTextList.hasScheduledGames,
                         text2: AppTextList.addScheduleTitle,
@@ -317,7 +353,7 @@ class _MainPageState extends State<MainPage>
                         ),
                       );
                     } else {
-                      if (index == 0 && todayGames.isNotEmpty) {
+                      if (index == 0 && _todayGames.isNotEmpty) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -337,34 +373,11 @@ class _MainPageState extends State<MainPage>
                                 ],
                               ),
                             ),
-                            ...todayGames.map(
-                              (game) {
-                                final isFirstCard =
-                                    todayGames.indexOf(game) == 0;
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (isFirstCard) const SizedBox(height: 16),
-                                    GameCard(
-                                      matchDate: game.matchDate,
-                                      startTime: game.startTime,
-                                      endTime: game.endTime,
-                                      positions: game.positions,
-                                      matchPlace: game.matchPlace,
-                                      team1Icon: game.team1Icon,
-                                      team1Name: game.team1Name,
-                                      btnTitle: game.btnTitle,
-                                      team2Icon: game.team2Icon,
-                                      team2Name: game.team2Name,
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
+                            _buildGameList(_todayGames),
                           ],
                         );
-                      } else if (index == (todayGames.isNotEmpty ? 1 : 0) &&
-                          filteredUpcomingGames.isNotEmpty) {
+                      } else if (index == (_todayGames.isNotEmpty ? 1 : 0) &&
+                          _filteredUpcomingGames.isNotEmpty) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -379,38 +392,17 @@ class _MainPageState extends State<MainPage>
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold)),
-                                  Text('${filteredUpcomingGames.length} >',
+                                  Text('${_filteredUpcomingGames.length} >',
                                       style: const TextStyle(fontSize: 14)),
                                 ],
                               ),
                             ),
-                            ...filteredUpcomingGames.map((game) {
-                              final isFirstCard =
-                                  filteredUpcomingGames.indexOf(game) == 0;
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (isFirstCard) const SizedBox(height: 16),
-                                  GameCard(
-                                    matchDate: game.matchDate,
-                                    startTime: game.startTime,
-                                    endTime: game.endTime,
-                                    positions: game.positions,
-                                    matchPlace: game.matchPlace,
-                                    team1Icon: game.team1Icon,
-                                    team1Name: game.team1Name,
-                                    btnTitle: game.btnTitle,
-                                    team2Icon: game.team2Icon,
-                                    team2Name: game.team2Name,
-                                  ),
-                                ],
-                              );
-                            }),
+                            _buildGameList(_filteredUpcomingGames),
                           ],
                         );
                       } else if (index ==
-                          todayGames.length +
-                              (filteredUpcomingGames.isNotEmpty ? 1 : 0)) {
+                          _todayGames.length +
+                              (_filteredUpcomingGames.isNotEmpty ? 1 : 0)) {
                         return EmptyCard(
                           text1: AppTextList.hasScheduledGames,
                           text2: AppTextList.addScheduleTitle,
