@@ -4,14 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
-import 'package:my_baseball_record/common/game_card.dart';
+import 'package:my_baseball_record/data/repository/game_model.dart';
 
 class GameResultPage extends StatefulWidget {
-  final GameCard gameCard;
+  final GameModel gameModel;
 
   const GameResultPage({
     super.key,
-    required this.gameCard,
+    required this.gameModel,
   });
 
   @override
@@ -103,6 +103,7 @@ class _GameResultPageState extends State<GameResultPage> {
   }
 
   void _saveResult() {
+    // gameModel 에 저장
     int ourTeamScore = _ourTeamScore;
     int opponentTeamScore = _opponentTeamScore;
     String result = _result;
@@ -153,13 +154,13 @@ class _GameResultPageState extends State<GameResultPage> {
   @override
   Widget build(BuildContext context) {
     final formattedDate =
-        DateFormat('M월 d일 E', 'ko_KR').format(widget.gameCard.matchDate);
+        DateFormat('M월 d일 E', 'ko_KR').format(widget.gameModel.matchDate);
     final formattedTime = DateFormat('HH:mm').format(DateTime(
       0,
       0,
       0,
-      widget.gameCard.startTime.hour,
-      widget.gameCard.startTime.minute,
+      widget.gameModel.startTime.hour,
+      widget.gameModel.startTime.minute,
     ));
 
     return Scaffold(
@@ -192,7 +193,7 @@ class _GameResultPageState extends State<GameResultPage> {
                       width: 4,
                     ),
                     Text(
-                      widget.gameCard.matchPlace,
+                      widget.gameModel.matchPlace,
                       style: AppTextStyle.body413M.copyWith(
                         color: AppColor.textHint,
                       ),
@@ -329,7 +330,7 @@ class _GameResultPageState extends State<GameResultPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,
                       child: Text(
-                        widget.gameCard.team1Name,
+                        widget.gameModel.team1Name,
                         style: AppTextStyle.body315M.copyWith(
                           color: AppColor.textSecondary,
                         ),
@@ -342,7 +343,7 @@ class _GameResultPageState extends State<GameResultPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,
                       child: Text(
-                        widget.gameCard.team2Name,
+                        widget.gameModel.team2Name,
                         style: AppTextStyle.body315M.copyWith(
                           color: AppColor.textPrimary10,
                         ),

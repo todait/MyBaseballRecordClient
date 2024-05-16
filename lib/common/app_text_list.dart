@@ -70,4 +70,5 @@ class AppTextList {
   static const matchResult = '경기 득점 결과';
   static const ourTeam = '우리팀';
   static const opponentTeam = '상대팀';
+  static const putResult = '결과 입력하기';
 }
