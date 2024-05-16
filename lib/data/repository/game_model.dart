@@ -9,10 +9,10 @@ class GameModel {
   final String? team2Icon;
   final List<String>? positions;
 
-  int? ourTeamScore;
-  int? opponentTeamScore;
-  String? result;
-  bool isFinished;
+  late final int? ourTeamScore;
+  late final int? opponentTeamScore;
+  late final String? result;
+  late final bool isFinished;
 
   GameModel({
     required this.matchDate,
@@ -30,5 +30,16 @@ class GameModel {
 
   TimeOfDay get startTime {
     return TimeOfDay.fromDateTime(matchDate);
+  }
+
+  void updateResult(
+      {required int ourTeamScore,
+      required int opponentTeamScore,
+      required String result,
+      required bool isFinished}) {
+    this.ourTeamScore = ourTeamScore;
+    this.opponentTeamScore = opponentTeamScore;
+    this.result = result;
+    this.isFinished = isFinished;
   }
 }

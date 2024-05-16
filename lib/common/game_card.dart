@@ -32,10 +32,12 @@ class _GameCardState extends State<GameCard> {
 
     if (result != null) {
       setState(() {
-        widget.gameModel.ourTeamScore = result['ourTeamScore'];
-        widget.gameModel.opponentTeamScore = result['opponentTeamScore'];
-        widget.gameModel.result = result['result'];
-        widget.gameModel.isFinished = true;
+        widget.gameModel.updateResult(
+          ourTeamScore: result['ourTeamScore'],
+          opponentTeamScore: result['opponentTeamScore'],
+          result: result['result'],
+          isFinished: true,
+        );
       });
     }
   }

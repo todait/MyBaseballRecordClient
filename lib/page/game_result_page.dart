@@ -103,6 +103,7 @@ class _GameResultPageState extends State<GameResultPage> {
   }
 
   void _saveResult() {
+    // gameModel 에 저장
     int ourTeamScore = _ourTeamScore;
     int opponentTeamScore = _opponentTeamScore;
     String result = _result;
