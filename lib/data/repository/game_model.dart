@@ -9,10 +9,10 @@ class GameModel {
   final String? team2Icon;
   final List<String>? positions;
 
-  late final int? ourTeamScore;
-  late final int? opponentTeamScore;
-  late final String? result;
-  late final bool isFinished;
+  int? ourTeamScore;
+  int? opponentTeamScore;
+  String? result;
+  bool isFinished;
 
   GameModel({
     required this.matchDate,

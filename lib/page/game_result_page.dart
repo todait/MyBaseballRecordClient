@@ -23,6 +23,7 @@ class _GameResultPageState extends State<GameResultPage> {
   int _opponentTeamScore = 0;
   String _result = '';
   Color _resultColor = AppColor.graysWhite;
+  bool _isFocusedOnOurTeam = true;
 
   final _ourTeamScoreController = TextEditingController();
   final _opponentTeamScoreController = TextEditingController();
@@ -35,6 +36,18 @@ class _GameResultPageState extends State<GameResultPage> {
     _ourTeamScoreFocusNode.requestFocus();
     _ourTeamScoreController.addListener(_onOurTeamScoreChanged);
     _opponentTeamScoreController.addListener(_onOpponentTeamScoreChanged);
+
+    _ourTeamScoreFocusNode.addListener(() {
+      setState(() {
+        _isFocusedOnOurTeam = _ourTeamScoreFocusNode.hasFocus;
+      });
+    });
+
+    _opponentTeamScoreFocusNode.addListener(() {
+      setState(() {
+        _isFocusedOnOurTeam = !_opponentTeamScoreFocusNode.hasFocus;
+      });
+    });
   }
 
   void _onOurTeamScoreChanged() {
@@ -215,9 +228,11 @@ class _GameResultPageState extends State<GameResultPage> {
                   children: [
                     Text(
                       AppTextList.ourTeam,
-                      style: AppTextStyle.caption113B1.copyWith(
-                        color: AppColor.primaryBlue1,
-                      ),
+                      style: _isFocusedOnOurTeam
+                          ? AppTextStyle.caption113B1
+                              .copyWith(color: AppColor.primaryBlue1)
+                          : AppTextStyle.body413M
+                              .copyWith(color: AppColor.textHint),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -237,9 +252,11 @@ class _GameResultPageState extends State<GameResultPage> {
                     ),
                     Text(
                       AppTextList.opponentTeam,
-                      style: AppTextStyle.body413M.copyWith(
-                        color: AppColor.textHint,
-                      ),
+                      style: _isFocusedOnOurTeam
+                          ? AppTextStyle.body413M
+                              .copyWith(color: AppColor.textHint)
+                          : AppTextStyle.caption113B1
+                              .copyWith(color: AppColor.primaryBlue1),
                     ),
                   ],
                 ),
@@ -256,8 +273,10 @@ class _GameResultPageState extends State<GameResultPage> {
                           horizontal: 30,
                           vertical: 16,
                         ),
-                        decoration: const BoxDecoration(
-                          color: AppColor.background246,
+                        decoration: BoxDecoration(
+                          color: _isFocusedOnOurTeam
+                              ? AppColor.background246
+                              : AppColor.graysWhite,
                         ),
                         child: TextField(
                           controller: _ourTeamScoreController,
@@ -265,7 +284,9 @@ class _GameResultPageState extends State<GameResultPage> {
                           textInputAction: TextInputAction.next,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.hero48BB.copyWith(
-                            color: AppColor.textPrimary,
+                            color: _isFocusedOnOurTeam
+                                ? AppColor.textPrimary
+                                : AppColor.textPrimary10,
                           ),
                           onSubmitted: (_) {
                             _opponentTeamScoreFocusNode.requestFocus();
@@ -296,8 +317,10 @@ class _GameResultPageState extends State<GameResultPage> {
                           horizontal: 30,
                           vertical: 16,
                         ),
-                        decoration: const BoxDecoration(
-                          color: AppColor.graysWhite,
+                        decoration: BoxDecoration(
+                          color: _isFocusedOnOurTeam
+                              ? AppColor.graysWhite
+                              : AppColor.background246,
                         ),
                         child: TextField(
                           controller: _opponentTeamScoreController,
@@ -305,7 +328,9 @@ class _GameResultPageState extends State<GameResultPage> {
                           textInputAction: TextInputAction.done,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.hero48BB.copyWith(
-                            color: AppColor.textPrimary10,
+                            color: _isFocusedOnOurTeam
+                                ? AppColor.textPrimary10
+                                : AppColor.textPrimary,
                           ),
                           onSubmitted: (_) {
                             _updateResult();
@@ -332,7 +357,9 @@ class _GameResultPageState extends State<GameResultPage> {
                       child: Text(
                         widget.gameModel.team1Name,
                         style: AppTextStyle.body315M.copyWith(
-                          color: AppColor.textSecondary,
+                          color: _isFocusedOnOurTeam
+                              ? AppColor.textSecondary
+                              : AppColor.textPrimary10,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 2,
@@ -345,7 +372,9 @@ class _GameResultPageState extends State<GameResultPage> {
                       child: Text(
                         widget.gameModel.team2Name,
                         style: AppTextStyle.body315M.copyWith(
-                          color: AppColor.textPrimary10,
+                          color: _isFocusedOnOurTeam
+                              ? AppColor.textPrimary10
+                              : AppColor.textSecondary,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 2,
