@@ -9,6 +9,7 @@ import 'package:my_baseball_record/common/bottom_navigation_bar.dart';
 import 'package:my_baseball_record/common/const/data.dart';
 import 'package:my_baseball_record/common/empty_card.dart';
 import 'package:my_baseball_record/common/game_card.dart';
+import 'package:my_baseball_record/data/repository/game_model.dart';
 import 'package:my_baseball_record/data/repository/game_repository.dart';
 
 class MainPage extends StatefulWidget {
@@ -28,18 +29,18 @@ class _MainPageState extends State<MainPage>
   late Timer _timer;
 
   final repository = GameRepository();
-  List<GameCard> _gameItems = [];
+  List<GameModel> _gameItems = [];
 
   DateTime _today = DateTime.now();
-  List<GameCard> _todayGames = [];
-  List<GameCard> _filteredUpcomingGames = [];
+  List<GameModel> _todayGames = [];
+  List<GameModel> _filteredUpcomingGames = [];
 
-  List<GameCard> _finishedGames = [];
-  List<GameCard> _todayFinishedGames = [];
-  List<GameCard> _pastFinishedGames = [];
+  List<GameModel> _finishedGames = [];
+  List<GameModel> _todayFinishedGames = [];
+  List<GameModel> _pastFinishedGames = [];
 
   Future<void> _fetchFinishedGames() async {
-    final games = await repository.getFinishedGames();
+    final games = await repository.getFinishedGameModels();
     setState(() {
       _finishedGames = games;
       _updateFilteredFinishedGames();
@@ -84,7 +85,7 @@ class _MainPageState extends State<MainPage>
   }
 
   Future<void> _fetchGames() async {
-    final games = await repository.getGames();
+    final games = await repository.getGameModels();
     setState(() {
       _gameItems = games;
       _updateFilteredGames();
@@ -102,7 +103,7 @@ class _MainPageState extends State<MainPage>
         _gameItems.where((game) => game.matchDate.isAfter(_today)).toList();
   }
 
-  List<GameCard> _getTodayGames(gameItems) {
+  List<GameModel> _getTodayGames(gameItems) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
@@ -170,7 +171,7 @@ class _MainPageState extends State<MainPage>
     );
   }
 
-  Widget _buildGameList(List<GameCard> games) {
+  Widget _buildGameList(List<GameModel> games) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: games.map(
@@ -181,19 +182,8 @@ class _MainPageState extends State<MainPage>
             children: [
               if (isFirstCard) const SizedBox(height: 16),
               GameCard(
-                matchDate: game.matchDate,
-                startTime: game.startTime,
-                positions: game.positions,
-                matchPlace: game.matchPlace,
-                team1Icon: game.team1Icon,
-                team1Name: game.team1Name,
-                btnTitle: game.btnTitle,
-                team2Icon: game.team2Icon,
-                team2Name: game.team2Name,
-                ourTeamScore: game.ourTeamScore,
-                opponentTeamScore: game.opponentTeamScore,
-                result: game.result,
-              ),
+                gameModel: game,
+              )
             ],
           );
         },
@@ -201,7 +191,7 @@ class _MainPageState extends State<MainPage>
     );
   }
 
-  Widget _buildFinishedGameList(List<GameCard> games, bool isToday) {
+  Widget _buildFinishedGameList(List<GameModel> games, bool isToday) {
     return Column(
       children: games.map(
         (game) {
@@ -213,20 +203,8 @@ class _MainPageState extends State<MainPage>
                   padding: EdgeInsets.only(top: 10, left: 24),
                 ),
               GameCard(
-                matchDate: game.matchDate,
-                startTime: game.startTime,
-                positions: game.positions,
-                matchPlace: game.matchPlace,
-                team1Icon: game.team1Icon,
-                team1Name: game.team1Name,
-                btnTitle: game.btnTitle,
-                team2Icon: game.team2Icon,
-                team2Name: game.team2Name,
-                finishedMatchStatus: game.finishedMatchStatus,
-                ourTeamScore: game.ourTeamScore,
-                opponentTeamScore: game.opponentTeamScore,
-                result: game.result,
-              ),
+                gameModel: game,
+              )
             ],
           );
         },
