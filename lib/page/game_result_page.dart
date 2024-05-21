@@ -103,7 +103,6 @@ class _GameResultPageState extends State<GameResultPage> {
   }
 
   void _saveResult() {
-    // gameModel 에 저장
     int ourTeamScore = _ourTeamScore;
     int opponentTeamScore = _opponentTeamScore;
     String result = _result;
@@ -117,6 +116,7 @@ class _GameResultPageState extends State<GameResultPage> {
 
   Widget _buildHeader() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,6 +151,98 @@ class _GameResultPageState extends State<GameResultPage> {
     );
   }
 
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required FocusNode focusNode,
+    required TextInputAction textInputAction,
+    required VoidCallback onSubmitted,
+    required Color backgroundColor,
+    required Color textColor,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 30,
+          vertical: 16,
+        ),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+        ),
+        child: TextField(
+          controller: controller,
+          focusNode: focusNode,
+          textInputAction: textInputAction,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.hero48BB.copyWith(
+            color: textColor,
+          ),
+          onSubmitted: (_) {
+            onSubmitted();
+          },
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(2),
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMatchResult() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Text(
+          AppTextList.ourTeam,
+          style: AppTextStyle.caption113B1.copyWith(
+            color: AppColor.primaryBlue1,
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 12,
+          ),
+          decoration: BoxDecoration(
+            color: _resultColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            _result,
+            style: AppTextStyle.body315M.copyWith(
+              color: AppColor.graysWhite,
+            ),
+          ),
+        ),
+        Text(
+          AppTextList.opponentTeam,
+          style: AppTextStyle.body413M.copyWith(
+            color: AppColor.textHint,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTeamNameText(String teamName, Color textColor) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.3,
+      child: Text(
+        teamName,
+        style: AppTextStyle.body315M.copyWith(
+          color: textColor,
+        ),
+        textAlign: TextAlign.center,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final formattedDate =
@@ -172,6 +264,9 @@ class _GameResultPageState extends State<GameResultPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeader(),
+                const SizedBox(
+                  height: 31,
+                ),
                 Text(
                   '$formattedDate • $formattedTime',
                   style: AppTextStyle.body315M.copyWith(
@@ -210,77 +305,22 @@ class _GameResultPageState extends State<GameResultPage> {
                 const SizedBox(
                   height: 40,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      AppTextList.ourTeam,
-                      style: AppTextStyle.caption113B1.copyWith(
-                        color: AppColor.primaryBlue1,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _resultColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        _result,
-                        style: AppTextStyle.body315M.copyWith(
-                          color: AppColor.graysWhite,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      AppTextList.opponentTeam,
-                      style: AppTextStyle.body413M.copyWith(
-                        color: AppColor.textHint,
-                      ),
-                    ),
-                  ],
-                ),
+                _buildMatchResult(),
                 const SizedBox(
                   height: 16,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // TODO: Expanded 똑같은 컴포넌트 두개 리팩토링 필요 (하나의 _build 함수로)
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 16,
-                        ),
-                        decoration: const BoxDecoration(
-                          color: AppColor.background246,
-                        ),
-                        child: TextField(
-                          controller: _ourTeamScoreController,
-                          focusNode: _ourTeamScoreFocusNode,
-                          textInputAction: TextInputAction.next,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyle.hero48BB.copyWith(
-                            color: AppColor.textPrimary,
-                          ),
-                          onSubmitted: (_) {
-                            _opponentTeamScoreFocusNode.requestFocus();
-                          },
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(2),
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 10),
-                          ),
-                        ),
-                      ),
+                    _buildTextField(
+                      controller: _ourTeamScoreController,
+                      focusNode: _ourTeamScoreFocusNode,
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: () {
+                        _opponentTeamScoreFocusNode.requestFocus();
+                      },
+                      backgroundColor: AppColor.background246,
+                      textColor: AppColor.textPrimary,
                     ),
                     const SizedBox(width: 16),
                     Text(
@@ -290,67 +330,29 @@ class _GameResultPageState extends State<GameResultPage> {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 16,
-                        ),
-                        decoration: const BoxDecoration(
-                          color: AppColor.graysWhite,
-                        ),
-                        child: TextField(
-                          controller: _opponentTeamScoreController,
-                          focusNode: _opponentTeamScoreFocusNode,
-                          textInputAction: TextInputAction.done,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyle.hero48BB.copyWith(
-                            color: AppColor.textPrimary10,
-                          ),
-                          onSubmitted: (_) {
-                            _updateResult();
-                          },
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(2),
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 10),
-                          ),
-                        ),
-                      ),
+                    _buildTextField(
+                      controller: _opponentTeamScoreController,
+                      focusNode: _opponentTeamScoreFocusNode,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: () {
+                        _updateResult();
+                      },
+                      backgroundColor: AppColor.graysWhite,
+                      textColor: AppColor.textPrimary10,
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: Text(
-                        widget.gameModel.team1Name,
-                        style: AppTextStyle.body315M.copyWith(
-                          color: AppColor.textSecondary,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                    _buildTeamNameText(
+                      widget.gameModel.team1Name,
+                      AppColor.textSecondary,
                     ),
                     const Spacer(),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: Text(
-                        widget.gameModel.team2Name,
-                        style: AppTextStyle.body315M.copyWith(
-                          color: AppColor.textPrimary10,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                    _buildTeamNameText(
+                      widget.gameModel.team2Name,
+                      AppColor.textPrimary10,
                     ),
                   ],
                 ),
