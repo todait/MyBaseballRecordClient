@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class GameModel {
   final DateTime matchDate;
@@ -41,5 +42,19 @@ class GameModel {
     this.opponentTeamScore = opponentTeamScore;
     this.result = result;
     this.isFinished = isFinished;
+  }
+
+  String get formattedDate {
+    return DateFormat('M월 d일 E', 'ko_KR').format(matchDate);
+  }
+
+  String get formattedTime {
+    return DateFormat('HH:mm').format(DateTime(
+      0,
+      0,
+      0,
+      startTime.hour,
+      startTime.minute,
+    ));
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
@@ -245,16 +244,6 @@ class _GameResultPageState extends State<GameResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    final formattedDate =
-        DateFormat('M월 d일 E', 'ko_KR').format(widget.gameModel.matchDate);
-    final formattedTime = DateFormat('HH:mm').format(DateTime(
-      0,
-      0,
-      0,
-      widget.gameModel.startTime.hour,
-      widget.gameModel.startTime.minute,
-    ));
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -268,7 +257,7 @@ class _GameResultPageState extends State<GameResultPage> {
                   height: 31,
                 ),
                 Text(
-                  '$formattedDate • $formattedTime',
+                  '${widget.gameModel.formattedDate} • ${widget.gameModel.formattedTime}',
                   style: AppTextStyle.body315M.copyWith(
                     fontSize: 16,
                     color: AppColor.textSecondary,
