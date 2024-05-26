@@ -86,13 +86,9 @@ class _GameCardState extends State<GameCard> {
 
   Widget _buildTeamIcon(String? iconUrl) {
     return (iconUrl == null || iconUrl.isEmpty)
-        ? Container(
-            width: 150,
-            height: 150,
-            decoration: BoxDecoration(
-              color: AppColor.graysGray,
-              borderRadius: BorderRadius.circular(8),
-            ),
+        ? Image.asset(
+            'assets/icon/Default Image - Team.png',
+            scale: 0.5,
           )
         : Image.network(
             iconUrl,
