@@ -4,14 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:my_baseball_record/common/app_color.dart';
 import 'package:my_baseball_record/common/app_text_list.dart';
 import 'package:my_baseball_record/common/app_text_style.dart';
-import 'package:my_baseball_record/common/game_card.dart';
+import 'package:my_baseball_record/data/repository/game_model.dart';
 
 class GameResultPage extends StatefulWidget {
-  final GameCard gameCard;
+  final GameModel gameModel;
 
   const GameResultPage({
     super.key,
-    required this.gameCard,
+    required this.gameModel,
   });
 
   @override
@@ -23,6 +23,7 @@ class _GameResultPageState extends State<GameResultPage> {
   int _opponentTeamScore = 0;
   String _result = '';
   Color _resultColor = AppColor.graysWhite;
+  bool _isFocusedOnOurTeam = true;
 
   final _ourTeamScoreController = TextEditingController();
   final _opponentTeamScoreController = TextEditingController();
@@ -35,6 +36,18 @@ class _GameResultPageState extends State<GameResultPage> {
     _ourTeamScoreFocusNode.requestFocus();
     _ourTeamScoreController.addListener(_onOurTeamScoreChanged);
     _opponentTeamScoreController.addListener(_onOpponentTeamScoreChanged);
+
+    _ourTeamScoreFocusNode.addListener(() {
+      setState(() {
+        _isFocusedOnOurTeam = _ourTeamScoreFocusNode.hasFocus;
+      });
+    });
+
+    _opponentTeamScoreFocusNode.addListener(() {
+      setState(() {
+        _isFocusedOnOurTeam = !_opponentTeamScoreFocusNode.hasFocus;
+      });
+    });
   }
 
   void _onOurTeamScoreChanged() {
@@ -103,6 +116,7 @@ class _GameResultPageState extends State<GameResultPage> {
   }
 
   void _saveResult() {
+    // gameModel 에 저장
     int ourTeamScore = _ourTeamScore;
     int opponentTeamScore = _opponentTeamScore;
     String result = _result;
@@ -153,13 +167,13 @@ class _GameResultPageState extends State<GameResultPage> {
   @override
   Widget build(BuildContext context) {
     final formattedDate =
-        DateFormat('M월 d일 E', 'ko_KR').format(widget.gameCard.matchDate);
+        DateFormat('M월 d일 E', 'ko_KR').format(widget.gameModel.matchDate);
     final formattedTime = DateFormat('HH:mm').format(DateTime(
       0,
       0,
       0,
-      widget.gameCard.startTime.hour,
-      widget.gameCard.startTime.minute,
+      widget.gameModel.startTime.hour,
+      widget.gameModel.startTime.minute,
     ));
 
     return Scaffold(
@@ -192,7 +206,7 @@ class _GameResultPageState extends State<GameResultPage> {
                       width: 4,
                     ),
                     Text(
-                      widget.gameCard.matchPlace,
+                      widget.gameModel.matchPlace,
                       style: AppTextStyle.body413M.copyWith(
                         color: AppColor.textHint,
                       ),
@@ -214,9 +228,11 @@ class _GameResultPageState extends State<GameResultPage> {
                   children: [
                     Text(
                       AppTextList.ourTeam,
-                      style: AppTextStyle.caption113B1.copyWith(
-                        color: AppColor.primaryBlue1,
-                      ),
+                      style: _isFocusedOnOurTeam
+                          ? AppTextStyle.caption113B1
+                              .copyWith(color: AppColor.primaryBlue1)
+                          : AppTextStyle.body413M
+                              .copyWith(color: AppColor.textHint),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -236,9 +252,11 @@ class _GameResultPageState extends State<GameResultPage> {
                     ),
                     Text(
                       AppTextList.opponentTeam,
-                      style: AppTextStyle.body413M.copyWith(
-                        color: AppColor.textHint,
-                      ),
+                      style: _isFocusedOnOurTeam
+                          ? AppTextStyle.body413M
+                              .copyWith(color: AppColor.textHint)
+                          : AppTextStyle.caption113B1
+                              .copyWith(color: AppColor.primaryBlue1),
                     ),
                   ],
                 ),
@@ -255,8 +273,10 @@ class _GameResultPageState extends State<GameResultPage> {
                           horizontal: 30,
                           vertical: 16,
                         ),
-                        decoration: const BoxDecoration(
-                          color: AppColor.background246,
+                        decoration: BoxDecoration(
+                          color: _isFocusedOnOurTeam
+                              ? AppColor.background246
+                              : AppColor.graysWhite,
                         ),
                         child: TextField(
                           controller: _ourTeamScoreController,
@@ -264,7 +284,9 @@ class _GameResultPageState extends State<GameResultPage> {
                           textInputAction: TextInputAction.next,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.hero48BB.copyWith(
-                            color: AppColor.textPrimary,
+                            color: _isFocusedOnOurTeam
+                                ? AppColor.textPrimary
+                                : AppColor.textPrimary10,
                           ),
                           onSubmitted: (_) {
                             _opponentTeamScoreFocusNode.requestFocus();
@@ -295,8 +317,10 @@ class _GameResultPageState extends State<GameResultPage> {
                           horizontal: 30,
                           vertical: 16,
                         ),
-                        decoration: const BoxDecoration(
-                          color: AppColor.graysWhite,
+                        decoration: BoxDecoration(
+                          color: _isFocusedOnOurTeam
+                              ? AppColor.graysWhite
+                              : AppColor.background246,
                         ),
                         child: TextField(
                           controller: _opponentTeamScoreController,
@@ -304,7 +328,9 @@ class _GameResultPageState extends State<GameResultPage> {
                           textInputAction: TextInputAction.done,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.hero48BB.copyWith(
-                            color: AppColor.textPrimary10,
+                            color: _isFocusedOnOurTeam
+                                ? AppColor.textPrimary10
+                                : AppColor.textPrimary,
                           ),
                           onSubmitted: (_) {
                             _updateResult();
@@ -329,9 +355,11 @@ class _GameResultPageState extends State<GameResultPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,
                       child: Text(
-                        widget.gameCard.team1Name,
+                        widget.gameModel.team1Name,
                         style: AppTextStyle.body315M.copyWith(
-                          color: AppColor.textSecondary,
+                          color: _isFocusedOnOurTeam
+                              ? AppColor.textSecondary
+                              : AppColor.textPrimary10,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 2,
@@ -342,9 +370,11 @@ class _GameResultPageState extends State<GameResultPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,
                       child: Text(
-                        widget.gameCard.team2Name,
+                        widget.gameModel.team2Name,
                         style: AppTextStyle.body315M.copyWith(
-                          color: AppColor.textPrimary10,
+                          color: _isFocusedOnOurTeam
+                              ? AppColor.textPrimary10
+                              : AppColor.textSecondary,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 2,
